@@ -1,0 +1,1808 @@
+ 
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bytes & Brew - Premium Coffee for Developers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <style>
+        :root {
+            --olive-green: #3c7349;
+            --light-green: #93b48b;
+            --beige: #f5f5dc;
+            --dark-gray: #333333;
+            --light-gray: #f0f0f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--beige);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+        
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        header.scrolled {
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            transform: scale(1.6);
+        }
+        
+        .logo img {
+            width: 100%;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #b8a47e;
+        }
+        
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 5px 15px;
+            margin-left: 30px;
+        }
+        
+        .search-container input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            padding: 5px;
+            width: 150px;
+        }
+        
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .login-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        /* Ticker */
+        .ticker {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+            margin-top: 0;
+        }
+        
+        .ticker-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 30s linear infinite;
+        }
+        
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        .ticker-item {
+            display: inline-block;
+            margin: 0 30px;
+            color: #fff;
+        }
+        
+        /* Hero Section */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            background-color: var(--olive-green);
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+        
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+            width: 80%;
+            max-width: 900px;
+        }
+        
+        .signature {
+            max-width: 400px;
+            margin: 0 auto 40px;
+        }
+        
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-btn:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+        
+        .scroll-arrow {
+            margin-top: 8px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Options Section */
+        .options-section {
+            padding: 100px 5%;
+            background-color: var(--beige);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--olive-green);
+        }
+        
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .option-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            max-width: 450px;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .option-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .option-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .option-card:hover .option-image img {
+            transform: scale(1.05);
+        }
+        
+        .option-content {
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .option-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--olive-green);
+        }
+        
+        .option-content p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+        
+        .option-btn {
+            display: inline-block;
+            background-color: var(--olive-green);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background-color: var(--light-green);
+        }
+        
+        /* Categories */
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 50px 5%;
+            background-color: white;
+        }
+        
+        .category {
+            text-align: center;
+            width: 180px;
+        }
+        
+        .category-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            overflow: hidden;
+        }
+        
+        .category-icon img {
+            width: 80%;
+            height: 80%;
+            object-fit: cover;
+        }
+        
+        .category h4 {
+            margin-top: 10px;
+            color: var(--olive-green);
+            font-size: 1.2rem;
+        }
+        
+        /* Image Grid */
+        .image-grid {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 500px;
+            position: relative;
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+        
+        .image-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            margin: 0 4px;
+        }
+        
+        .image-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-101%);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .image-wrapper.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        /* Image Controls */
+        .controls {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .controls button {
+            padding: 8px 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .controls button:hover {
+            background-color: #555;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--dark-gray);
+            color: white;
+            padding: 50px 5%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--light-green);
+        }
+        
+        .footer-section p, .footer-section a {
+            margin-bottom: 10px;
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons i {
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+        }
+        
+        /* Utility Classes */
+        .trend {
+            color: #ff4d4d;
+        }
+        
+        .up {
+            color: #4dff4d;
+        }
+        
+        .down {
+            color: #ff4d4d;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .animate-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .animate-delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .animate-delay-3 {
+            animation-delay: 0.6s;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .options-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-card {
+                width: 100%;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .social-icons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links a {
+                display: none;
+            }
+            
+            .nav-links .search-container,
+            .nav-links .login-btn {
+                display: block;
+                margin-left: 0;
+            }
+            
+            .content p {
+                font-size: 16px;
+            }
+            
+            .image-grid {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .image-container {
+                height: 300px;
+                margin-bottom: 8px;
+            }
+        }
+
+        .image-enter {
+      animation: fadeInUp 1s ease-in-out forwards;
+    }
+    .image-enter-delayed {
+      animation: fadeInRight 1s ease-in-out 0.5s forwards;
+    }
+    @keyframes fadeInUp {
+      0% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    @keyframes fadeInRight {
+      0% {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .animate-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-in-out;
+    }
+
+    .animate-show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .image-block {
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      color: white;
+    }
+
+
+    .coffee-origins {
+        width: 100%;
+        padding: 20px 0;
+        overflow: hidden;
+    }
+
+    .origins-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        gap: 50px;
+        padding: 0 20px;
+    }
+
+    .origin-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-radius: 40% 20% 0 0;
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+
+    .origin-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .origin-image {
+        height: 0;
+        padding-bottom: 100%;
+        background-size: cover;
+        background-position: center;
+        border-radius: 50%;
+    }
+
+    .honduras-bg {
+        background-image: url('/static/images/honduras.jpg');
+    }
+
+    .ecuador-bg {
+        background-image: url('/static/images/ecuador.jpg');
+    }
+
+    .colombia-bg {
+        background-image: url('/static/images/colombia.jpg');
+    }
+
+    .origin-content {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .origin-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .origin-content p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .view-link {
+        display: inline-block;
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 0;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .view-link:hover {
+        color: #ccc;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .origins-container {
+            flex-direction: column;
+        }
+
+        .origin-card {
+            margin-bottom: 60px;
+        }
+
+        .origin-image {
+            padding-bottom: 60%;
+        }
+    }
+
+
+
+    .coffee-origins {
+        width: 100%;
+        padding: 20px 0;
+        overflow: hidden;
+    }
+
+    .origins-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .origin-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .origin-media {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .arch-container {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        position: relative;
+        border-radius: 100% 100% 0 0;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .origin-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .origin-content {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .origin-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .origin-content p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .view-link {
+        display: inline-block;
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 0;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .view-link:hover {
+        color: #ccc;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .origins-container {
+            flex-direction: column;
+        }
+
+        .origin-card {
+            margin-bottom: 60px;
+        }
+
+        .arch-container {
+            padding-bottom: 70%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .origin-content h2 {
+            font-size: 2rem;
+        }
+    }
+    
+
+    .testimonial-section {
+            width: 100%;
+            background-color: #f9f5f0;
+            padding: 40px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .testimonial-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.1 ease-in-out;
+        }
+        
+        .testimonial-item {
+            flex: 0 0 auto;
+            width: 400px;
+            padding: 20px 40px;
+            margin: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .testimonial-logo {
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .testimonial-logo img {
+            max-width: 120px;
+            max-height: 40px;
+        }
+        
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Logo styling */
+        .onyx-logo {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .food-wine-logo {
+            font-family: 'Georgia', serif;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .thrillist-logo {
+            color: #ff4d00;
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .usa-today-logo {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+            color: #0071ce;
+        }
+
+        /* Image substitution for logos */
+        .logo-img {
+            height: 30px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+
+        .options-section {
+    padding: 70px 20px;
+    background-color: #f8f7e9;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle background pattern */
+.options-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#5a7d5e10 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+}
+
+.section-title {
+    text-align: center;
+    color: #3c6e45;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    font-weight: 500;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 3px;
+    background-color: #3c6e45;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+.options-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.option-card {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.4s ease;
+    max-width: 500px;
+}
+
+.option-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 15px 40px rgba(90, 125, 94, 0.15);
+}
+
+.option-image {
+    height: 240px;
+    overflow: hidden;
+    position: relative;
+}
+
+.option-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.option-card:hover .option-image img {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option-card:hover .image-overlay {
+    opacity: 1;
+}
+
+.option-content {
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.option-card:hover .option-content {
+    transform: translateY(-5px);
+}
+
+.option-content h3 {
+    color: #3c6e45;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.option-card:hover .option-content h3 {
+    color: #2d533a;
+}
+
+.option-content p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.option-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #3c6e45;
+    color: white;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #2d533a;
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.option-btn:hover::before {
+    left: 0;
+}
+
+.btn-arrow {
+    transition: transform 0.3s ease;
+}
+
+.option-btn:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+/* Coffee steam animation */
+.coffee-steam {
+    width: 60px;
+    height: 70px;
+}
+
+.coffee-steam span {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    filter: blur(5px);
+    animation: steam 2s infinite ease-in-out;
+}
+
+.coffee-steam span:nth-child(1) {
+    animation-delay: 0.2s;
+    left: calc(50% - 15px);
+}
+
+.coffee-steam span:nth-child(2) {
+    animation-delay: 0.6s;
+    left: 50%;
+}
+
+.coffee-steam span:nth-child(3) {
+    animation-delay: 0.4s;
+    left: calc(50% + 15px);
+}
+
+@keyframes steam {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-70px) scale(2);
+        opacity: 0;
+    }
+}
+
+/* Merch icon animation */
+.merch-icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+}
+
+.merch-bean {
+    position: absolute;
+    width: 15px;
+    height: 22px;
+    background: #5a3d2b;
+    border-radius: 50%;
+    animation: float 3s infinite ease-in-out;
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+}
+
+.merch-bean:nth-child(1) {
+    animation-delay: 0.2s;
+    top: 0;
+    left: 30px;
+}
+
+.merch-bean:nth-child(2) {
+    animation-delay: 0.5s;
+    top: 30px;
+    left: 10px;
+}
+
+.merch-bean:nth-child(3) {
+    animation-delay: 0.8s;
+    top: 30px;
+    left: 50px;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(15deg);
+    }
+}
+
+/* Enhanced animations */
+.animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.animate.animate-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-delay-1 {
+    transition-delay: 0.2s;
+}
+
+/* Responsive styling */
+@media (max-width: 992px) {
+    .options-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    
+    .option-card {
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .option-content {
+        padding: 25px 20px;
+    }
+}
+ 
+
+  
+
+    </style>
+</head>
+<body>
+   
+    <div class="ticker">
+        <div class="ticker-content">
+            <span class="ticker-item">Now Listening: Jack Van Cleaf</span>
+            <span class="ticker-item">Michael Kiwanuka</span>
+            <span class="ticker-item">Penny & Sparrow</span>
+            <span class="ticker-item">Goldie Boutilier</span>
+            <span class="ticker-item">Free Shipping Over $40</span>
+            <span class="ticker-item">Southern Weather <span class="up">▲</span></span>
+            <span class="ticker-item">Tropical Weather <span class="up">▲</span></span>
+            <span class="ticker-item">Trending Coffees <span class="trend">▼</span></span>
+        </div>
+    </div>
+
+    <header id="main-header">
+        <div class="logo">
+            <img src="{% static 'images/logo-removebg-preview (1).png' %}" alt="Bytes & Brew Logo" style="height: 100px;width:170px">
+        </div>
+        
+        <div class="nav-links">
+            <a href="{% url 'landing' %}">Home</a>
+            <a href="{% url 'shop_app:gift_cards' %}">Shop</a>
+            <a href="#">Origins</a>
+            <a href="{% url 'shop_app:about'%}">Our Story</a>
+            <a href="#">Journal</a>
+            <div class="search-container">
+                <input type="text" placeholder="Search...">
+            </div>
+            <a href="{% url 'order_app:loginadmin' %}"> <button class="login-btn">LOGIN</button></a>
+        </div>
+    </header>
+    {% if messages %}
+
+
+    {% for message in messages %}
+
+
+    <div class="alert alert-warning  alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    {% endfor %}
+    {% endif %}
+
+    <div class="video-container">
+        <div></div>
+        <!-- Using a placeholder color div instead of video -->
+       
+        <div class="video-bg">
+            <video class="video-bg" autoplay loop muted>
+                <source src="{% static 'images/mainpagevideo.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="content">
+            <img class="signature" src="{% static 'images\bytesandbrewssignature-removebg-preview.png' %}" alt="Bytes & Brew Signature" style="height: 500px;width: 500px;">
+            <p>Join us in seeking quality, truth and accountability in coffee. Together, we journey to find the finest and most unique coffees in the world.</p>
+            <a href="#" class="cta-btn" style="margin-bottom: 20px;">Explore Offerings →</a>
+        </div>
+        
+        <div class="scroll-indicator" style="margin-top: 20px;">
+            <span>Scroll</span>
+            <div class="scroll-arrow">
+                ▼
+            </div>
+        </div>
+    </div>
+
+    <div class="testimonial-section">
+        <div class="testimonial-container">
+            <div class="testimonial-track" id="testimonialTrack">
+                <!-- Static Testimonials -->
+                <div class="testimonial-item">
+                    <div class="testimonial-logo onyx-logo">Onyx Lab</div>
+                    <p class="testimonial-text">"bytes and brews has an Everlane-like approach to consumers on what goes into its products, from the farm origins to the most minute details — as well as all the prices that contribute to the cost you pay."</p>
+                </div>
+                
+                <div class="testimonial-item">
+                    <div class="testimonial-logo food-wine-logo">FOOD&WINE</div>
+                    <p class="testimonial-text">"Most online coffee retailers also sell some accessories, but few have an inventory as well-curated as Bytes and brews. Its selection of stylish espresso machines, scales, grinders, kettles, AeroPress coffee makers, and more can't be beat."</p>
+                </div>
+                
+                <div class="testimonial-item">
+                    <div class="testimonial-logo thrillist-logo">thrillist</div>
+                    <p class="testimonial-text">"Few [companies] lay out their process quite like Bytes and brews. On its website, the Arkansas-based roastery and cafe explains the whole process, from its roaster model (rebuilt Diedrich IR-12 and IR40s) to cupping schedule; each coffee is tasted at 2, 5, and 10 days to learn how it ages."</p>
+                </div>
+                
+                <div class="testimonial-item">
+                    <div class="testimonial-logo">
+                        <span class="usa-today-logo">USA TODAY</span>
+                    </div>
+                    <p class="testimonial-text">"[Bytes and brews] has high standards for sourcing and serving their beans, and they bring that attention to detail in every cup."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="options" class="options-section">
+        <h2 class="section-title">What would you like today?</h2>
+        <div class="options-container">
+            <div class="option-card animate">
+                <div class="option-image">
+                    <img src="{% static 'images\e227e2a1dbdaa3f66b4067e8f89479dc.jpg' %}" alt="Cafe Menu">
+                    <div class="image-overlay">
+                        <div class="coffee-steam">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="option-content">
+                    <h3 style="font-weight: 600;">ORDER FROM CAFE</h3>
+                    <p>Ready for a coffee break? Order your favorite drinks and snacks from our cafe menu for pickup or delivery.</p>
+                    <a href="{% url 'order_app:order-home' %}" class="option-btn">
+                        ORDER NOW
+                        <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="option-card animate animate-delay-1">
+                <div class="option-image">
+                    <img src="{% static 'images\merchpic.jpg' %}" alt="Shop Merchandise">
+                    <div class="image-overlay">
+                        <div class="merch-icon">
+                            <span class="merch-bean"></span>
+                            <span class="merch-bean"></span>
+                            <span class="merch-bean"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="option-content">
+                    <h3 style="font-weight: 600;">SHOP MERCH & GIFTS</h3>
+                    <p>Browse our collection of developer-themed merchandise, gift cards, and premium coffee packages.</p>
+                    <a href="{% url 'shop_app:merch-home' %}" class="option-btn">
+                        SHOP NOW
+                        <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="category animate">
+            <div class="category-icon">
+                <img src="{% static 'images\Mocha_bag.png' %}" alt="Coffee Beans">
+            </div>
+            <h4>COFFEE BEANS</h4>
+        </div>
+        <div class="category animate animate-delay-1">
+            <div class="category-icon">
+                <img src="{% static 'images\merch.jpg' %}" alt="Coder Merch">
+            </div>
+            <h4>BYTES CODED MERCH</h4>
+        </div>
+       
+        
+        <div class="category animate animate-delay-3">
+            <div class="category-icon">
+                <img src="{% static 'images\delux.png' %}" alt="Gift Packs">
+            </div>
+            <h4>GIFT PACKS</h4>
+        </div>
+
+        <div class="category animate animate-delay-3">
+            <div class="category-icon">
+                <img src="{% static 'images\char2.jpg' %}" alt="Gift cards">
+            </div>
+            <h4>GIFT CARDS</h4>
+        </div>
+    </section>
+
+    <section class="coffee-origins" style="background-color: #000; margin-bottom:40px;  color: #fff">
+        <div class="origins-container">
+            <div class="origin-card">
+                <div class="origin-media">
+                    <div class="arch-container">
+                        <video class="origin-video" autoplay muted loop playsinline>
+                            <source src= "{% static 'images/karantakacoffee.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="origin-content">
+                        <h2>KARNATAKA</h2>
+                        <p>Coorg(karnataka) features a diverse coffee climate, where its varying altitudes, microclimates, and fertile volcanic soils combine to cultivate a broad spectrum of unique, high-quality coffee beans.</p>
+                        <a href="#" class="view-link">View Coffees →</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="origin-card">
+                <div class="origin-media">
+                    <div class="arch-container">
+                        <video class="origin-video" autoplay muted loop playsinline>
+                            <source src="{% static 'images/keralacoffee.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="origin-content">
+                        <h2>KERALA</h2>
+                        <p>In wayanad(kerala), coffee is deeply woven into the culture, celebrated for its rich flavors and tradition of craftsmanship passed down through generations.</p>
+                        <a href="#" class="view-link">View Coffees →</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="origin-card">
+                <div class="origin-media">
+                    <div class="arch-container">
+                        <video class="origin-video" autoplay muted loop playsinline>
+                            <source src="{% static 'images/assam.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="origin-content">
+                        <h2>ASSAM</h2>
+                        <p>Known for innovation and resilience, Assam's coffee history dates back to the early 19th century.They produces arabica and robusta.</p>
+                        <a href="#" class="view-link">View Coffees →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+ 
+
+    <div class="flex flex-wrap w-full" style="margin-bottom: 30px;">
+        <!-- Full-height image block -->
+        <div class="w-full md:w-1/4 h-screen image-block animate-in">
+          <img src="{% static 'images/tea.webp' %}" class="w-full h-full object-cover" alt="Coffee">
+          <div class="overlay">
+            <h2 class="text-2xl font-bold">Tea</h2>
+            <a href="{% url 'shop_app:merch-home' %}"> <button class="mt-2 px-4 py-2 bg-white text-black font-semibold">Shop</button></a>
+          </div>
+        </div>
+    
+        <!-- 3 Half-height image blocks -->
+        <div class="w-1/2 md:w-1/4 h-[50vh] image-block animate-in">
+          <img src="{% static 'images\landingcoffee.jpg' %}" class="w-full h-full object-cover" alt="Tea">
+          <div class="overlay">
+            <h2 class="text-2xl font-bold">Coffee</h2>
+            <a href="{% url 'shop_app:coffee_pack' %}"> <button class="mt-2 px-4 py-2 bg-white text-black font-semibold">Shop</button></a>
+          </div>
+        </div>
+    
+        <div class="w-1/2 md:w-1/4 h-[50vh] image-block animate-in">
+          <img src="{% static 'images\giftcardfinal.jpg' %}" class="w-full h-full object-cover" alt="Chocolate">
+          <div class="overlay">
+              <h2 class="text-2xl font-bold">Gift</h2>
+              <a href="{% url 'shop_app:gift_cards' %}"><button class="mt-2 px-4 py-2 bg-white text-black font-semibold">Shop</button></a>
+          </div>
+        </div>
+    
+        <div class="w-full md:w-1/4 h-[50vh] image-block animate-in">
+          <img src="{% static 'images\bytesandbrewsmerck.jpg' %}" class="w-full h-full object-cover" alt="Merch">
+          <div class="overlay">
+            <h2 class="text-2xl font-bold">Merch</h2>
+            <a href="{% url 'shop_app:merchandise' %}"><button class="mt-2 px-4 py-2 bg-white text-black font-semibold">Shop</button></a>
+          </div>
+        </div>
+      </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BYTES & BREW</h3>
+                <p>Premium coffee for developers and tech enthusiasts.</p>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>OPENING HOURS</h3>
+                <p>Monday - Friday: 8am - 10pm</p>
+                <p>Saturday - Sunday: 9am - 9pm</p>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACT US</h3>
+                <p>123 Code Street, Tech Hub</p>
+                <p>hello@bytesandbrew.com</p>
+                <p>+1 (555) 123-4567</p>
+            </div>
+            <div class="footer-section">
+                <h3>QUICK LINKS</h3>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Bytes & Brew. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Scroll indicator functionality
+        document.querySelector('.scroll-indicator').addEventListener('click', function() {
+            const optionsSection = document.getElementById('options');
+            optionsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Animation for elements when they enter viewport
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(el);
+            });
+            
+            // Image grid animation
+            const imageWrappers = document.querySelectorAll('.image-wrapper');
+            const showBtn = document.getElementById('show-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            
+            function animateImagesSequentially() {
+                imageWrappers.forEach((wrapper, index) => {
+                    setTimeout(() => {
+                        wrapper.classList.add('show');
+                    }, index * 300); // 300ms delay between each image
+                });
+            }
+            
+            // Show button handler
+            showBtn.addEventListener('click', function() {
+                animateImagesSequentially();
+            });
+            
+            // Reset button handler
+            resetBtn.addEventListener('click', function() {
+                imageWrappers.forEach(wrapper => {
+                    wrapper.classList.remove('show');
+                });
+            });
+            
+            // Auto-start animation after a short delay
+            setTimeout(animateImagesSequentially, 800);
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-show');
+          observer.unobserve(entry.target); // Optional: remove if you want repeated animation
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Optional animation for cards
+        const cards = document.querySelectorAll('.origin-card');
+        
+        // Simple animation for cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.2 });
+        
+        cards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(card);
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure videos autoplay and handle any potential playback issues
+        const videos = document.querySelectorAll('.origin-video');
+        
+        videos.forEach(video => {
+            // Force video play in case autoplay doesn't work automatically
+            video.play().catch(error => {
+                console.log("Auto-play was prevented:", error);
+                // Add a play button if autoplay is blocked
+                const playButton = document.createElement('button');
+                playButton.innerText = 'Play';
+                playButton.classList.add('video-play-button');
+                video.parentNode.appendChild(playButton);
+                
+                playButton.addEventListener('click', () => {
+                    video.play();
+                    playButton.style.display = 'none';
+                });
+            });
+        });
+
+        // Animation for cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        const cards = document.querySelectorAll('.origin-card');
+        cards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(card);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            const track = document.getElementById('testimonialTrack');
+            const items = track.querySelectorAll('.testimonial-item');
+            
+            // Clone testimonials for infinite scroll effect
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                track.appendChild(clone);
+            });
+            
+            // Set track width
+            updateTrackWidth();
+            
+            // Handle scrolling
+            let position = 0;
+            const speed = 1; // pixels per frame - lower is slower
+            const scrollDelay = 30; // milliseconds between movements
+            
+            function updateTrackWidth() {
+                const totalItems = track.children.length;
+                const itemWidth = items[0].offsetWidth;
+                track.style.width = (totalItems * itemWidth) + 'px';
+            }
+            
+            function scroll() {
+                position -= speed;
+                
+                // Reset position for infinite loop
+                const firstSetWidth = items.length * items[0].offsetWidth;
+                if (Math.abs(position) >= firstSetWidth) {
+                    position = 0;
+                }
+                
+                track.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(() => setTimeout(scroll, scrollDelay));
+            }
+            
+            // Start scrolling after a delay
+            setTimeout(scroll, 1000);
+            
+            // Handle window resize
+            window.addEventListener('resize', updateTrackWidth);
+            
+            // Pause on hover
+            track.addEventListener('mouseenter', function() {
+                // Store the current position
+                track.style.transitionDuration = '0.3s';
+                clearTimeout(scrollTimeout);
+            });
+            
+            let scrollTimeout;
+            track.addEventListener('mouseleave', function() {
+                // Resume scrolling
+                track.style.transitionDuration = '0.5s';
+                scrollTimeout = setTimeout(scroll, scrollDelay);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Animation on scroll
+    const animateElements = document.querySelectorAll('.animate');
+    
+    // Initial check on load
+    checkVisibility();
+    
+    // Check on scroll
+    window.addEventListener('scroll', function() {
+        checkVisibility();
+    });
+    
+    function checkVisibility() {
+        animateElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('animate-visible');
+            }
+        });
+    }
+    
+    // Hover effect with cursor
+    const optionCards = document.querySelectorAll('.option-card');
+    const optionsSection = document.getElementById('options');
+    
+    optionCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            // Only apply tilt effect on larger screens
+            if (window.innerWidth > 992) {
+                const cardRect = this.getBoundingClientRect();
+                const cardCenterX = cardRect.left + cardRect.width / 2;
+                const cardCenterY = cardRect.top + cardRect.height / 2;
+                
+                const mouseX = e.clientX - cardCenterX;
+                const mouseY = e.clientY - cardCenterY;
+                
+                // Calculate rotation based on mouse position
+                const rotateY = mouseX * 0.01;
+                const rotateX = mouseY * -0.01;
+                
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px) translateY(-12px)`;
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            
+            // Re-add the hover class for standard hover effect
+            setTimeout(() => {
+                this.style.transform = 'translateY(-12px)';
+            }, 100);
+        });
+    });
+    
+    // Button interaction effect
+    const buttons = document.querySelectorAll('.option-btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>

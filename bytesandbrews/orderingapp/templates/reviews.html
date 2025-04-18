@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bytes and Brew - Customer Reviews</title>
+    <style>
+        :root {
+            --primary-blue: #040B24;
+            --secondary-blue: #0A1A4D;
+            --beige-light: rgb(245, 232, 211);
+            --beige-medium: rgb(226, 199, 163);
+            --beige-dark: rgb(186, 152, 116);
+            --text-light: #F0F4FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-blue);
+            padding: 20px;
+            background-image: url('data:image/jpeg;base64,<ADD_BASE64_IMAGE_HERE>');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: var(--text-light);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--beige-light);
+        }
+
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: var(--secondary-blue);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            color: var(--text-light);
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--beige-dark);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .review-date {
+            color: var(--beige-medium);
+            font-size: 0.9em;
+        }
+
+        .review-content {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 2rem;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--beige-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--beige-light);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            background: var(--beige-light);
+            color: var(--primary-blue);
+        }
+
+        .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-items a{
+            font-size: 1.2rem;
+        }
+
+        .nav-link {
+            color: var(--beige-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--beige-medium);
+        }
+
+        .nav-link.active {
+            color: var(--beige-medium);
+            font-weight: 500;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--beige-medium);
+            border-radius: 2px;
+        }
+
+        .right-items {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: var(--beige-light);
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .icon-button:hover {
+            color: var(--beige-medium);
+        }
+
+        /* Icons */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .footer {
+            background: var(--darker-blue);
+            padding: 4rem 2rem 2rem;
+            color: var(--beige-light);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column {
+            background: var(--box-blue);
+            box-shadow: #040B24 0px 5px 15px;
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .footer-column h3 {
+            color: var(--beige-light);
+            font-size: 1.25rem;
+            
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent-teal);
+        }
+
+        .footer-links {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            color: rgba(245, 232, 211, 0.7);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--beige-light);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 232, 211, 0.1);
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(245, 232, 211, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .company-logo {
+            font-weight: bold;
+            color: var(--beige-light);
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            color: rgba(245, 232, 211, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--beige-light);
+        }
+
+        .certification-badges {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .certification-badge {
+            background: rgba(245, 232, 211, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .certification-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .company-info {
+                flex-direction: column;
+            }
+        }
+
+ 
+
+        @media (max-width: 768px) {
+            .nav-items {
+                display: none;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+        }
+         
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="" class="logo">BYTES AND BREW</a>
+        
+        <nav class="nav-items">
+            <a href="{% url 'order_app:admin' %}" class="nav-link">Home</a>
+            {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'order_app:dashboard' id=user.id  %}" class="nav-link active">Dashboard</a>
+            {% endif %}
+            {% if user.is_authenticated and user.is_superuser %}
+            <a href="{% url 'order_app:superadmin' %}" class="nav-link active">SUPERADMIN PANEL</a>
+            {% endif %}
+        
+            <a href="{% url 'order_app:contact' %}" class="nav-link">CONTACT US</a>
+            <a href="{% url 'order_app:about' %}" class="nav-link">ABOUT US</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'order_app:profile' id=user.id %}" class="nav-link">PROFILE </a>
+            <a href="{% url 'order_app:logout' %}" class="nav-link active">LOGOUT</a>
+            {% endif %}
+            
+            
+            
+        </nav>
+
+        <div class="right-items">
+            
+            <a href="
+            #"><i class="fa fa-user-o" style="font-size:36px;color: var(--beige-light);"></i></a>
+        </div>
+
+    </header>
+    <div class="header">
+        <h1>Bytes and Brew - Customer Reviews</h1>
+    </div>
+    <div class="reviews-container" id="reviewsContainer">
+        {% for review in reviews %}
+        <div class="review-card" id="review-{{review.id}}">
+            <div class="review-header">
+
+                <div class="avatar">{{review.custname|slice:":1"}}</div>
+                <div class="name">{{review.custname}}</div>
+                <div class="user-info">
+                    <div class="user-name">
+                        {{ review.name }} 
+                        {% if review.rating|add:0 == 1  %}
+                            😫
+                        {% elif  review.rating|add:0 == 2  %}
+                            😞
+                        {% elif review.rating|add:0 == 3  %}
+                            😐
+                        {% elif  review.rating|add:0 == 4  %}
+                            😊
+                        {% else %}
+                            😍
+                        {% endif %}
+                
+                    </div>
+                     
+                </div>
+            </div>
+            <div class="review-content">{{review.comment}}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Expertise</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Analytics and Reporting</a>
+                       
+                        <a href="#" class="footer-link">Inventory Management</a>
+                        <a href="#" class="footer-link">Mobile and Remote Access</a>
+                         
+                        <a href="#" class="footer-link">Endpoint Management</a>
+                        <a href="#" class="footer-link">Order Processing</a>
+                        
+                        <a href="#" class="footer-link">Customer Database</a>
+                        <a href="#" class="footer-link">Integration Capabilities</a>
+                        <a href="#" class="footer-link">Security and Compliance</a>
+                        <a href="#" class="footer-link">Menu Management</a>
+                        <a href="#" class="footer-link">Employee Management</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">About Us</a>
+                        
+                        <a href="#" class="footer-link">News</a>
+                        <a href="#" class="footer-link">Contact</a>
+                        <a href="#" class="footer-link">Trust Centre</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Security Policy</a>
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Targeted Industries</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">CAFES</a>
+                        <a href="#" class="footer-link">RESORTS</a>
+                        <a href="#" class="footer-link">CLOUD KITCHENS</a>
+                        <a href="#" class="footer-link">BAKERIES</a>
+                        <a href="#" class="footer-link">FOOD TRUCKS</a>
+                        <a href="#" class="footer-link">CORPORTE CAFETERIAS</a>
+                        <a href="#" class="footer-link">FAST FOOD CHAINS</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Learn & Support</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Technical Insights</a>
+                        <a href="#" class="footer-link">Events</a>
+                        <a href="#" class="footer-link">BYTES AND BREWS</a>
+                        <a href="#" class="footer-link">Client Support</a>
+                    </div>
+                    <div class="certification-badges">
+                        <div class="certification-badge">
+                            <i class="fa fa-bar-chart-o" style="font-size:48px;color:var(--beige-light)"></i>
+                        </div>
+                        <div class="certification-badge">
+                             <img src="{% static 'images/bytesandbrewlogo-removebg-preview.png' %}" height="100px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="company-info">
+                    <a href="#" class="company-logo">Bytes and Brews Systems</a>
+                    <span>© 2025 All rights reserved.</span>
+                </div>
+                <div class="social-links">
+                    <i class="fa fa-facebook-f" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-instagram" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-linkedin" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-twitter" style="font-size:25px;color:var(--beige-light)"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- <script>
+        const reviews = [
+            { id: 1, name: "Sarah Chen", date: "Feb 12, 2025", content: "The cold brew here is perfectly balanced.", initials: "SC", emoji: "😊" },
+            { id: 2, name: "Mike Rodriguez", date: "Feb 11, 2025", content: "Best breakfast spot in town!", initials: "MR", emoji: "😍" },
+            { id: 3, name: "Emma Wilson", date: "Feb 10, 2025", content: "Love their seasonal drink specials.", initials: "EW", emoji: "😊" },
+            { id: 4, name: "David Park", date: "Feb 9, 2025", content: "Their pastries are baked fresh daily.", initials: "DP", emoji: "😐" },
+            { id: 5, name: "Lisa Thompson", date: "Feb 8, 2025", content: "Perfect spot for remote work.", initials: "LT", emoji: "😍" },
+            { id: 6, name: "James Kumar", date: "Feb 7, 2025", content: "The grilled chicken sandwich is delicious.", initials: "JK", emoji: "😊" },
+            { id: 7, name: "Anna Martinez", date: "Feb 6, 2025", content: "Great coffee and atmosphere.", initials: "AM", emoji: "😊" },
+            { id: 8, name: "Tom Anderson", date: "Feb 5, 2025", content: "Love the minimalist decor.", initials: "TA", emoji: "😐" },
+            { id: 9, name: "Rachel Kim", date: "Feb 4, 2025", content: "Amazing latte art!", initials: "RK", emoji: "😍" },
+            { id: 10, name: "Chris Baker", date: "Feb 3, 2025", content: "The weekend brunch is outstanding.", initials: "CB", emoji: "😊" },
+            { id: 11, name: "Olivia Chen", date: "Feb 2, 2025", content: "The chai latte is perfect for study.", initials: "OC", emoji: "😊" },
+            { id: 12, name: "Peter Smith", date: "Feb 1, 2025", content: "Great selection of vegan options.", initials: "PS", emoji: "😐" },
+            { id: 13, name: "Maya Patel", date: "Jan 31, 2025", content: "The breakfast burrito is amazing.", initials: "MP", emoji: "😊" },
+            { id: 14, name: "Kevin Lee", date: "Jan 30, 2025", content: "c", initials: "KL", emoji: "😍" },
+            { id: 15, name: "Sophie Turner", date: "Jan 29, 2025", content: "The atmosphere is cozy and welcoming.", initials: "ST", emoji: "😊" }
+        ];
+
+        function createReviewCard(review) {
+            return `
+                <div class="review-card" id="review-${review.id}">
+                    <div class="review-header">
+                        <div class="avatar">${review.initials}</div>
+                        <div class="user-info">
+                            <div class="user-name">${review.name} ${review.emoji}</div>
+                            <div class="review-date">${review.date}</div>
+                        </div>
+                    </div>
+                    <div class="review-content">${review.content}</div>
+                </div>
+            `;
+        }
+
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = reviews.map(review => createReviewCard(review)).join('');
+        }
+
+        // Initial display
+        displayReviews();
+    </script> -->
+</body>
+</html>
+

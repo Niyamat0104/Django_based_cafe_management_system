@@ -1,0 +1,736 @@
+ 
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Bytes & Brew Coffee{% endblock %}
+
+{% block extra_css %}
+ 
+<style>
+        .banner {
+            width: 100%;
+            height: 500px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("{% static 'images/combo.png' %}");
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .banner-text {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            color: var(--accent);
+        }
+
+        .banner-text h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .banner-text h1 span {
+            color: var(--secondary);
+        }
+
+        .banner-text p {
+            font-size: 16px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+
+        .coffee-products {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-price {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .product-desc {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .buy-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        .buy-button span {
+            font-size: 18px;
+        }
+
+        .section-title {
+            margin: 40px 0 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .about-section {
+            background-color: #fff;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            background-color: #3a2614;
+            padding: 30px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coffee-steam {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .steam {
+            position: absolute;
+            height: 20px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            animation: steam 3s infinite ease-out;
+        }
+
+        .steam:nth-child(1) {
+            left: 10px;
+            animation-delay: 0.2s;
+        }
+
+        .steam:nth-child(2) {
+            left: 25px;
+            animation-delay: 0.6s;
+        }
+
+        .steam:nth-child(3) {
+            left: 40px;
+            animation-delay: 1s;
+        }
+
+        @keyframes steam {
+            0% {
+                transform: translateY(20px) scale(0.1);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-20px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-tagline {
+            font-size: 16px;
+            color: #e0c9a6;
+            font-style: italic;
+        }
+
+        .content-wrapper {
+            padding: 30px;
+        }
+
+        .content-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fcfaf7;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-block h3 {
+            color: #3a2614;
+            margin-bottom: 15px;
+            font-size: 22px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .content-block h3:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233a2614'%3E%3Cpath d='M2,21V19H20V21H2M20,8V5H18V8H20M20,3A2,2 0 0,1 22,5V8A2,2 0 0,1 20,10H18V13A4,4 0 0,1 14,17H8A4,4 0 0,1 4,13V3H20M16,5H6V13A2,2 0 0,0 8,15H14A2,2 0 0,0 16,13V5Z' /%3E%3C/svg%3E");
+            transform: translateY(-50%);
+            background-repeat: no-repeat;
+        }
+
+        .content-block p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .coffee-bean {
+            position: absolute;
+            background-color: #3a2614;
+            border-radius: 50%;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .bean-1 {
+            width: 80px;
+            height: 80px;
+            bottom: -20px;
+            right: -20px;
+        }
+
+        .bean-2 {
+            width: 60px;
+            height: 60px;
+            top: 30px;
+            right: 30px;
+        }
+
+        .year-counter {
+            display: inline-block;
+            font-weight: bold;
+            color: #c87e3e;
+            min-width: 30px;
+            text-align: center;
+            animation: countUp 3s ease-out forwards;
+        }
+
+        @keyframes countUp {
+            0% {
+                content: "1";
+            }
+
+            10% {
+                content: "2";
+            }
+
+            20% {
+                content: "3";
+            }
+
+            30% {
+                content: "4";
+            }
+
+            40% {
+                content: "5";
+            }
+
+            50% {
+                content: "6";
+            }
+
+            60% {
+                content: "7";
+            }
+
+            70% {
+                content: "8";
+            }
+
+            80% {
+                content: "9";
+            }
+
+            90% {
+                content: "10";
+            }
+
+            100% {
+                content: "11";
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(to right, #f8e7d2, #e0c9a6);
+            background-size: 200% 100%;
+            animation: gradient 3s ease infinite;
+            color: #3a2614;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .interactive-button {
+            background-color: #3a2614;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .interactive-button:hover {
+            background-color: #c87e3e;
+            transform: scale(1.05);
+        }
+
+        .recommended-section {
+            margin-top: 40px;
+        }
+
+        .sale-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff5252;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .page-link {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            background-color: #fff;
+            border-radius: 3px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .page-link.active {
+            background-color: var(--primary);
+            color: white;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="banner">
+        <div class="banner-text">
+            <h1><span>Freshly</span> roasted,</h1>
+            <p>for all your brewing needs!</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="coffee-products">
+            <div class="product-card">
+                <img src="{% static 'images/vanila_bag.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 340</div>
+                    <h3 class="product-title">Vanilla Velvet</h3>
+                    <p class="product-desc">Silky, creamy, mellow</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/expresso.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 340</div>
+                    <h3 class="product-title">Expresso</h3>
+                    <p class="product-desc">Strong, bold, dark roast</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/hazelnut_1.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 350</div>
+                    <h3 class="product-title">Hazelnut</h3>
+                    <p class="product-desc">Nutty, toasted, aromatic</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/lavander_latte.jpg' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 380</div>
+                    <h3 class="product-title">Lavander Latte Blend</h3>
+                    <p class="product-desc">Floral, soothing</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/midnight_mocha.jpg' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 360</div>
+                    <h3 class="product-title">Midnight Mocha</h3>
+                    <p class="product-desc">Deep chocolate tones</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/toffee_crunch.jpg' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 340</div>
+                    <h3 class="product-title">Toffee Crunch</h3>
+                    <p class="product-desc">Buttery, rich, with bite</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/almond_amareto.jpg' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 380</div>
+                    <h3 class="product-title">Almond Amaretto</h3>
+                    <p class="product-desc">Nutty and slightly sweet Italian twist</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/berry_brew.jpg' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 340</div>
+                    <h3 class="product-title">Berry Brew</h3>
+                    <p class="product-desc">Subtle berry undertones in a fruity roast</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <div class="section-header">
+            <div class="coffee-steam">
+                <div class="steam"></div>
+                <div class="steam"></div>
+                <div class="steam"></div>
+            </div>
+            <h2 class="section-title">Bytes & Brew</h2>
+            <p class="section-tagline">Brewing brilliance since 2025</p>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="content-block">
+                <div class="coffee-bean bean-1"></div>
+                <div class="coffee-bean bean-2"></div>
+                <h3>Our Brewing Story</h3>
+                <p>Launched in <span class="year-counter" id="year-count">2025</span>, Bytes & Brew was born from a
+                    simple idea — to deliver <span class="highlight">exceptional coffee experiences</span> that
+                    bring warmth, quality, and a spark of innovation to every cup. Our mission is to connect coffee
+                    lovers with the finest blends made from organically grown, handpicked beans.</p>
+                <button class="interactive-button"
+                    onclick="document.getElementById('year-count').innerHTML = '2025'">Discover Our Journey</button>
+            </div>
+
+            <div class="content-block">
+                <div class="coffee-bean bean-1"></div>
+                <div class="coffee-bean bean-2"></div>
+                <h3>Organic Roots, Local Hearts</h3>
+                <p>At Bytes & Brew, we proudly source our beans from farms committed to <span
+                        class="highlight">organic and sustainable practices</span>. We work directly with local
+                    growers to ensure every batch of coffee supports farming communities and upholds the quality our
+                    customers deserve.</p>
+                <button class="interactive-button">Meet the Growers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommended-section">
+        <h2 class="section-title" style="color: black;">YOU MAY ALSO LIKE</h2>
+        <div class="coffee-products">
+            <div class="product-card">
+                <img src="{% static 'images/Mocha_bag.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 450</div>
+                    <h3 class="product-title">DHAK BLEND</h3>
+                    <p class="product-desc">Dark Chocolate, Cocoa & Fruit Jam</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/Drizzle Roast.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 250</div>
+                    <h3 class="product-title">Drizzle Roast</h3>
+                    <p class="product-desc">Caramelized sweetness</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/bronze_blend.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 380</div>
+                    <h3 class="product-title">Bronze Bloom</h3>
+                    <p class="product-desc">Smooth, rich, golden indulgence.</p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/Caramel_bag.png' %}" alt="Coffee" class="product-image">
+                <div class="product-info">
+                    <div class="product-price">₹ 500</div>
+                    <h3 class="product-title">Caramel bag</h3>
+                    <p class="product-desc"></p>
+                    <button class="buy-button">BUY NOW <span>+</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animations on scroll
+    function checkVisible() {
+        const elements = document.querySelectorAll('.animate-fade-up');
+        elements.forEach(element => {
+            const position = element.getBoundingClientRect();
+            if (position.top < window.innerHeight - 100) {
+                element.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', checkVisible);
+    window.addEventListener('resize', checkVisible);
+    window.addEventListener('load', checkVisible);
+
+    // Review Slider
+    const track = document.querySelector('.reviews-track');
+    const slides = document.querySelectorAll('.review-card');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    let currentIndex = 0;
+    const slideWidth = slides[0].clientWidth + 30; // Width + margin
+
+    function updateSlider() {
+        track.style.transform = translateX(-${currentIndex * slideWidth}px);
+    }
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
+        updateSlider();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
+        updateSlider();
+    });
+
+    // Auto slider
+    setInterval(() => {
+        currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
+        updateSlider();
+    }, 5000);
+
+    // Cart functionality
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const cartCount = document.querySelector('.cart-count');
+    let count = 0;
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            count++;
+            cartCount.textContent = count;
+
+            // Animation effect
+            button.textContent = 'Added!';
+            button.style.backgroundColor = '#4CAF50';
+
+            setTimeout(() => {
+                button.textContent = 'Add to Cart';
+                button.style.backgroundColor = '';
+            }, 1500);
+        });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Add animation when scrolling into view
+    document.addEventListener('DOMContentLoaded', function () {
+        // Simulate counting up for the year-counter
+        const yearCount = document.getElementById('year-count');
+        let count = 1;
+        const interval = setInterval(() => {
+            yearCount.textContent = count;
+            count++;
+            if (count > 11) {
+                clearInterval(interval);
+            }
+        }, 200);
+
+        const contentBlocks = document.querySelectorAll('.content-block');
+        contentBlocks.forEach(block => {
+            block.addEventListener('mouseenter', function () {
+                this.style.backgroundColor = '#f5eee3';
+            });
+            block.addEventListener('mouseleave', function () {
+                this.style.backgroundColor = '#fcfaf7';
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get all buy now buttons
+    const buyButtons = document.querySelectorAll('.buy-button');
+    
+    // Add click event listener to each button
+    buyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get product information from the parent card
+            const productCard = this.closest('.product-card');
+            const productTitle = productCard.querySelector('.product-title').textContent;
+            const productPrice = productCard.querySelector('.product-price').textContent;
+            const productImage = productCard.querySelector('.product-image').src;
+            
+            // Store product info in session storage to access on checkout page
+            const productData = {
+                title: productTitle,
+                price: productPrice,
+                image: productImage
+            };
+            
+            sessionStorage.setItem('selectedProduct', JSON.stringify(productData));
+            
+            // Redirect to checkout page
+            window.location.href = "/checkout/";
+        });
+    });
+});
+    
+
+</script>
+{% endblock %}

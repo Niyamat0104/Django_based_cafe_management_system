@@ -1,0 +1,319 @@
+ 
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Bytes & Brew Delux{% endblock %}
+
+{% block extra_css %}
+ 
+<style>
+    .card-container {
+    max-width: 1200px;
+    width: 100%;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(93, 64, 55, 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 40px auto;
+    flex: 1;
+}
+
+.card-header {
+    background-color: var(--primary);
+    color: white;
+    padding: 20px 30px;
+    text-align: center;
+}
+
+.card-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.card-header p {
+    font-size: 1.1rem;
+    color: var(--coffee-accent);
+}
+
+.card-body {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+    gap: 30px;
+}
+
+.product-image {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-details {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-title {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    border-bottom: 3px solid var(--coffee-accent);
+    padding-bottom: 10px;
+}
+
+.product-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #424242;
+}
+
+.product-price {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 20px 0;
+}
+
+.whats-included {
+    margin-bottom: 30px;
+}
+
+.whats-included h3 {
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.whats-included h3::before {
+    content: '☕';
+    margin-right: 10px;
+    font-size: 1.6rem;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.item-card {
+    background-color: var(--coffee-light);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+}
+
+.item-card.cinnamon {
+    border-left: 5px solid var(--cinnamon);
+}
+
+.item-card.irish-cream {
+    border-left: 5px solid var(--irish-cream);
+}
+
+.item-card.vanilla {
+    border-left: 5px solid var(--vanilla);
+}
+
+.item-card.accessory {
+    border-left: 5px solid var(--coffee-accent);
+}
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+.item-description {
+    font-size: 0.9rem;
+    color: #5D4037;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.quantity-selector label {
+    margin-right: 15px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.quantity-selector input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.2rem;
+    border: 2px solid var(--coffee-medium);
+    border-radius: 4px;
+}
+
+.add-to-cart {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-to-cart:hover {
+    background-color: var(--coffee-medium);
+    transform: translateY(-2px);
+}
+
+.add-to-cart:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-footer {
+    background-color: var(--coffee-light);
+    padding: 20px;
+    text-align: center;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-container">
+    <div class="card-header">
+        <h1>BYTES & BREW</h1>
+        <p>Crafted Code and Crafted Coffee Since 2025</p>
+    </div>
+
+    <div class="card-body">
+        <div class="product-image">
+            <img src="{% static 'images/delux.png' %}" alt="Bytes & Brew Deluxe Coffee Pack">
+        </div>
+
+        <div class="product-details">
+            <h2 class="product-title">DELUXE Coffee Pack</h2>
+
+            <p class="product-description">
+                Experience the perfect blend of flavor and coding fuel with our DELUXE coffee pack. This premium
+                gift set brings together our three signature coffee flavors along with exclusive accessories to
+                elevate your coffee ritual. Whether you're debugging late at night or brainstorming your next big
+                project, this pack has everything you need.
+            </p>
+
+            <div class="whats-included">
+                <h3>What's Included</h3>
+
+                <div class="items-grid">
+                    <div class="item-card cinnamon">
+                        <div class="item-icon">🌶</div>
+                        <div class="item-details">
+                            <div class="item-name">Cinnamon Spice</div>
+                            <div class="item-description">250g premium ground coffee</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card irish-cream">
+                        <div class="item-icon">☘</div>
+                        <div class="item-details">
+                            <div class="item-name">Irish Cream</div>
+                            <div class="item-description">250g premium ground coffee</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card vanilla">
+                        <div class="item-icon">🌼</div>
+                        <div class="item-details">
+                            <div class="item-name">Vanilla</div>
+                            <div class="item-description">250g premium ground coffee</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card accessory">
+                        <div class="item-icon">☕</div>
+                        <div class="item-details">
+                            <div class="item-name">Ceramic Mug</div>
+                            <div class="item-description">Branded 12oz mug</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card accessory">
+                        <div class="item-icon">🥄</div>
+                        <div class="item-details">
+                            <div class="item-name">Wooden Scoop</div>
+                            <div class="item-description">Artisan coffee measuring scoop</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card accessory">
+                        <div class="item-icon">🍪</div>
+                        <div class="item-details">
+                            <div class="item-name">Biscotti</div>
+                            <div class="item-description">Handcrafted coffee companion</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="product-price">₹1150</p>
+
+            <div class="quantity-selector">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
+            </div>
+
+            <button class="add-to-cart">
+                <span>ADD TO CART</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        BYTES & BREW — Where Coding and Coffee Meet — ESTD 2025
+    </div>
+</div>
+{% endblock %}

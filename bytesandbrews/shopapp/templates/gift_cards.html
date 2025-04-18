@@ -1,0 +1,2344 @@
+{% extends 'base.html' %}
+{% load static %}
+ {% block extra_css %}
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+      :root {
+      --primary: #6F4E37; /* Coffee brown as primary color */
+      --secondary: #A67C52; /* Lighter coffee tone */
+      --accent: #D4B996; /* Cream color */
+      --dark: #2C1E1A; /* Dark brown */
+      --light: #F5F5F5;
+      --transition: all 0.3s ease;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Anton', sans-serif;
+            transition: all 0.3s ease;
+        }
+        body {
+            background-color: var(--cream);
+        }
+        /* header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: #14463a;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 100px;
+        } */
+        .logo img {
+            height: 100px;
+            transition: transform 0.3s;
+            transform: scale(1.25);
+        }
+        /* nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        nav ul li {
+            margin: 0 15px;
+            position: relative;
+            background-color: transparent;
+        }
+        nav ul li::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: width 0.3s, left 0.3s;
+        }
+        nav ul li:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--coffee-light);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: white;
+        }
+        .icons {
+            display: flex;
+            align-items: center;
+        }
+        .icons a {
+            margin-left: 20px;
+            color: var(--cream);
+            font-size: 22px;
+            transition: transform 0.3s, color 0.3s;
+        }
+        .icons a:hover {
+            color: var(--accent-green);
+            transform: scale(1.2);
+        } */
+
+      .hero-section {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 60px 40px;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section:before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 10%,
+          transparent 10.5%
+        );
+        background-size: 20px 20px;
+        transform: rotate(30deg);
+        animation: moveBackground 20s linear infinite;
+      }
+
+      @keyframes moveBackground {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 40px 40px;
+        }
+      }
+
+      .hero-title {
+        font-size: 36px;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .breadcrumb {
+        padding: 15px 40px;
+        color: #808080;
+        font-size: 14px;
+        display: flex;
+        gap: 5px;
+        background-color: white;
+      }
+
+      .breadcrumb a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .category-tabs {
+        display: flex;
+        justify-content: center;
+        background-color: white;
+        padding: 0 40px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .tab {
+        padding: 15px 25px;
+        cursor: pointer;
+        color: #808080;
+        font-weight: 500;
+        position: relative;
+        transition: var(--transition);
+      }
+
+      .tab:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 3px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--primary);
+        transition: var(--transition);
+      }
+
+      .tab:hover {
+        color: var(--primary);
+      }
+
+      .tab:hover:after {
+        width: 40%;
+      }
+
+      .tab.active {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .tab.active:after {
+        width: 70%;
+      }
+
+      .section-title {
+        padding: 40px 40px 20px;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--dark);
+        text-align: center;
+        position: relative;
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background-color: var(--primary);
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .gift-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px 40px 60px;
+        gap: 30px;
+      }
+
+      .gift-card {
+        width: 320px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        background-color: white;
+        transform: translateY(0);
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+      }
+
+      .gift-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .gift-card:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          transparent 70%,
+          rgba(0, 0, 0, 0.05)
+        );
+        opacity: 0;
+        transition: var(--transition);
+      }
+
+      .gift-card:hover:after {
+        opacity: 1;
+      }
+
+      .gift-card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: var(--transition);
+      }
+
+      .gift-card:hover .gift-card-image {
+        transform: scale(1.05);
+      }
+
+      .gift-card-content {
+        padding: 20px;
+        position: relative;
+      }
+
+      .gift-card-title {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: var(--dark);
+        position: relative;
+      }
+
+      .gift-card-title:before {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 2px;
+        background-color: var(--accent);
+        bottom: -4px;
+        left: 0;
+        transition: var(--transition);
+      }
+
+      .gift-card:hover .gift-card-title:before {
+        width: 50px;
+      }
+
+      .gift-card-description {
+        color: #555;
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .add-item-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+      }
+
+      .add-item-btn:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: var(--transition);
+        z-index: -1;
+      }
+
+      .add-item-btn:hover {
+        background-color: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .add-item-btn:hover:before {
+        left: 100%;
+        transition: 0.7s;
+      }
+
+      .promotion-banner {
+      background: linear-gradient(135deg, #F5F5F5, #E8E8E8);
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .banner-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/assets/images/pattern-coffee-beans.png'); /* Path to your coffee bean pattern */
+      opacity: 0.05;
+      z-index: 1;
+    }
+    
+    .promotion-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      max-width: 600px;
+      text-align: left;
+      padding-right: 20px;
+    }
+    
+    .promotion-visual {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      max-width: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .cafe-logo {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    
+    .promotion-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--dark);
+      position: relative;
+      line-height: 1.2;
+    }
+    
+    .promotion-title::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+    
+    .promotion-text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    
+    .gifts-cards-container {
+      position: relative;
+      perspective: 1000px;
+      width: 100%;
+      height: 300px;
+    }
+    
+    .gifts-card {
+      position: absolute;
+      width: 350px;
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background-color: #fff;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .gifts-card-1 {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) rotateY(-5deg) translateZ(0);
+      z-index: 3;
+      background-image: url('../static/images/seasonal_speciall.jpg'); /* Path to your birthday gift card */
+    }
+    
+    .gifts-card-2 {
+      top: 30px;
+      left: calc(50% - 40px);
+      transform: translateX(-50%) rotateY(-15deg) translateZ(-50px);
+      z-index: 2;
+      filter: brightness(0.9);
+      background-image: url('../static/images/thanku.jpg'); /* Path to your thank you gift card */
+    }
+    
+    .gifts-card-3 {
+      top: 60px;
+      left: calc(50% - 80px);
+      transform: translateX(-50%) rotateY(-25deg) translateZ(-100px);
+      z-index: 1;
+      filter: brightness(0.8);
+      background-image: url('../static/images/anniversary2.jpg'); /* Path to your anniversary gift card */
+    }
+    
+    .gifts-cards-container:hover .gifts-card-1 {
+      transform: translateX(-50%) rotateY(0deg) translateZ(30px);
+    }
+    
+    .gifts-cards-container:hover .gifts-card-2 {
+      transform: translateX(calc(-50% + 120px)) rotateY(-5deg) translateZ(-10px);
+    }
+    
+    .gifts-cards-container:hover .gifts-card-3 {
+      transform: translateX(calc(-50% - 120px)) rotateY(5deg) translateZ(-20px);
+    }
+    
+    .card-label {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+    
+    .card-price {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255,255,255,0.9);
+      color: var(--dark);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .promotion-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    
+    .promotion-btn:hover {
+      background-color: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(111, 78, 55, 0.3);
+    }
+    
+    .btn-icon {
+      display: inline-flex;
+      transition: var(--transition);
+    }
+    
+    .promotion-btn:hover .btn-icon {
+      transform: translateX(4px);
+    }
+    
+    .promo-tag {
+      display: inline-block;
+      background-color: var(--accent);
+      color: var(--dark);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    
+
+       /* Footer */
+       .blue-tokai-footer {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 60px 0 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .blue-tokai-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--coffee-medium), var(--coffee-light), var(--coffee-medium));
+        }
+        .footer-logo {
+            width: 150px;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s;
+        }
+        .footer-logo:hover {
+            transform: scale(1.05);
+        }
+        .blue-tokai-footer .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .footer-left {
+            flex: 0 0 20%;
+        }
+        .footer-legal {
+            margin-bottom: 20px;
+        }
+        .footer-legal p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .footer-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .footer-social a:hover {
+            background-color: var(--coffee-light);
+            transform: translateY(-3px);
+        }
+        .footer-center {
+            flex: 0 0 30%;
+        }
+        .news-section {
+            padding: 60px 5%;
+            background-color: #f8f5f0;
+        }
+        .news-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--coffee-dark);
+            font-size: 32px;
+            position: relative;
+        }
+        .news-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-green);
+        }
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .news-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .news-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .news-content {
+            padding: 20px;
+        }
+        .news-date {
+            display: block;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .news-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--coffee-dark);
+        }
+        .news-content p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .read-more {
+            display: inline-block;
+            color: var(--primary-green);
+            font-weight: 500;
+            text-decoration: none;
+            position: relative;
+        }
+        .read-more::after {
+            content: '→';
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        .read-more:hover::after {
+            transform: translateX(5px);
+        }
+        .news-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .view-all-news {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .view-all-news:hover {
+            background-color: var(--coffee-dark);
+        }
+        .news-controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background-color: white;
+            color: var(--coffee-dark);
+            cursor: pointer;
+            margin-left: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .special-offers {
+            margin-top: 20px;
+        }
+        .special-offers p {
+            margin-bottom: 10px;
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+
+      /* Gift form modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        overflow-y: auto;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal.active {
+        opacity: 1;
+      }
+
+      .modal-content {
+        background-color: white;
+        width: 90%;
+        max-width: 800px;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 50px auto;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        transform: translateY(50px);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        position: relative;
+      }
+
+      .modal.active .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: var(--light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        font-size: 18px;
+        transition: var(--transition);
+      }
+
+      .close-modal:hover {
+        background-color: #f0f0f0;
+        transform: rotate(90deg);
+      }
+
+      .modal-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .modal-title {
+        font-size: 28px;
+        color: var(--dark);
+        margin-bottom: 10px;
+      }
+
+      .modal-subtitle {
+        color: #666;
+        font-size: 16px;
+      }
+
+      .gift-preview-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .gift-preview {
+        width: 100%;
+        height: 400px;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .gift-preview-container:hover .gift-preview {
+        transform: scale(1.03);
+      }
+
+      .gift-preview-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        color: white;
+        text-align: left;
+      }
+
+      .gift-preview-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .gift-preview-desc {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .form-section {
+        padding: 25px;
+        background-color: var(--light);
+        border-radius: 12px;
+        margin-bottom: 30px;
+        transition: var(--transition);
+        border: 1px solid transparent;
+      }
+
+      .form-section:hover {
+        border-color: var(--light-green);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-section-title {
+        font-size: 18px;
+        color: var(--dark);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .form-section-title i {
+        color: var(--primary);
+        font-size: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: #444;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: var(--transition);
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 112, 74, 0.1);
+        outline: none;
+      }
+
+      .amount-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .amount-option {
+        padding: 10px 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition);
+        color: #555;
+      }
+
+      .amount-option:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .amount-option.selected {
+        border-color: var(--primary);
+        background-color: var(--light-green);
+        color: var(--primary);
+      }
+
+      .required {
+        color: #e74c3c;
+        margin-left: 3px;
+      }
+
+      .form-text {
+        font-size: 13px;
+        color: #777;
+        margin-top: 8px;
+      }
+
+      .recipient-container {
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background-color: white;
+        position: relative;
+      }
+
+      .remove-recipient {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #f8f8f8;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .remove-recipient:hover {
+        background-color: #ffeeee;
+        color: #e74c3c;
+      }
+
+      .add-recipient-btn {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 5px;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .add-recipient-btn:hover {
+        background-color: #333;
+        transform: translateY(-2px);
+      }
+
+      .textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .character-count {
+        text-align: right;
+        font-size: 13px;
+        color: #777;
+        margin-top: 5px;
+        transition: var(--transition);
+      }
+
+      .character-count.warning {
+        color: #e67e22;
+      }
+
+      .character-count.danger {
+        color: #e74c3c;
+      }
+
+      .checkout-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 30px;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .checkout-btn:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: var(--transition);
+        z-index: -1;
+      }
+
+      .checkout-btn:hover {
+        background-color: var(--secondary);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .checkout-btn:hover:before {
+        left: 100%;
+        transition: 0.7s;
+      }
+
+      .checkout-btn:active {
+        transform: translateY(-1px);
+      }
+
+      .checkout-summary {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        margin-top: 20px;
+        border-top: 1px solid #eee;
+        font-weight: 500;
+      }
+
+      .checkout-total {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .payment-icons {
+        display: flex;
+        gap: 8px;
+        margin-top: 15px;
+        justify-content: center;
+      }
+
+      .payment-icon {
+        width: 40px;
+        height: 25px;
+        opacity: 0.7;
+        transition: var(--transition);
+      }
+
+      .payment-icon:hover {
+        opacity: 1;
+      }
+
+      .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 25px;
+      }
+
+      .terms-checkbox input {
+        margin-top: 3px;
+      }
+
+      .terms-text {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .terms-text a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .terms-text a:hover {
+        text-decoration: underline;
+      }
+      .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 500px;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+        
+        .carousel-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .carousel-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+        }
+        
+        .carousel-btn {
+            background-color: #0a5c36;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-btn:hover {
+            background-color: #084628;
+        }
+        
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #333;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+        
+        .prev:hover, .next:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .prev {
+            left: 20px;
+        }
+        
+        .next {
+            right: 20px;
+        }
+        
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+        
+        .indicator.active {
+            background-color: white;
+        }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Media queries for responsiveness */
+      @media screen and (max-width: 768px) {
+        .slide-title {
+          font-size: 2rem;
+        }
+        .slide-subtitle {
+          font-size: 1rem;
+        }
+        .carousel-container {
+          height: 400px;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .slide-title {
+          font-size: 1.75rem;
+        }
+        .carousel-arrows {
+          display: none;
+        }
+        .carousel-container {
+          height: 350px;
+        }
+      }
+
+      /* Mobile responsive styles */
+      @media (max-width: 992px) {
+        .nav {
+          gap: 20px;
+        }
+
+        .search-bar {
+          width: 200px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          padding: 15px 20px;
+        }
+
+        .nav {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .hero-section {
+          padding: 40px 20px;
+        }
+
+        .hero-title {
+          font-size: 28px;
+        }
+
+        .hero-subtitle {
+          font-size: 16px;
+        }
+
+        .category-tabs {
+          overflow-x: auto;
+          justify-content: flex-start;
+          padding: 0 20px;
+        }
+
+        .gift-cards-container {
+          padding: 20px 20px 40px;
+          gap: 20px;
+        }
+
+        .gift-card {
+          width: 100%;
+        }
+
+        .promotion-banner {
+          padding: 40px 20px;
+        }
+
+        .footer {
+          padding: 40px 20px;
+        }
+
+        .footer-container {
+          flex-direction: column;
+        }
+
+        .modal-content {
+          padding: 20px;
+          margin: 30px auto;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .search-section {
+          display: none;
+        }
+
+        .modal-content {
+          padding: 15px;
+          margin: 20px auto;
+        }
+
+        .modal-title {
+          font-size: 24px;
+        }
+
+        .form-section {
+          padding: 15px;
+        }
+
+        .amount-options {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .amount-option {
+          flex: 1 0 calc(50% - 10px);
+          text-align: center;
+        }
+      }
+
+      /* Animations and effects */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+      }
+
+      /* Accessibility focus styles */
+      :focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #aaa;
+      }
+
+      /* Mobile menu for responsive design */
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--dark);
+        cursor: pointer;
+      }
+
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        height: 100%;
+        background-color: white;
+        z-index: 200;
+        padding: 30px;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow-y: auto;
+      }
+
+      .mobile-menu.active {
+        left: 0;
+      }
+
+      .mobile-menu-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: var(--dark);
+        cursor: pointer;
+      }
+
+      .mobile-nav {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .mobile-nav-item {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        transition: var(--transition);
+      }
+
+      .mobile-nav-item:hover {
+        color: var(--primary);
+        padding-left: 5px;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 199;
+        display: none;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      .overlay.active {
+        display: block;
+        opacity: 1;
+      }
+    </style>
+    {% endblock %}
+   {% block content %}
+  
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+  
+      <!-- Mobile menu -->
+      <div class="mobile-menu">
+        <button class="mobile-menu-close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-nav">
+          <a href="#" class="mobile-nav-item">Home</a>
+          <a href="#" class="mobile-nav-item">Gift</a>
+          <a href="#" class="mobile-nav-item">Order</a>
+          <a href="#" class="mobile-nav-item">Pay</a>
+          <a href="#" class="mobile-nav-item">Store</a>
+        </div>
+      </div>
+      <div class="overlay"></div>
+  
+     <!-- Hero Carousel Section -->
+     <div class="carousel-container">
+      <div class="carousel">
+          <div class="carousel-slide">
+              <img src="{% static 'images/carousouel.jpg' %}" alt="Holiday Gift Card" class="carousel-image">
+              <div class="carousel-content">
+                  <h2>Give the Gift of Perfect Coffee</h2>
+                  <p>Share your passion for exceptional coffee with our beautifully designed gift cards, perfect for every occasion.</p>
+                  <button class="carousel-btn" style="background-color: #6F4E37;">Explore Gift Cards</button>
+              </div>
+          </div>
+          <div class="carousel-slide">
+              <img src="{% static 'images/char4.jpg' %}" alt="Birthday Gift Card" class="carousel-image">
+              <div class="carousel-content">
+                  <h2>Celebrate Special Moments</h2>
+                  <p>Make any occasion memorable with a gift card that delivers the perfect coffee experience.</p>
+                  <button class="carousel-btn" style="background-color: #6F4E37;">Browse Birthday Cards</button>
+              </div>
+          </div>
+          <div class="carousel-slide">
+              <img src="{% static 'images/carosuel3.jpg' %}" alt="Thank You Gift Card" class="carousel-image">
+              <div class="carousel-content">
+                  <h2>Express Your Gratitude</h2>
+                  <p>Say "thank you" with the gift of exceptional coffee and brewing experiences.</p>
+                  <button class="carousel-btn" style="background-color: #6F4E37;">See Thank You Cards</button>
+              </div>
+          </div>
+          <div class="carousel-slide">
+              <img src="{% static 'images/carosouel2.jpg' %}" alt="Coffee Subscription Gift" class="carousel-image">
+              <div class="carousel-content">
+                  <h2>The Gift That Keeps Brewing</h2>
+                  <p>Give them more than just coffee with our subscription gift cards - a new experience with every delivery.</p>
+                  <button class="carousel-btn" style="background-color: #6F4E37;">Discover Subscriptions</button>
+              </div>
+          </div>
+      </div>
+      
+      <button class="prev">❮</button>
+      <button class="next">❯</button>
+      
+      <div class="carousel-indicators">
+          <div class="indicator active"></div>
+          <div class="indicator"></div>
+          <div class="indicator"></div>
+          <div class="indicator"></div>
+      </div>
+  </div>
+  
+      <!-- Breadcrumb -->
+ 
+
+<!-- Category Tabs -->
+<div class="category-tabs" style="margin-top: 20px;">
+  <div class="tab" data-category="all">ALL</div>
+  <div class="tab active" data-category="featured">FEATURED</div>
+  <div class="tab" data-category="birthday">BIRTHDAY</div>
+  <div class="tab" data-category="thank-you">THANK YOU</div>
+  <div class="tab" data-category="congratulations">CONGRATULATIONS</div>
+  <div class="tab" data-category="holidays">HOLIDAYS</div>
+</div>
+
+<!-- Gift Cards Section -->
+<h2 class="section-title">Explore Our Gift Cards</h2>
+
+<div class="gift-cards-container">
+  {% for gift_card_type in gift_card_types %}
+  <!-- Gift Card Item -->
+  <div class="gift-card" data-category="{{ gift_card_type.get_categories }}">
+    <img
+      src="{% static gift_card_type.image %}"
+      alt="{{ gift_card_type.name }}"
+      class="gift-card-image"
+    />
+    <div class="gift-card-content">
+      <div class="gift-card-title">{{ gift_card_type.name }}</div>
+      <div class="gift-card-description">
+        {{ gift_card_type.description }}
+      </div>
+      <button class="add-item-btn" data-id="{{ gift_card_type.id }}" data-price="{{ gift_card_type.price }}">Add to Cart</button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Promotion Banner -->
+<div class="promotion-banner">
+  <div class="banner-pattern"></div>
+  
+  <div class="promotion-content">
+ 
+    <span class="promo-tag">Limited Time Offer</span>
+    <h2 class="promotion-title">Share Joy with a Gift of Coffee</h2>
+    <p class="promotion-text">
+      Make someone's day special with our premium gift cards. Perfect for birthdays, anniversaries, or just to say thanks. Each card is elegantly designed and can be loaded with any amount of your choice.
+    </p>
+    <a href="{% url 'shop_app:gift_cards' %}" class="promotion-btn">
+      Explore Gift Cards
+      <span class="btn-icon">→</span>
+    </a>
+  </div>
+  
+  <div class="promotion-visual">
+    <div class="gifts-cards-container">
+      <div class="gifts-card gifts-card-1">
+        <div class="card-label">Birthday Special</div>
+        <div class="card-price">${{ price_range.min }}-${{ price_range.max }}</div>
+      </div>
+      <div class="gifts-card gifts-card-2">
+        <div class="card-label">Thank You</div>
+        <div class="card-price">${{ price_range.min }}-${{ price_range.max }}</div>
+      </div>
+      <div class="gifts-card gifts-card-3">
+        <div class="card-label">Anniversary</div>
+        <div class="card-price">${{ price_range.min }}-${{ price_range.max }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gift Form Modal -->
+<div class="modal" id="giftModal">
+  <div class="modal-content">
+    <button class="close-modal">&times;</button>
+    <div class="modal-header">
+      <h2 class="modal-title">Customize Your Gift Card</h2>
+      <p class="modal-subtitle">Personalize your gift with a message and choose the perfect amount</p>
+    </div>
+
+    <div class="gift-preview-container">
+      <img src="" alt="Gift Card Preview" class="gift-preview" id="cardPreview">
+      <div class="gift-preview-overlay">
+        <h3 class="gift-preview-title" id="previewTitle"></h3>
+        <p class="gift-preview-desc">The perfect gift for coffee lovers</p>
+      </div>
+    </div>
+
+    <form id="giftForm" method="post" action="{% url 'shop_app:create_gift_card' %}">
+      {% csrf_token %}
+      <input type="hidden" name="gift_card_type_id" id="giftCardTypeId">
+      
+      <div class="form-section">
+        <h3 class="form-section-title">₹ Choose Amount</h3>
+        <div class="form-group">
+          <label class="form-label">Select an amount <span class="required">*</span></label>
+          <div class="amount-options">
+            <div class="amount-option" data-value="1000">₹1000</div>
+            <div class="amount-option" data-value="1500">₹1500</div>
+            <div class="amount-option selected" data-value="2000">₹2000</div>
+            <div class="amount-option" data-value="3000">₹3000</div>
+            <div class="amount-option" data-value="5000">₹5000</div>
+          </div>
+          <input type="hidden" name="amount" id="selectedAmount" value="50">
+          <p class="form-text">Digital gift cards are delivered via email within 24 hours of purchase</p>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-user"></i> Recipient Information</h3>
+        <div id="recipientsList">
+          <div class="recipient-container">
+            <div class="form-group">
+              <label class="form-label">Recipient's Name <span class="required">*</span></label>
+              <input type="text" class="form-control" name="recipient_name" placeholder="Enter recipient's name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Recipient's Email <span class="required">*</span></label>
+              <input type="email" class="form-control" name="recipient_email" placeholder="Enter recipient's email" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Recipient's Phone (Optional)</label>
+              <input type="tel" class="form-control" name="recipient_phone" placeholder="Enter recipient's phone number">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-envelope"></i> Your Message</h3>
+        <div class="form-group">
+          <label class="form-label">From</label>
+          <input type="text" class="form-control" name="sender_name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Personal Message</label>
+          <textarea class="form-control textarea" id="messageArea" name="message" placeholder="Write a personal message (optional)" maxlength="200"></textarea>
+          <div class="character-count"><span id="charCount">0</span>/200</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-credit-card"></i> Payment</h3>
+        <div class="form-group">
+          <label class="form-label">Delivery Date</label>
+          <input type="date" class="form-control" name="delivery_date" min="{{ today|date:'Y-m-d' }}">
+          <p class="form-text">Leave blank to send immediately</p>
+        </div>
+        
+        <div class="checkout-summary">
+          <span>Total:</span>
+          <span class="checkout-total" id="totalAmount">₹50.00</span>
+        </div>
+
+        <div class="terms-checkbox">
+          <input type="checkbox" id="termsCheck" required>
+          <label for="termsCheck" class="terms-text">
+            I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button type="submit" class="checkout-btn">
+          <i class="fas fa-lock"></i> Secure Checkout
+        </button>
+
+        <div class="payment-icons">
+          <img src="{% static 'images/visa.jpg' %}" alt="Visa" class="payment-icon">
+          <img src="{% static 'images/mastercard.jpg' %}" alt="Mastercard" class="payment-icon">
+          <img src="{% static 'images/american.jpg' %}" alt="Amex" class="payment-icon">
+          <img src="{% static 'images/paypal.jpg' %}" alt="PayPal" class="payment-icon">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+  
+     
+  
+{% block extra_js %}
+<script> 
+// Function to create an animated coffee cup with improved device compatibility
+function createCoffeeCupAnimation() {
+    // Check if the element already exists (to prevent duplicates)
+    if (document.getElementById('bytes-brews-coffee-cup')) {
+        return;
+    }
+    
+    // Create a container for the coffee cup
+    const container = document.createElement('div');
+    container.id = 'bytes-brews-coffee-cup';
+    container.style.position = 'fixed';
+    container.style.bottom = '20px';
+    container.style.right = '20px';
+    container.style.width = '80px'; // Smaller size for better compatibility
+    container.style.height = '80px';
+    container.style.zIndex = '999';
+    container.style.cursor = 'pointer';
+    container.style.transition = 'transform 0.3s ease';
+    container.style.transform = 'scale(0)'; // Start hidden for animation
+    
+    // Create SVG coffee cup with simplified animations
+    container.innerHTML = `
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background circle -->
+            <circle cx="100" cy="100" r="85" fill="#00704A" />
+            
+            <!-- Coffee cup -->
+            <path class="cup" d="M50,70 L50,140 C50,155 65,170 100,170 C135,170 150,155 150,140 L150,70 Z" fill="#ffffff" stroke="#333333" stroke-width="2" />
+            
+            <!-- Cup rim -->
+            <ellipse cx="100" cy="70" rx="50" ry="10" fill="#ffffff" stroke="#333333" stroke-width="2" />
+            
+            <!-- Coffee liquid - simplified to reduce animations -->
+            <path class="coffee" d="M55,80 L55,130 C55,145 70,155 100,155 C130,155 145,145 145,130 L145,80 Z" fill="#6F4E37" />
+            
+            <!-- Cup handle -->
+            <path d="M150,90 C170,90 180,100 170,120 C160,140 150,130 150,120" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+            
+            <!-- Bytes & Brews text -->
+            <text x="100" y="115" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Bytes &</text>
+            <text x="100" y="135" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Brews</text>
+            
+            <!-- Static steam instead of animated for better performance -->
+            <path d="M80,50 Q90,35 95,50" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+            <path d="M100,45 Q110,30 115,45" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+            <path d="M120,50 Q130,35 125,50" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+        </svg>
+    `;
+    
+    // Append to body
+    document.body.appendChild(container);
+    
+    // Simple show animation with timeout
+    setTimeout(() => {
+        container.style.transform = 'scale(1)';
+    }, 1000);
+    
+    // Make coffee cup interactive
+    container.addEventListener('mouseover', function() {
+        this.style.transform = 'scale(1.1)';
+    });
+    
+    container.addEventListener('mouseout', function() {
+        this.style.transform = 'scale(1)';
+    });
+    
+    // Easter egg - click on cup
+    container.addEventListener('click', function() {
+        alert('☕ Thanks for visiting Bytes & Brews! ☕');
+    });
+}
+
+// Wait for document to be fully loaded before creating the coffee cup
+document.addEventListener('DOMContentLoaded', function() {
+    // Add a small delay to ensure page is rendered
+    setTimeout(createCoffeeCupAnimation, 500);
+    
+    // Rest of your existing DOMContentLoaded code remains here
+    // Category tabs functionality
+    const tabs = document.querySelectorAll('.tab');
+    const giftCards = document.querySelectorAll('.gift-card');
+
+    if (tabs.length > 0) {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Get category to filter
+                const category = tab.getAttribute('data-category');
+                
+                // Update section title based on category
+                const sectionTitle = document.querySelector('.section-title');
+                if (sectionTitle) {
+                    if (category === 'all') {
+                        sectionTitle.textContent = 'All Gift Cards';
+                    } else if (category === 'featured') {
+                        sectionTitle.textContent = 'Featured Gift Cards';
+                    } else if (category === 'birthday') {
+                        sectionTitle.textContent = 'Birthday Gift Cards';
+                    } else if (category === 'thank-you') {
+                        sectionTitle.textContent = 'Thank You Gift Cards';
+                    } else if (category === 'congratulations') {
+                        sectionTitle.textContent = 'Congratulations Gift Cards';
+                    } else if (category === 'holidays') {
+                        sectionTitle.textContent = 'Holiday Gift Cards';
+                    }
+                }
+                
+                // Filter gift cards
+                giftCards.forEach(card => {
+                    const cardCategories = card.getAttribute('data-category').split(' ');
+                    
+                    if (category === 'all' || cardCategories.includes(category)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // Gift card modal functionality
+    const modal = document.getElementById('giftModal');
+    const addItemBtns = document.querySelectorAll('.add-item-btn');
+    const closeModal = document.querySelector('.close-modal');
+    
+    if (modal && addItemBtns.length > 0) {
+        const giftCardTypeIdInput = document.getElementById('giftCardTypeId');
+        const amountOptions = document.querySelectorAll('.amount-option');
+        const selectedAmountInput = document.getElementById('selectedAmount');
+
+        addItemBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.gift-card');
+                const cardTitle = card.querySelector('.gift-card-title').textContent;
+                const cardImage = card.querySelector('.gift-card-image').src;
+                const cardId = this.getAttribute('data-id');
+                
+                // Update modal preview
+                const cardPreview = document.getElementById('cardPreview');
+                const previewTitle = document.getElementById('previewTitle');
+                
+                if (cardPreview) cardPreview.src = cardImage;
+                if (previewTitle) previewTitle.textContent = cardTitle;
+                if (giftCardTypeIdInput) giftCardTypeIdInput.value = cardId;
+                
+                // Show modal
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Amount selection
+        const totalAmount = document.getElementById('totalAmount');
+        
+        if (amountOptions.length > 0 && totalAmount) {
+            amountOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    amountOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    const value = this.getAttribute('data-value');
+                    totalAmount.textContent = `₹${value}.00`;
+                    if (selectedAmountInput) selectedAmountInput.value = value;
+                });
+            });
+        }
+    }
+
+    // Character counter for message
+    const messageArea = document.getElementById('messageArea');
+    const charCount = document.getElementById('charCount');
+    
+    if (messageArea && charCount) {
+        messageArea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            const charCountElement = document.querySelector('.character-count');
+            if (charCountElement) {
+                charCountElement.classList.remove('warning', 'danger');
+                
+                if (count > 150) {
+                    charCountElement.classList.add('warning');
+                }
+                if (count > 180) {
+                    charCountElement.classList.add('danger');
+                }
+            }
+        });
+    }
+
+    // Form submission validation
+    const giftForm = document.getElementById('giftForm');
+    if (giftForm) {
+        giftForm.addEventListener('submit', function(e) {
+            const termsCheck = document.getElementById('termsCheck');
+            if (termsCheck && !termsCheck.checked) {
+                e.preventDefault();
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+        });
+    }
+});
+// Function to create an animated coffee cup with improved device compatibility
+function createCoffeeCupAnimation() {
+    // Check if the element already exists (to prevent duplicates)
+    if (document.getElementById('bytes-brews-coffee-cup')) {
+        return;
+    }
+    
+    // Create a container for the coffee cup
+    const container = document.createElement('div');
+    container.id = 'bytes-brews-coffee-cup';
+    container.style.position = 'fixed';
+    container.style.bottom = '20px';
+    container.style.right = '20px';
+    container.style.width = '80px'; // Smaller size for better compatibility
+    container.style.height = '80px';
+    container.style.zIndex = '999';
+    container.style.cursor = 'pointer';
+    container.style.transition = 'transform 0.3s ease';
+    container.style.transform = 'scale(0)'; // Start hidden for animation
+    
+    // Create SVG coffee cup with simplified animations
+    container.innerHTML = `
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background circle -->
+            <circle cx="100" cy="100" r="85" fill="#00704A" />
+            
+            <!-- Coffee cup -->
+            <path class="cup" d="M50,70 L50,140 C50,155 65,170 100,170 C135,170 150,155 150,140 L150,70 Z" fill="#ffffff" stroke="#333333" stroke-width="2" />
+            
+            <!-- Cup rim -->
+            <ellipse cx="100" cy="70" rx="50" ry="10" fill="#ffffff" stroke="#333333" stroke-width="2" />
+            
+            <!-- Coffee liquid - simplified to reduce animations -->
+            <path class="coffee" d="M55,80 L55,130 C55,145 70,155 100,155 C130,155 145,145 145,130 L145,80 Z" fill="#6F4E37" />
+            
+            <!-- Cup handle -->
+            <path d="M150,90 C170,90 180,100 170,120 C160,140 150,130 150,120" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+            
+            <!-- Bytes & Brews text -->
+            <text x="100" y="115" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Bytes &</text>
+            <text x="100" y="135" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">Brews</text>
+            
+            <!-- Static steam instead of animated for better performance -->
+            <path d="M80,50 Q90,35 95,50" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+            <path d="M100,45 Q110,30 115,45" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+            <path d="M120,50 Q130,35 125,50" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+        </svg>
+    `;
+    
+    // Append to body
+    document.body.appendChild(container);
+    
+    // Simple show animation with timeout
+    setTimeout(() => {
+        container.style.transform = 'scale(1)';
+    }, 1000);
+    
+    // Make coffee cup interactive
+    container.addEventListener('mouseover', function() {
+        this.style.transform = 'scale(1.1)';
+    });
+    
+    container.addEventListener('mouseout', function() {
+        this.style.transform = 'scale(1)';
+    });
+    
+    // Easter egg - click on cup
+    container.addEventListener('click', function() {
+        alert('☕ Thanks for visiting Bytes & Brews! ☕');
+    });
+}
+
+// Wait for document to be fully loaded before creating the coffee cup
+document.addEventListener('DOMContentLoaded', function() {
+    // Add a small delay to ensure page is rendered
+    setTimeout(createCoffeeCupAnimation, 500);
+    
+    // Rest of your existing DOMContentLoaded code remains here
+    // Category tabs functionality
+    const tabs = document.querySelectorAll('.tab');
+    const giftCards = document.querySelectorAll('.gift-card');
+
+    if (tabs.length > 0) {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Get category to filter
+                const category = tab.getAttribute('data-category');
+                
+                // Update section title based on category
+                const sectionTitle = document.querySelector('.section-title');
+                if (sectionTitle) {
+                    if (category === 'all') {
+                        sectionTitle.textContent = 'All Gift Cards';
+                    } else if (category === 'featured') {
+                        sectionTitle.textContent = 'Featured Gift Cards';
+                    } else if (category === 'birthday') {
+                        sectionTitle.textContent = 'Birthday Gift Cards';
+                    } else if (category === 'thank-you') {
+                        sectionTitle.textContent = 'Thank You Gift Cards';
+                    } else if (category === 'congratulations') {
+                        sectionTitle.textContent = 'Congratulations Gift Cards';
+                    } else if (category === 'holidays') {
+                        sectionTitle.textContent = 'Holiday Gift Cards';
+                    }
+                }
+                
+                // Filter gift cards
+                giftCards.forEach(card => {
+                    const cardCategories = card.getAttribute('data-category').split(' ');
+                    
+                    if (category === 'all' || cardCategories.includes(category)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // Gift card modal functionality
+    const modal = document.getElementById('giftModal');
+    const addItemBtns = document.querySelectorAll('.add-item-btn');
+    const closeModal = document.querySelector('.close-modal');
+    
+    if (modal && addItemBtns.length > 0) {
+        const giftCardTypeIdInput = document.getElementById('giftCardTypeId');
+        const amountOptions = document.querySelectorAll('.amount-option');
+        const selectedAmountInput = document.getElementById('selectedAmount');
+
+        addItemBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.gift-card');
+                const cardTitle = card.querySelector('.gift-card-title').textContent;
+                const cardImage = card.querySelector('.gift-card-image').src;
+                const cardId = this.getAttribute('data-id');
+                
+                // Update modal preview
+                const cardPreview = document.getElementById('cardPreview');
+                const previewTitle = document.getElementById('previewTitle');
+                
+                if (cardPreview) cardPreview.src = cardImage;
+                if (previewTitle) previewTitle.textContent = cardTitle;
+                if (giftCardTypeIdInput) giftCardTypeIdInput.value = cardId;
+                
+                // Show modal
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Amount selection
+        const totalAmount = document.getElementById('totalAmount');
+        
+        if (amountOptions.length > 0 && totalAmount) {
+            amountOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    amountOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    const value = this.getAttribute('data-value');
+                    totalAmount.textContent = `₹${value}.00`;
+                    if (selectedAmountInput) selectedAmountInput.value = value;
+                });
+            });
+        }
+    }
+
+    // Character counter for message
+    const messageArea = document.getElementById('messageArea');
+    const charCount = document.getElementById('charCount');
+    
+    if (messageArea && charCount) {
+        messageArea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            const charCountElement = document.querySelector('.character-count');
+            if (charCountElement) {
+                charCountElement.classList.remove('warning', 'danger');
+                
+                if (count > 150) {
+                    charCountElement.classList.add('warning');
+                }
+                if (count > 180) {
+                    charCountElement.classList.add('danger');
+                }
+            }
+        });
+    }
+
+    // Form submission validation
+    const giftForm = document.getElementById('giftForm');
+    if (giftForm) {
+        giftForm.addEventListener('submit', function(e) {
+            const termsCheck = document.getElementById('termsCheck');
+            if (termsCheck && !termsCheck.checked) {
+                e.preventDefault();
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            const indicators = document.querySelectorAll('.indicator');
+            const totalSlides = slides.length;
+            
+            let currentIndex = 0;
+            let autoSlideInterval;
+            
+            // Initialize carousel
+            function initCarousel() {
+                // Set initial position
+                updateCarousel();
+                
+                // Start autoslide
+                startAutoSlide();
+            }
+            
+            // Update carousel position
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Update indicators
+                indicators.forEach((indicator, index) => {
+                    if (index === currentIndex) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Move to specific slide
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoSlide();
+            }
+            
+            // Move to next slide
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateCarousel();
+                resetAutoSlide();
+            }
+            
+            // Move to previous slide
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+                resetAutoSlide();
+            }
+            
+            // Start auto slide
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+            }
+            
+            // Reset auto slide timer
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
+            }
+            
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Add click event for indicators
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+            });
+            
+            // Add swipe functionality for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            carousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    nextSlide(); // Swipe left, go to next slide
+                } else if (touchEndX > touchStartX + swipeThreshold) {
+                    prevSlide(); // Swipe right, go to previous slide
+                }
+            }
+            
+            // Pause auto slide when user hovers over carousel
+            carousel.addEventListener('mouseenter', () => {
+                clearInterval(autoSlideInterval);
+            });
+            
+            carousel.addEventListener('mouseleave', () => {
+                startAutoSlide();
+            });
+            
+            // Initialize carousel
+            initCarousel();
+        });
+</script>
+{% endblock %}
+ 

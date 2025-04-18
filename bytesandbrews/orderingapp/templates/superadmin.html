@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superadmin - Cafe Owners Management</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #161a23;
+            color: #ffffff;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2c3144;
+            padding-bottom: 15px;
+        }
+
+        .header-actions h1 {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #7c4dff, #03a9f4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .navbar {
+            background-color: #1c2130;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #1c2130;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 18px 20px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #212639;
+            color: #a3b4d0;
+            font-weight: 500;
+            border-bottom: 1px solid #2c3552;
+        }
+
+        .user-table td {
+            border-bottom: 1px solid #2c3552;
+            vertical-align: middle;
+            color: #ffffff;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #232942;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #213966;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #ffffff;
+            font-weight: bold;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .subscription {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .basic {
+            background: linear-gradient(135deg, #1565c0, #0d47a1);
+            color: #ffffff;
+        }
+
+        .premium {
+            background: linear-gradient(135deg, #ff9800, #ff6f00);
+            color: #ffffff;
+        }
+
+        .pro {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: #ffffff;
+        }
+
+        .enterprise {
+            background: linear-gradient(135deg, #d81b60, #880e4f);
+            color: #ffffff;
+        }
+
+        .trial {
+            background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+            color: #ffffff;
+        }
+
+        .action-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+        }
+
+        .dashboard-btn {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            color: #a3b4d0;
+            background-color: #1c2130;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            color: #7c4dff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #aac3c0;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #a3b4d0;
+            font-size: 1.1em;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 2rem;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--beige-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--beige-light);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            background: var(--beige-light);
+            color: var(--primary-blue);
+        }
+
+        .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-items a{
+            font-size: 1.2rem;
+        }
+
+        .nav-link {
+            color: var(--beige-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--beige-medium);
+        }
+
+        .nav-link.active {
+            color: var(--beige-medium);
+            font-weight: 500;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--beige-medium);
+            border-radius: 2px;
+        }
+
+        .right-items {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: var(--beige-light);
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .icon-button:hover {
+            color: var(--beige-medium);
+        }
+
+        /* Icons */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .footer {
+            background: var(--darker-blue);
+            padding: 4rem 2rem 2rem;
+            color: var(--beige-light);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column {
+            background: var(--box-blue);
+            box-shadow: #040B24 0px 5px 15px;
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .footer-column h3 {
+            color: var(--beige-light);
+            font-size: 1.25rem;
+            
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent-teal);
+        }
+
+        .footer-links {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            color: rgba(245, 232, 211, 0.7);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--beige-light);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 232, 211, 0.1);
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(245, 232, 211, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .company-logo {
+            font-weight: bold;
+            color: var(--beige-light);
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            color: rgba(245, 232, 211, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--beige-light);
+        }
+
+        .certification-badges {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .certification-badge {
+            background: rgba(245, 232, 211, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .certification-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .company-info {
+                flex-direction: column;
+            }
+        }
+
+ 
+
+        @media (max-width: 768px) {
+            .nav-items {
+                display: none;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+        }
+         
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="" class="logo">BYTES AND BREW</a>
+        
+        <nav class="nav-items">
+            <a href="{% url 'order_app:admin' %}" class="nav-link">Home</a>
+            {% if user.is_authenticated and user.is_staff and not user.is_superuser %}
+            <a href="{% url 'order_app:dashboard' id=user.id %}" class="nav-link active">Dashboard</a>
+            {% endif %}
+            {% if user.is_authenticated and user.is_superuser %}
+            <a href="{% url 'order_app:superadmin' %}" class="nav-link active">SUPERADMIN PANEL</a>
+            {% endif %}
+            
+        
+            <a href="{% url 'order_app:contact' %}" class="nav-link">CONTACT US</a>
+            <a href="{% url 'order_app:about' %}" class="nav-link">ABOUT US</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'order_app:profile' id=user.id %}" class="nav-link">PROFILE </a>
+            <a href="{% url 'order_app:logout' %}" class="nav-link active">LOGOUT</a>
+            {% endif %}
+            
+            
+            
+        </nav>
+
+        <div class="right-items">
+            
+            <a href="
+            #"><i class="fa fa-user-o" style="font-size:36px;color: var(--beige-light);"></i></a>
+        </div>
+
+    </header>
+    <div class="container">
+        <div class="header-actions">
+            <h1>Cafe Owners Management</h1>
+        </div>
+
+        <div class="navbar">
+            <div class="nav-item">Cafe Owners</div>
+        </div>
+
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Cafe Location</th>
+                    <th>Subscription Plan</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in users %}
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <div class="avatar">
+                                {% if admin.gender == "Male" %}
+                                    <img src="{% static 'images/male_avatar.jpg' %}" alt="{{ admin.get_full_name }}">
+                                {% else %}
+                                <img src="{% static 'images/female_avatar.jpg' %}" alt="{{ admin.get_full_name }}">
+                                {% endif %}
+                            </div>
+                            <div>
+                                <div><strong>{{ admin.name }}</strong></div>
+                                <div style="color: #a3b4d0; font-size: 0.9em;">{{ admin.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ admin.location|default:"N/A" }}</td>
+                    <td>
+                        <span class="subscription {{ user.subscription_plan|lower }}">
+                            {{ admin.usersubscription|default:"No Plan" }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'order_app:profile' id=admin.id %}" class="action-btn view-btn">View Profile</a>
+                        {% if admin.usersubscription %}
+                        <a href="{% url 'order_app:dashboard' id=admin.id %}" class="action-btn dashboard-btn">Dashboard</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-message">No cafe owners found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <span>
+                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ paginator.count }} cafe owners
+            </span>
+            <div>
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Expertise</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Analytics and Reporting</a>
+                       
+                        <a href="#" class="footer-link">Inventory Management</a>
+                        <a href="#" class="footer-link">Mobile and Remote Access</a>
+                         
+                        <a href="#" class="footer-link">Endpoint Management</a>
+                        <a href="#" class="footer-link">Order Processing</a>
+                        
+                        <a href="#" class="footer-link">Customer Database</a>
+                        <a href="#" class="footer-link">Integration Capabilities</a>
+                        <a href="#" class="footer-link">Security and Compliance</a>
+                        <a href="#" class="footer-link">Menu Management</a>
+                        <a href="#" class="footer-link">Employee Management</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">About Us</a>
+                        
+                        <a href="#" class="footer-link">News</a>
+                        <a href="#" class="footer-link">Contact</a>
+                        <a href="#" class="footer-link">Trust Centre</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Security Policy</a>
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Targeted Industries</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">CAFES</a>
+                        <a href="#" class="footer-link">RESORTS</a>
+                        <a href="#" class="footer-link">CLOUD KITCHENS</a>
+                        <a href="#" class="footer-link">BAKERIES</a>
+                        <a href="#" class="footer-link">FOOD TRUCKS</a>
+                        <a href="#" class="footer-link">CORPORTE CAFETERIAS</a>
+                        <a href="#" class="footer-link">FAST FOOD CHAINS</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Learn & Support</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Technical Insights</a>
+                        <a href="#" class="footer-link">Events</a>
+                        <a href="#" class="footer-link">BYTES AND BREWS</a>
+                        <a href="#" class="footer-link">Client Support</a>
+                    </div>
+                    <div class="certification-badges">
+                        <div class="certification-badge">
+                            <i class="fa fa-bar-chart-o" style="font-size:48px;color:var(--beige-light)"></i>
+                        </div>
+                        <div class="certification-badge">
+                             <img src="{% static 'images/bytesandbrewlogo-removebg-preview.png' %}" height="100px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="company-info">
+                    <a href="#" class="company-logo">Bytes and Brews Systems</a>
+                    <span>© 2025 All rights reserved.</span>
+                </div>
+                <div class="social-links">
+                    <i class="fa fa-facebook-f" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-instagram" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-linkedin" style="font-size:25px;color:var(--beige-light)"></i>
+                    <i class="fa fa-twitter" style="font-size:25px;color:var(--beige-light)"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

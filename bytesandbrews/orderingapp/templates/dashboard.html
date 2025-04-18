@@ -1,0 +1,890 @@
+<!--  
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Management Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        .no-data-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .no-data-message h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .no-data-message p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .menu-items-container, .reviews-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .menu-items-container h3, .reviews-container h3 {
+            margin-bottom: 15px;
+            color: #4e73df;
+            border-bottom: 1px solid #e3e6f0;
+            padding-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .review-rating {
+            color: #f6c23e;
+        }
+        
+        .menu-modal, .review-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+
+
+    {% for message in messages %}
+
+
+    <div class="alert alert-warning  alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    {% endfor %}
+    {% endif %}
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="profile">
+            {% if gender == "Male" %}
+            <img src="{% static 'images/male_avatar.jpg' %}" alt="User Profile" width="100px">
+            {% else %}
+            <img src="{% static 'images/female_avatar.jpg' %}" alt="User Profile" width="100px">
+            {% endif %}
+            <h3>{{ user_name }}</h3>
+            <p>Cafe Owner</p>
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'order_app:dashboard' id=id %}" class="nav-link active">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Sales</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-box"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="{% url 'order_app:order-menu' %}" class="nav-link">
+                <i class="fas fa-utensils"></i>
+                <span>Menu</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-users"></i>
+                <span>Employees</span>
+            </a>
+            <a href="{% url 'order_app:reviews' %}" class="nav-link">
+                <i class="fas fa-star"></i>
+                <span>Reviews</span>
+            </a>
+        </nav>
+        <div class="logout-link">
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span><a href="{% url 'order_app:logout' %}" style="text-decoration: none;color: white;font-weight: 600;"> Logout </a></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content" id="main-content">
+        <div class="top-bar">
+            <h1>CAFE MANAGEMENT DASHBOARD - {{ cafe_name }}</h1>
+        </div>
+        
+        <!-- Static cards as in original template -->
+        <!-- <div class="cards">
+            <div class="card" onclick="showGraph(0)">
+                <img src="{% static 'images/bar_graph-removebg-preview (1).png' %}" alt="Graph 1">
+                <div class="card-content">
+                    <h3>110</h3>
+                    <p>Hourly Sales</p>
+                </div>
+            </div>
+            <div class="card" onclick="showGraph(1)">
+                <img src="{% static 'images/scatter_graph-removebg-preview.png' %}" alt="Graph 2">
+                <div class="card-content">
+                    <h3>1150</h3>
+                    <p>Daily Sales</p>
+                </div>
+            </div>
+            <div class="card" onclick="showGraph(2)">
+                <img src="{% static 'images/line_graph-removebg-preview.png'%}" alt="Graph 3">
+                <div class="card-content">
+                    <h3>3500</h3>
+                    <p>Weekly Sales</p>
+                </div>
+            </div>
+            <div class="card" onclick="showGraph(3)">
+                <img src="{% static 'images/pie_chart-removebg-preview.png' %}" alt="Graph 4" style="width: 170px; height: 140px;">
+                <div class="card-content">
+                    <h3>9000</h3>
+                    <p>Monthly Sales</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="statistics-box">
+            <h2>Trends Overview</h2>
+            <canvas id="trendsChart"></canvas>
+        </div>
+
+        <div class="tab-container">
+            <!-- Menu Tab - Dynamic based on user data -->
+            <!-- <a href="#" class="tab-link" onclick="showMenuModal()">
+                <div class="tab-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Menu Management</h3>
+                    <p>Update items and pricing</p>
+                </div>
+            </a>
+            <a href="#" class="tab-link">
+                <div class="tab-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Revenue</h3>
+                    <p>Manage bookings and tables</p>
+                </div>
+            </a>
+            <a href="#" class="tab-link">
+                <div class="tab-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Order History</h3>
+                    <p>Manage vendor relationships</p>
+                </div>
+            </a>
+            <a href="#" class="tab-link">
+                <div class="tab-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Inventory</h3> -->
+                    <!-- <p>View and manage invoices</p>
+                </div>
+            </a>
+            <a href="#" class="tab-link">
+                <div class="tab-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Sales Report</h3>
+                    <p>View analytics and insights</p>
+                </div> -->
+            <!-- </a> --> 
+            <!-- Reviews Tab - Dynamic based on user data -->
+            <!-- <a href="#" class="tab-link" onclick="showReviewModal()">
+                <div class="tab-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="tab-content">
+                    <h3>Reviews</h3>
+                    <p>Customer feedback and ratings</p>
+                </div>
+            </a>
+        </div>
+    </div> -->
+
+    <!-- Overlay for Zoomed Graph (kept same as original) -->
+    <!-- <div id="overlay" class="overlay">
+        <div class="zoom-card">
+            <button class="close-btn" onclick="closeGraph()">&times;</button>
+            <canvas id="zoomChart"></canvas>
+        </div>
+    </div>
+     -->
+    <!-- Menu Modal - Only shown when clicked -->
+    <!-- <div id="menuModal" class="menu-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeMenuModal()">&times;</span>
+            <h2>{{ cafe_name }} Menu Items</h2>
+            
+            {% if has_menu %} -->
+            <!-- <div class="menu-items-container">
+                {% for item in menu_items %}
+                <div class="menu-item">
+                    <div>
+                        <strong>{{ item.name }}</strong>
+                        <p>{{ item.category }} > {{ item.subcategory }} > {{ item.subsubcategory }}</p>
+                    </div>
+                    <div>
+                        <span>${{ item.price }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div> -->
+            <!-- <a href="{% url 'order_app:order-menu' %}" class="view-menu-button">
+                View {{ cafe_name }} Menu
+            </a>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Menu Items Available</h3>
+                <p>Bytes and Brews does not have the feature to add menu items for new cafes yet.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div> -->
+    
+    <!-- Reviews Modal - Only shown when clicked -->
+    <!-- <div id="reviewModal" class="review-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+            <h2>{{ cafe_name }} Customer Reviews</h2>
+            
+            {% if has_reviews %}
+            <a href="{% url 'order_app:reviews' %}" class="view-menu-button">
+                View {{ cafe_name }} Menu
+            </a>
+           
+                  
+              
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Reviews Available</h3>
+                <p>Bytes and Brews does not have the feature to add reviews for new cafes yet.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script> -->
+        // Add modal functionality
+        <!-- function showMenuModal() {
+            document.getElementById('menuModal').style.display = 'flex';
+        }
+        
+        function closeMenuModal() {
+            document.getElementById('menuModal').style.display = 'none';
+        }
+        
+        function showReviewModal() {
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+        
+        function closeReviewModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+        }
+
+  -->
+
+         
+<!--       
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Management Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        .no-data-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .no-data-message h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .no-data-message p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .menu-items-container, .reviews-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .menu-items-container h3, .reviews-container h3 {
+            margin-bottom: 15px;
+            color: #4e73df;
+            border-bottom: 1px solid #e3e6f0;
+            padding-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .review-rating {
+            color: #f6c23e;
+        }
+        
+        .menu-modal, .review-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Added styles for content sections */
+        .content-section {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .view-menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4e73df;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .view-menu-button:hover {
+            background-color: #2e59d9;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="profile">
+            {% if gender == "Male" %}
+            <img src="{% static 'images/male_avatar.jpg' %}" alt="User Profile" width="100px">
+            {% else %}
+            <img src="{% static 'images/female_avatar.jpg' %}" alt="User Profile" width="100px">
+            {% endif %}
+            <h3>{{ user_name }}</h3>
+            <p>Cafe Owner</p>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link active" onclick="showContent('dashboard'); return false;">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('orders'); return false;">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('sales'); return false;">
+                <i class="fas fa-chart-bar"></i>
+                <span>Sales</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('inventory'); return false;">
+                <i class="fas fa-box"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('menu'); return false;">
+                <i class="fas fa-utensils"></i>
+                <span>Menu</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('employees'); return false;">
+                <i class="fas fa-users"></i>
+                <span>Employees</span>
+            </a>
+            <a href="#" class="nav-link" onclick="showContent('reviews'); return false;">
+                <i class="fas fa-star"></i>
+                <span>Reviews</span>
+            </a>
+        </nav>
+        {% if not user.is_superuser %}
+        <div class="logout-link">
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span><a href="{% url 'order_app:logout' %}" style="text-decoration: none;color: white;font-weight: 600;"> Logout </a></span>
+            </button>
+        </div>
+        {% else %}
+        <div class="logout-link">
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span><a href="{% url 'order_app:superadmin' %}" style="text-decoration: none;color: white;font-weight: 600;">Back to superadmin panel</a></span>
+            </button>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="main-content" id="main-content">
+        <div class="top-bar">
+            <h1>CAFE MANAGEMENT DASHBOARD - {{ cafe_name }}</h1>
+        </div>
+        
+        <!-- Dashboard Content Section -->
+        <div id="dashboard-content" class="content-section active">
+            <!-- Static cards as in original template -->
+            <div class="cards">
+                <div class="card" onclick="showGraph(0)">
+                    <img src="{% static 'images/bar_graph-removebg-preview (1).png' %}" alt="Graph 1">
+                    <div class="card-content">
+                        <h3>110</h3>
+                        <p>Hourly Sales</p>
+                    </div>
+                </div>
+                <div class="card" onclick="showGraph(1)">
+                    <img src="{% static 'images/scatter_graph-removebg-preview.png' %}" alt="Graph 2">
+                    <div class="card-content">
+                        <h3>1150</h3>
+                        <p>Daily Sales</p>
+                    </div>
+                </div>
+                <div class="card" onclick="showGraph(2)">
+                    <img src="{% static 'images/line_graph-removebg-preview.png'%}" alt="Graph 3">
+                    <div class="card-content">
+                        <h3>3500</h3>
+                        <p>Weekly Sales</p>
+                    </div>
+                </div>
+                <div class="card" onclick="showGraph(3)">
+                    <img src="{% static 'images/pie_chart-removebg-preview.png' %}" alt="Graph 4" style="width: 170px; height: 140px;">
+                    <div class="card-content">
+                        <h3>9000</h3>
+                        <p>Monthly Sales</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="statistics-box">
+                <h2>Trends Overview</h2>
+                <canvas id="trendsChart"></canvas>
+            </div>
+
+            <div class="tab-container">
+                <!-- Menu Tab - Dynamic based on user data -->
+                <a href="#" class="tab-link" onclick="showMenuModal()">
+                    <div class="tab-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Menu Management</h3>
+                        <p>Update items and pricing</p>
+                    </div>
+                </a>
+                <a href="#" class="tab-link">
+                    <div class="tab-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Revenue</h3>
+                        <p>Manage bookings and tables</p>
+                    </div>
+                </a>
+                <a href="#" class="tab-link">
+                    <div class="tab-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Order History</h3>
+                        <p>Manage vendor relationships</p>
+                    </div>
+                </a>
+                <a href="#" class="tab-link">
+                    <div class="tab-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Inventory</h3>
+                        <p>View and manage invoices</p>
+                    </div>
+                </a>
+                <a href="#" class="tab-link">
+                    <div class="tab-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Sales Report</h3>
+                        <p>View analytics and insights</p>
+                    </div>
+                </a>
+                <!-- Reviews Tab - Dynamic based on user data -->
+                <a href="#" class="tab-link" onclick="showReviewModal()">
+                    <div class="tab-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="tab-content">
+                        <h3>Reviews</h3>
+                        <p>Customer feedback and ratings</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Orders Content Section -->
+        <div id="orders-content" class="content-section">
+            <h2>Orders Management</h2>
+            <h2>{{ cafe_name }} Order History</h2>
+            {% if has_orders %}
+            <div class="menu-items-container">
+                <a href="{% url 'order_app:order_history' %}" class="view-menu-button">
+                    View  {{ cafe_name }} order history
+                </a>
+            </div>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No order History Available</h3>
+                <p>You Have to add first the menu items.</p>
+                
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sales Content Section -->
+        <div id="sales-content" class="content-section">
+            <h2>Sales Analytics</h2>
+            <div class="statistics-box">
+                <canvas id="salesChart"></canvas>
+            </div>
+            <div class="no-data-message">
+                <h3>Sales Data Visualization</h3>
+                <p>Detailed sales analytics will be available soon.</p>
+            </div>
+        </div>
+
+        <!-- Inventory Content Section -->
+        <div id="inventory-content" class="content-section">
+            <h2>Inventory Management</h2>
+            <div class="no-data-message">
+                <h3>Inventory Module Coming Soon</h3>
+                <p>Track stock levels, set reorder points, and manage suppliers.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+        </div>
+
+        <!-- Menu Content Section -->
+        <div id="menu-content" class="content-section">
+            <h2>{{ cafe_name }} Menu Management</h2>
+            {% if has_menu %}
+            <div class="menu-items-container">
+                <a href="{% url 'order_app:order-menu' %}" class="view-menu-button">
+                    View and Edit {{ cafe_name }} Menu
+                </a>
+            </div>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Menu Items Available</h3>
+                <p>You haven't added any menu items yet.</p>
+                <a href="{% url 'order_app:order-menu' %}" class="view-menu-button">
+                    Create Your Menu
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Employees Content Section -->
+        <div id="employees-content" class="content-section">
+            <h2>Employee Management</h2>
+            <div class="no-data-message">
+                <h3>Employee Module Coming Soon</h3>
+                <p>Manage staff schedules, roles, and performance.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+        </div>
+
+        <!-- Reviews Content Section -->
+        <div id="reviews-content" class="content-section">
+            <h2>{{ cafe_name }} Customer Reviews</h2>
+            {% if has_reviews %}
+            <div class="reviews-container">
+                <a href="{% url 'order_app:reviews' %}" class="view-menu-button">
+                    View All Reviews
+                </a>
+            </div>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Reviews Available</h3>
+                <p>Your cafe doesn't have any customer reviews yet.</p>
+                <p>As customers leave reviews, they will appear here.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Overlay for Zoomed Graph (kept same as original) -->
+    <div id="overlay" class="overlay">
+        <div class="zoom-card">
+            <button class="close-btn" onclick="closeGraph()">&times;</button>
+            <canvas id="zoomChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Menu Modal - Only shown when clicked -->
+    <div id="menuModal" class="menu-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeMenuModal()">&times;</span>
+            <h2>{{ cafe_name }} Menu Items</h2>
+            
+            {% if has_menu %}
+            <a href="{% url 'order_app:order-menu' %}" class="view-menu-button">
+                View {{ cafe_name }} Menu
+            </a>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Menu Items Available</h3>
+                <p>Bytes and Brews does not have the feature to add menu items for new cafes yet.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Reviews Modal - Only shown when clicked -->
+    <div id="reviewModal" class="review-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+            <h2>{{ cafe_name }} Customer Reviews</h2>
+            
+            {% if has_reviews %}
+            <a href="{% url 'order_app:reviews' %}" class="view-menu-button">
+                View {{ cafe_name }} Reviews
+            </a>
+            {% else %}
+            <div class="no-data-message">
+                <h3>No Reviews Available</h3>
+                <p>Bytes and Brews does not have the feature to add reviews for new cafes yet.</p>
+                <p>This functionality will be available soon!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+     
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script>
+        // Add modal functionality
+        function showMenuModal() {
+            document.getElementById('menuModal').style.display = 'flex';
+        }
+        
+        function closeMenuModal() {
+            document.getElementById('menuModal').style.display = 'none';
+        }
+        
+        function showReviewModal() {
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+        
+        function closeReviewModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+        }
+
+        // Function to show content sections based on sidebar navigation
+        function showContent(contentType) {
+            // Hide all content sections
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected content section
+            document.getElementById(contentType + '-content').classList.add('active');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find and activate the clicked nav link
+            const clickedLink = event.currentTarget;
+            clickedLink.classList.add('active');
+        }
+
+        // Initialize Sales Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const salesCtx = document.getElementById('salesChart');
+            if (salesCtx) {
+                new Chart(salesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                        datasets: [{
+                            label: 'Monthly Sales',
+                            data: [12000, 15000, 18000, 16000, 19000, 22000],
+                            backgroundColor: 'rgba(78, 115, 223, 0.7)',
+                            borderColor: 'rgba(78, 115, 223, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

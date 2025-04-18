@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Bytes & Brew</title>
+  <style>
+    :root {
+      --coffee-dark: #32221A;
+      --coffee-medium: #6F4E37;
+      --coffee-light: #B49C73;
+      --coffee-cream: #F5F1E8;
+      --coffee-accent: #D4A76A;
+      --border-color: #E2E2E2;
+      --form-bg: #FFFFFF;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    body {
+      background-color: var(--coffee-cream);
+      color: var(--coffee-dark);
+      line-height: 1.5;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .checkout-layout {
+      display: flex;
+      height: 100vh;
+    }
+    
+    .checkout-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 40px;
+      max-width: 65%;
+    }
+    
+    .order-sidebar {
+      width: 35%;
+      background-color: #f8f8f8;
+      padding: 20px;
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      border-left: 1px solid var(--border-color);
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+    }
+    
+    .logo {
+      font-size: 36px;
+      font-weight: bold;
+      color: var(--coffee-dark);
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+    
+    .logo span {
+      color: var(--coffee-medium);
+    }
+    
+    .cart-icon {
+      font-size: 24px;
+      color: var(--coffee-dark);
+    }
+    
+    .express-checkout {
+      margin-bottom: 30px;
+    }
+    
+    .express-title {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #777;
+      font-size: 14px;
+    }
+    
+    .express-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .express-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+    }
+    
+    .shop-pay {
+      background-color: #5A31F4;
+      color: white;
+    }
+    
+    .paypal {
+      background-color: #FFC439;
+      color: #253B80;
+    }
+    
+    .g-pay {
+      background-color: #000;
+      color: white;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 25px 0;
+      color: #999;
+      font-size: 14px;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .divider::before {
+      margin-right: 15px;
+    }
+    
+    .divider::after {
+      margin-left: 15px;
+    }
+    
+    .form-section {
+      margin-bottom: 35px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--coffee-dark);
+    }
+    
+    .form-row {
+      margin-bottom: 15px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 15px;
+      background-color: var(--form-bg);
+      transition: border-color 0.2s;
+    }
+    
+    .form-control:focus {
+      border-color: var(--coffee-medium);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(111, 78, 55, 0.1);
+    }
+    
+    .form-row-split {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .form-row-split > div {
+      flex: 1;
+    }
+    
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .checkbox-row input {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+    }
+    
+    .checkbox-row label {
+      font-size: 14px;
+      color: #555;
+    }
+    
+    .shipping-notice {
+      background-color: #f8f7f2;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      color: #777;
+      border: 1px solid #f0ede3;
+      font-size: 14px;
+    }
+    
+    .payment-options {
+      margin-bottom: 20px;
+    }
+    
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .payment-option.selected {
+      border-color: var(--coffee-medium);
+      background-color: #f9f5f1;
+    }
+    
+    .payment-option-radio {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--coffee-medium);
+    }
+    
+    .payment-option-label {
+      flex: 1;
+      font-weight: 500;
+    }
+    
+    .card-logos {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .card-logos span {
+      font-size: 12px;
+      color: #666;
+      border: 1px solid #ddd;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    
+    .payment-details {
+      padding: 20px;
+      background-color: #f9f5f1;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      border: 1px solid #f0ede3;
+    }
+    
+    .submit-button {
+      width: 100%;
+      padding: 15px;
+      background-color: var(--coffee-dark);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .submit-button:hover {
+      background-color: var(--coffee-medium);
+    }
+    
+    .terms-text {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+      line-height: 1.5;
+    }
+    
+    .terms-text a {
+      color: var(--coffee-medium);
+      text-decoration: none;
+    }
+    
+    /* Order summary styles */
+    .order-item {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .item-image {
+      width: 65px;
+      height: 65px;
+      background-color: var(--coffee-accent);
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      position: relative;
+    }
+    
+    .item-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--coffee-dark);
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--coffee-dark);
+    }
+    
+    .item-variant {
+      font-size: 14px;
+      color: #777;
+    }
+    
+    .item-price {
+      font-weight: 600;
+      color: var(--coffee-dark);
+    }
+    
+    .discount-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    
+    .discount-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .discount-button {
+      background-color: #f5f5f5;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 0 15px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 15px;
+      color: #555;
+    }
+    
+    .summary-row.total {
+      font-weight: 600;
+      font-size: 18px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      color: var(--coffee-dark);
+    }
+    
+    .info-icon {
+      font-size: 14px;
+      color: #999;
+      margin-left: 5px;
+    }
+    
+    .login-link {
+      float: right;
+      color: var(--coffee-medium);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .currency {
+      color: #999;
+      font-size: 14px;
+      font-weight: normal;
+      margin-right: 5px;
+    }
+    
+    .secure-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #777;
+    }
+    
+    .lock-icon {
+      font-size: 14px;
+    }
+    
+    .mobile-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .country-code {
+      font-size: 15px;
+      color: #555;
+    }
+
+    @media (max-width: 992px) {
+      .checkout-layout {
+        flex-direction: column;
+      }
+      
+      .checkout-main {
+        max-width: 100%;
+        order: 2;
+        padding: 20px;
+      }
+      
+      .order-sidebar {
+        position: relative;
+        width: 100%;
+        order: 1;
+        max-height: none;
+      }
+      
+      .form-row-split {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .express-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="checkout-layout">
+    <div class="checkout-main">
+      <div class="header">
+        <a href="#" class="logo">BYTES <span>&</span> BREW</a>
+        <a href="#" class="login-link">Log in</a>
+      </div>
+      
+      <div class="express-checkout">
+        <div class="express-title">Express checkout</div>
+        <div class="express-buttons">
+          <button class="express-button shop-pay">Shop Pay</button>
+          <button class="express-button paypal">PayPal</button>
+          <button class="express-button g-pay">G Pay</button>
+        </div>
+      </div>
+      
+      <div class="divider">OR</div>
+      
+      <div class="form-section">
+        <div class="section-title">Contact</div>
+        <div class="form-row">
+          <input type="email" class="form-control" placeholder="Email">
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="email-updates">
+          <label for="email-updates">Email me with news and offers</label>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="section-title">Delivery</div>
+        <div class="form-row">
+          <select class="form-control">
+            <option>United States</option>
+            <option>Canada</option>
+            <option>Mexico</option>
+          </select>
+        </div>
+        <div class="form-row-split">
+          <div>
+            <input type="text" class="form-control" placeholder="First name">
+          </div>
+          <div>
+            <input type="text" class="form-control" placeholder="Last name">
+          </div>
+        </div>
+        <div class="form-row">
+          <input type="text" class="form-control" placeholder="Company (optional)">
+        </div>
+        <div class="form-row">
+          <input type="text" class="form-control" placeholder="Address">
+        </div>
+        <div class="form-row">
+          <input type="text" class="form-control" placeholder="Apartment, suite, etc. (optional)">
+        </div>
+        <div class="form-row-split">
+          <div>
+            <input type="text" class="form-control" placeholder="City">
+          </div>
+          <div>
+            <select class="form-control">
+              <option>Select state</option>
+              <option>California</option>
+              <option>New York</option>
+              <!-- Add more states as needed -->
+            </select>
+          </div>
+          <div>
+            <input type="text" class="form-control" placeholder="ZIP code">
+          </div>
+        </div>
+        <div class="form-row">
+          <input type="text" class="form-control" placeholder="Phone (optional)">
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="text-updates">
+          <label for="text-updates">Text me with news and offers</label>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="section-title">Shipping method</div>
+        <div class="shipping-notice">
+          Enter your shipping address to view available shipping methods.
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="section-title">Payment</div>
+        <div class="secure-note">
+          <span class="lock-icon">🔒</span>
+          <span>All transactions are secure and encrypted.</span>
+        </div>
+        
+        <div class="payment-options">
+          <div class="payment-option selected">
+            <input type="radio" name="payment" class="payment-option-radio" checked>
+            <div class="payment-option-label">Credit card</div>
+            <div class="card-logos">
+              <span>VISA</span>
+              <span>MC</span>
+              <span>AMEX</span>
+              <span>DISC</span>
+              <span>+4</span>
+            </div>
+          </div>
+          
+          <div class="payment-details">
+            <div class="form-row">
+              <input type="text" class="form-control" placeholder="Card number">
+            </div>
+            <div class="form-row-split">
+              <div>
+                <input type="text" class="form-control" placeholder="Expiration date (MM / YY)">
+              </div>
+              <div>
+                <input type="text" class="form-control" placeholder="Security code">
+              </div>
+            </div>
+            <div class="form-row">
+              <input type="text" class="form-control" placeholder="Name on card">
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="billing-same" checked>
+              <label for="billing-same">Use shipping address as billing address</label>
+            </div>
+          </div>
+          
+          <div class="payment-option">
+            <input type="radio" name="payment" class="payment-option-radio">
+            <div class="payment-option-label">PayPal</div>
+            <div>PayPal</div>
+          </div>
+          
+          <div class="payment-option">
+            <input type="radio" name="payment" class="payment-option-radio">
+            <div class="payment-option-label">Shop Pay</div>
+            <div>Shop Pay</div>
+          </div>
+        </div>
+        
+        <div class="checkbox-row">
+          <input type="checkbox" id="save-info" checked>
+          <label for="save-info">Save my information for a faster checkout with a Shop account</label>
+        </div>
+        
+        <div class="form-row">
+          <div class="mobile-input">
+            <span class="country-code">+1</span>
+            <input type="text" class="form-control" placeholder="Mobile phone number">
+          </div>
+        </div>
+        
+        <div class="secure-note">
+          <span class="lock-icon">🔒</span>
+          <span>Secure and encrypted</span>
+        </div>
+        
+        <button class="submit-button">Pay now</button>
+        
+        <div class="terms-text">
+          Your info will be saved to a Shop account. By continuing, you agree to Shop's <a href="#">Terms of Service</a> and acknowledge the <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="order-sidebar">
+      <div class="order-item">
+        <div class="item-image">
+          B&B
+          <div class="item-count">1</div>
+        </div>
+        <div class="item-details">
+          <div class="item-name">Ethiopia Yirgacheffe Single Origin</div>
+          <div class="item-variant">12oz</div>
+        </div>
+        <div class="item-price">$22.00</div>
+      </div>
+      
+      <div class="discount-row">
+        <input type="text" class="discount-input" placeholder="Discount code or gift card">
+        <button class="discount-button">Apply</button>
+      </div>
+      
+      <div class="summary-row">
+        <div>Subtotal</div>
+        <div>$22.00</div>
+      </div>
+      
+      <div class="summary-row">
+        <div>Shipping <span class="info-icon">ⓘ</span></div>
+        <div>Enter shipping address</div>
+      </div>
+      
+      <div class="summary-row">
+        <div>Service <span class="info-icon">ⓘ</span></div>
+        <div>$3.00</div>
+      </div>
+      
+      <div class="summary-row total">
+        <div>Total</div>
+        <div><span class="currency">USD</span>$25.00</div>
+      </div>
+    </div>
+  </div>
+ 
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brew and Bytes - Payment Page</title>
+  <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+  <style>
+    /* Add this to ensure modal is hidden by default */
+    /* .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 8px;
+    }
+    
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover,
+    .close-modal:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    } */
+
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+}
+
+.close-modal {
+  color: #5C4033; /* dark brown */
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: #3E2723; /* even darker brown on hover/focus */
+  text-decoration: none;
+  cursor: pointer;
+}
+  </style>
+</head>
+<body>
+    {% if messages %}
+
+
+    {% for message in messages %}
+
+
+    <div class="alert alert-warning  alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    {% endfor %}
+    {% endif %}
+  <div class="logo-container">
+    <img src="{% static 'images/Bytes___Brew_1_-removebg-preview.png' %}" alt="Brew and Bytes Logo">
+  </div>
+
+  <div class="container">
+    <!-- Payment Section -->
+    <div class="card">
+      <h2>Choose your payment method</h2>
+      
+      <div class="payment-option" data-method="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
+        <div class="payment-info">
+          <span>XXXX XXXX XXXX 8908</span>
+          <span class="expiry">Expires 09/27</span>
+        </div>
+        <span class="status">Default</span>
+      </div>
+      
+      <div class="payment-option" data-method="MasterCard">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+        <div class="payment-info">
+          <span>XXXX XXXX XXXX 7777</span>
+          <span class="expiry">Expires 01/24</span>
+        </div>
+      </div>
+      
+      <div class="payment-option" data-method="PayPal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
+        <div class="payment-info">
+          <span>XXXX XXXX XXXX 6498</span>
+          <span class="expiry">Expires 12/23</span>
+        </div>
+      </div>
+      
+      <!-- Gift Card Payment Option -->
+      <div class="payment-option" data-method="GiftCard" id="gift-card-option">
+        <img src="{% static 'images/gift-card-icon.png' %}" alt="Gift Card" onerror="this.src='https://img.icons8.com/color/48/000000/gift-card.png'">
+        <div class="payment-info">
+          <span>Brew & Bytes Gift Card</span>
+          <span class="expiry">Pay with your gift card</span>
+        </div>
+      </div>
+      
+      <div class="add-payment">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxp0v4qZkvQmZySNXWh4Q1mB41AM9zl_5D-g&s" alt="Add Payment">
+        <span>Add Payment Method</span>
+      </div>
+      
+      <form action="{% url 'order_app:payment' %}" method="POST" id="checkout-form">
+        {% csrf_token %}
+        
+        <!-- Hidden inputs to carry data -->
+        <input type="hidden" name="cart_data" id="cart-data">
+        <input type="hidden" name="subtotal" id="form-subtotal">
+        <input type="hidden" name="gst" id="form-gst">
+        <input type="hidden" name="total" id="form-total">
+        <input type="hidden" name="payment_method" id="payment-method" value="card">
+          
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+    
+    <!-- Order Summary Section -->
+    <div class="card order-summary">
+      <h2>Order Summary</h2>
+      <div class="order-details">
+        <div><span>Bag:</span><span>{{order_items}}</span></div>
+        <div><span>Subtotal:</span><span id="subtotal">₹{{subtotal}}</span></div>
+        <div><span>GST</span><span id="gst">₹{{gst}}</span></div>
+        <div>Total : <span id="total">₹{{total}}</span></div>
+      </div>
+      <a href="{% url 'order_app:payment_successfull' %}"><button id="payBtn">Pay ₹{{total}}</button></a>
+      
+      <div class="authenticity-message">
+        Enjoy your order. Have a good day.
+      </div>
+    </div>
+  </div>
+  
+  <!-- Gift Card Modal -->
+  <div id="giftCardModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Redeem Gift Card</h2>
+      <form action="{% url 'order_app:redeem_gift_card' %}" method="POST" id="gift-card-form" class="gift-card-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="Enter recipient email">
+        </div>
+        
+        <div class="form-group">
+          <label for="code">Gift Card Code</label>
+          <input type="text" id="code" name="code" required placeholder="Enter 16-digit code">
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Gift Card Password</label>
+          <input type="password" id="password" name="password" required placeholder="Enter gift card password">
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required placeholder="Enter recipient phone number">
+        </div>
+        
+        <!-- Hidden inputs to carry data -->
+        <input type="hidden" name="cart_data" id="gift-cart-data">
+        <input type="hidden" name="subtotal" id="gift-form-subtotal">
+        <input type="hidden" name="gst" id="gift-form-gst">
+        <input type="hidden" name="total" id="gift-form-total">
+        
+        <button type="submit" class="gift-card-submit">Redeem & Pay</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Ensure modal is hidden by default (redundant with CSS but good for safety)
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById("giftCardModal");
+      modal.style.display = "none";
+    });
+    
+    const modal = document.getElementById("giftCardModal");
+    
+    // Get the button that opens the modal
+    const giftCardOption = document.getElementById("gift-card-option");
+    
+    // Get the <span> element that closes the modal
+    const closeBtn = document.getElementsByClassName("close-modal")[0];
+    
+    // When the user clicks on the gift card option, open the modal
+    giftCardOption.onclick = function() {
+      modal.style.display = "block";
+      
+      // Prepare data for gift card form
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.getElementById('gift-cart-data').value = JSON.stringify(cart);
+      document.getElementById('gift-form-subtotal').value = document.getElementById('subtotal').textContent;
+      document.getElementById('gift-form-gst').value = document.getElementById('gst').textContent;
+      document.getElementById('gift-form-total').value = document.getElementById('total').textContent;
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    closeBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+    
+    // Set selected payment method
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        if (this.dataset.method !== "GiftCard") {
+          // Remove active class from all options
+          paymentOptions.forEach(opt => opt.classList.remove('active'));
+          
+          // Add active class to selected option
+          this.classList.add('active');
+          
+          // Set payment method in hidden input
+          document.getElementById('payment-method').value = this.dataset.method.toLowerCase();
+        }
+      });
+    });
+    
+    // Original checkout form handler
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Send Cart Data to Backend
+      document.getElementById('cart-data').value = JSON.stringify(cart);
+      document.getElementById('form-subtotal').value = document.getElementById('subtotal').textContent;
+      document.getElementById('form-gst').value = document.getElementById('gst').textContent;
+      document.getElementById('form-total').value = document.getElementById('total').textContent;
+      
+      // Clear cart after submission
+      localStorage.removeItem('cart');
+    });
+    
+    // Gift card form handler
+    document.getElementById('gift-card-form').addEventListener('submit', function(e) {
+      // Clear cart after submission
+      localStorage.removeItem('cart');
+    });
+  </script>
+
+  <script src="{% static 'js/payment.js' %}"></script>
+</body>
+</html>

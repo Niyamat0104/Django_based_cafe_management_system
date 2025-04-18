@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Selection</title>
+    <link rel="stylesheet" href="{% static  'css/order_selection.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'images/logo-removebg-preview.png' %}" alt="Custom Logo" />
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'order_app:order-home' %}" class="active">Home</a>
+            <a href="{% url 'order_app:order-menu' %}">Menu</a>
+            <a href="{% url 'order_app:ordernow' %}">Order</a>
+            <a href="{% url 'order_app:cart' %}">Cart</a>
+            <a href="{% url 'order_app:feedback' %}">Feedback</a>
+        </nav>
+        <div class="search-container">
+            <ion-icon name="search"></ion-icon>
+            <input type="text" placeholder="Looking for something specific?" />
+        </div>
+        <div class="profile-icon">
+            <a href="#"> <ion-icon name="person"></ion-icon></a>
+        </div>
+    </header>
+
+    <div id="only_strip" style="background-color:#d3bd9a; height: 60px; margin-bottom: 30px;"></div>
+
+    <main>
+        <h2 style="margin-left:30px;">{{ item.subsubcategory }}</h2>
+        <div id="main_pic"> 
+            <img src="{% static item.image_path %}" class="main_image">
+            <div style="margin-top: 100px; font-size: 20px;"> 
+                <h1 style="color: #feb;">{{ item.name }}</h1>
+                <h2>Price : ₹{{item.price}}</h2>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <div class="size-options" id="sizeOptions"></div>
+            <div id="milkContainer" class="milk-container">
+                <h3 class="milk-heading">Choose Your Milk Preference</h3>
+                <div class="custom-select-wrapper">
+                    <select id="milkSelection" class="custom-select">
+                        <option value="Regular">🥛 Regular Milk</option>
+                        <option value="Soy">🌱 Soy Milk</option>
+                        <option value="Almond">🌰 Almond Milk</option>
+                        <option value="Oat">🌾 Oat Milk</option>
+                    </select>
+                </div>
+            </div>
+           
+
+            <a href="#" style="text-decoration: none;"> <button class="add-to-cart-btn">Add to Cart</button></a>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Company</a></li>
+                    <li><a href="#">Our Coffee</a></li>
+                    <li><a href="#">About Bytes & Brew</a></li>
+                    <li><a href="#">Investor Relations</a></li>
+                    <li><a href="#">Customer Service</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Careers</h3>
+                <ul>
+                    <li><a href="#">Culture and Values</a></li>
+                    <li><a href="#">Jobs at Bytes & Brew</a></li>
+                    <li><a href="#">College Achievement Plan</a></li>
+                    <li><a href="#">Alumni Community</a></li>
+                    <li><a href="#">International Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Social Impact</h3>
+                <ul>
+                    <li><a href="#">Communities</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                    <li><a href="#">Environmental Impact</a></li>
+                    <li><a href="#">Foundation Work</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Order and Pick Up</h3>
+                <ul>
+                    <li><a href="#">Order on the App</a></li>
+                    <li><a href="#">Order on the Web</a></li>
+                    <li><a href="#">Delivery Options</a></li>
+                    <li><a href="#">Pick Up Locations</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+            </div>
+            <div class="footer-column">
+            </div>
+        </div>
+  
+        <div class="footer-social">
+            <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+            <a href="https://www.instagram.com/"><i class="fa fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/"><i class="fa fa-linkedin"></i></a>
+            <a href="https://www.twitter.com/"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a>
+        </div>
+  
+        <div class="footer-bottom">
+            <p>&copy; 2025 Bytes & Brew, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+</body>  
+<script>
+    const cupSizes = [
+        { name: 'Short', size: '8 fl oz', symbol: '☕' },
+        { name: 'Tall', size: '12 fl oz', symbol: '🍵' },
+        { name: 'Grande', size: '16 fl oz', symbol: '🥤' },
+        { name: 'Venti', size: '20 fl oz', symbol: '🧃' }
+    ];
+
+    const itemCategory = "{{ item.category|lower }}";
+    const itemSubCategory = "{{ item.subcategory|lower }}";
+
+    const sizeContainer = document.getElementById('sizeOptions');
+    const milkContainer = document.getElementById('milkContainer');
+    let selectedCup = 'Grande';
+
+    function renderCups() {
+        sizeContainer.innerHTML = '';
+        cupSizes.forEach(cup => {
+            const div = document.createElement('div');
+            div.className = 'cup' + (cup.name === selectedCup ? ' selected' : '');
+            div.innerHTML = `<span class='cup-symbol'>${cup.symbol}</span><strong>${cup.name}</strong><br>${cup.size}`;
+            div.onclick = () => selectCup(cup.name);
+            sizeContainer.appendChild(div);
+        });
+    }
+
+    function selectCup(name) {
+        selectedCup = name;
+        renderCups();
+    }
+
+    function toggleOptionsBasedOnCategory() {
+        const milkSubcategories = ["hot coffee", "cold coffee", "cold tea"];
+        const isDrink = itemCategory === "drinks";
+        const showMilk = milkSubcategories.includes(itemSubCategory);
+
+        if (isDrink) {
+            document.querySelector(".size-options").style.display = "flex";
+            milkContainer.style.display = showMilk ? "block" : "none";
+            renderCups();
+        } else {
+            document.querySelector(".size-options").style.display = "none";
+            milkContainer.style.display = "none";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        toggleOptionsBasedOnCategory();
+
+        document.querySelector(".add-to-cart-btn").addEventListener("click", function () {
+            addToCart();
+        });
+
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const itemName = "{{ item.name }}";
+            const itemImage = "{% static item.image_path %}";
+            const itemPrice = parseFloat("{{ item.price }}");
+            const selectedSize = selectedCup || "Regular";
+            const selectedMilk = document.getElementById("milkSelection")?.value || "";
+
+            if (!itemName || !itemImage || isNaN(itemPrice)) {
+                alert("Error: Missing item details. Please try again.");
+                return;
+            }
+
+            let displayName = `${itemName}`;
+            if (itemCategory !== "food") {
+                displayName += ` (${selectedSize})`;
+                if (["hot coffee", "cold coffee", "cold tea", "hot tea"].includes(itemSubCategory)) {
+                    displayName += ` - ${selectedMilk}`;
+                }
+            }
+
+            let cartItem = {
+                name: displayName,
+                image: itemImage,
+                price: itemPrice,
+                quantity: 1
+            };
+
+            let existingItem = cart.find(item => item.name === cartItem.name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("Item added to cart successfully!");
+        }
+    });
+</script>
+
+
+
+ 
+</html>

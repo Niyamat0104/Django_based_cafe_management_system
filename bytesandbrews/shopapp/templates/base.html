@@ -1,0 +1,738 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bytes & Brew{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ 
+    
+    <!-- If you prefer to keep the styles in the base template, move them here -->
+    <style>
+        :root {
+            --primary: #5D4037;
+            --coffee-medium: #8D6E63;
+            --coffee-light: #D7CCC8;
+            --coffee-accent: #FFCC80;
+            --cinnamon: #A1522F;
+            --irish-cream: #2E7D32;
+            --vanilla: #F9A825;
+
+            --primary: #5e3a1a;
+            --secondary: #d4a56a;
+            --accent: #e7c9a9;
+            --light: #f8f3ed;
+            --dark: #2d1e12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30,20 Q45,20 45,35 Q45,50 30,50 Q15,50 15,35 Q15,20 30,20 Z' fill='%23D7CCC8' fill-opacity='0.2'/%3E%3C/svg%3E");
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 101;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        .dropdown i {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .cart-btn {
+            position: relative;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--secondary);
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Footer Styles */
+        .footer-container {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 60px;
+        }
+
+        .newsletter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--primary);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            gap: 12px;
+        }
+
+        .newsletter-bar input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--dark);
+            border-radius: 6px;
+            background-color: var(--primary);
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .newsletter-bar input::placeholder {
+            color: #cccccc;
+        }
+
+        .newsletter-bar input:focus {
+            outline: none;
+            border-color: var(--dark);
+            background-color: var(--dark);
+        }
+
+        .newsletter-bar button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .newsletter-bar button:hover {
+            background-color: #e0e0e0;
+        }
+
+        #newsletter-msg-box {
+            margin-top: 20px;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--primary);
+            background-color: #d8f3e0;
+            border: 1px solid #a1d7b5;
+            max-width: 500px;
+            transition: opacity 0.3s ease;
+        }
+
+        #newsletter-msg-box.error {
+            background-color: #ffe1e1;
+            color: #751b1b;
+            border: 1px solid #e5b3b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            margin-right: 40px;
+        }
+
+        .footer-column h3 {
+            text-transform: uppercase;
+            font-size: 16px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .gift-cards {
+            text-align: right;
+        }
+
+        .gift-cards h3 {
+            margin-bottom: 10px;
+        }
+
+        .gift-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .gift-button:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .social-media h3 {
+            margin-bottom: 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            opacity: 0.8;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tagline {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+            text-align: right;
+        }
+
+        .back-to-top {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid white;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            margin-left: 1300px;
+        }
+
+        .back-to-top:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        .animate-fade-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive design adjustments */
+        @media (max-width: 768px) {
+            .card-body {
+                flex-direction: column;
+            }
+
+            .product-image {
+                order: -1;
+            }
+
+            .card-header h1 {
+                font-size: 2rem;
+            }
+
+            .product-title {
+                font-size: 1.6rem;
+            }
+
+            .product-price {
+                font-size: 1.8rem;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+
+            .footer-column {
+                width: 100%;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 10px 20px;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+                font-size: 1.5rem;
+                color: white;
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .card-body {
+                padding: 20px 15px;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            #newsletter-email {
+                border-radius: 4px;
+            }
+
+            #subscribe-btn {
+                width: 100%;
+                max-width: 400px;
+                border-radius: 4px;
+            }
+        }
+    </style>
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="{% url 'landing' %}"> <img src="{% static 'images/logo-removebg-preview (1).png' %}" 
+                    alt="Coffee Logo" style="height: 90px;margin-top:0;padding: -20px;width: 80px;transform: scale(1.4);"></a>
+                <span>Bytes & Brew</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'shop_app:merch-home' %}">Home</a></li>
+
+                    <li class="dropdown">
+                        <a href="#products">Products <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'shop_app:coffee_pack' %}">Coffee Beans</a>
+                            <a href="{% url 'shop_app:merchandise' %}">Brewing Equipment</a>
+                            <a href="{% url 'shop_app:merchandise' %}">Mugs & Cups</a>
+                            <a href="{% url 'shop_app:gift_cards' %}">Gift Cards</a>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#gift-hampers">Gift Hampers <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'shop_app:starter_pack' %}">Starter Pack</a>
+                            <a href="{% url 'shop_app:conisseur' %}">Connoisseur</a>
+                            <a href="{% url 'shop_app:deluxe' %}">Deluxe</a>
+                            <a href="#custom">Custom Hamper</a>
+                        </div>
+                    </li>
+
+                    <li><a href="{% url 'shop_app:about' %}">About</a></li>
+                    <li><a href="{% url 'order_app:contact' %}">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="cart-btn">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+    {% if messages %}
+
+
+    {% for message in messages %}
+
+
+    <div class="alert alert-warning  alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    {% endfor %}
+    {% endif %}
+
+    <main>
+        {% block content %}
+        <!-- Content will be inserted here by child templates -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% block footer %}
+        <div class="footer-container">
+            <div class="newsletter-bar">
+                <input type="email" id="newsletter-email" placeholder="Enter your email" />
+                <button id="subscribe-btn">Subscribe</button>
+            </div>
+            <div id="newsletter-msg-box" class="hidden"></div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#">Coffee</a></li>
+                        <li><a href="#">Gear</a></li>
+                        <li><a href="#">Subscriptions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Wholesale</h3>
+                    <ul>
+                        <li><a href="#">Become a Wholesale Partner</a></li>
+                        <li><a href="#">Cold Brew</a></li>
+                        <li><a href="#">Tech Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">The Company</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Jobs</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Accessibility Statement</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Locations</h3>
+                    <ul>
+                        <li><a href="#">Bethesda</a></li>
+                        <li><a href="#">Cross St Market</a></li>
+                        <li><a href="#">Harbor Point</a></li>
+                        <li><a href="#">Mt. Vernon</a></li>
+                        <li><a href="#">Riva</a></li>
+                        <li><a href="#">The Roastery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column gift-cards">
+                    <h3>Gift Cards</h3>
+                    <a href="#" class="gift-button">Give a Gift Today</a>
+
+                    <div class="social-media">
+                        <h3>Social Media</h3>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Twitter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 4.01C21 4.5 20.02 4.84 19 5C18.2 4.13 17.14 3.62 16 3.62C13.8 3.62 12 5.42 12 7.62C12 7.94 12.03 8.25 12.09 8.55C8.54 8.38 5.39 6.78 3.33 4.32C3.04 4.96 2.89 5.66 2.89 6.4C2.89 7.79 3.56 9.03 4.66 9.74C3.91 9.72 3.19 9.53 2.57 9.21V9.25C2.57 11.19 3.91 12.8 5.75 13.16C5.47 13.25 5.17 13.3 4.87 13.3C4.66 13.3 4.46 13.28 4.26 13.24C4.67 14.81 6.11 15.99 7.83 16.02C6.5 17.12 4.84 17.76 3.04 17.76C2.76 17.76 2.48 17.74 2.21 17.71C3.94 18.87 5.98 19.52 8.15 19.52C15.99 19.52 20.27 13.36 20.27 8.01C20.27 7.83 20.27 7.65 20.26 7.47C21.26 6.92 22.09 6.12 22.67 5.2"
+                                        fill="currentColor" />
+                                </svg>
+                            </a>
+                            <a href="#" aria-label="Facebook">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 12C22 6.48 17.52 2 12 2C6.48 2 2 6.48 2 12C2 16.84 5.44 20.87 10 21.8V15H8V12H10V9.5C10 7.57 11.57 6 13.5 6H16V9H14C13.45 9 13 9.45 13 10V12H16V15H13V21.95C18.05 21.45 22 17.19 22 12Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 2C14.717 2 15.056 2.01 16.122 2.06C17.187 2.11 17.912 2.277 18.55 2.525C19.21 2.779 19.766 3.123 20.322 3.678C20.8305 4.1779 21.224 4.78259 21.475 5.45C21.722 6.087 21.89 6.813 21.94 7.878C21.987 8.944 22 9.283 22 12C22 14.717 21.99 15.056 21.94 16.122C21.89 17.187 21.722 17.912 21.475 18.55C21.2247 19.2178 20.8311 19.8226 20.322 20.322C19.822 20.8303 19.2173 21.2238 18.55 21.475C17.913 21.722 17.187 21.89 16.122 21.94C15.056 21.987 14.717 22 12 22C9.283 22 8.944 21.99 7.878 21.94C6.813 21.89 6.088 21.722 5.45 21.475C4.78233 21.2245 4.17753 20.8309 3.678 20.322C3.16941 19.8222 2.77593 19.2175 2.525 18.55C2.277 17.913 2.11 17.187 2.06 16.122C2.013 15.056 2 14.717 2 12C2 9.283 2.01 8.944 2.06 7.878C2.11 6.812 2.277 6.088 2.525 5.45C2.77524 4.78218 3.1688 4.17732 3.678 3.678C4.17767 3.16923 4.78243 2.77573 5.45 2.525C6.088 2.277 6.812 2.11 7.878 2.06C8.944 2.013 9.283 2 12 2ZM12 7C10.6739 7 9.40215 7.52678 8.46447 8.46447C7.52678 9.40215 7 10.6739 7 12C7 13.3261 7.52678 14.5979 8.46447 15.5355C9.40215 16.4732 10.6739 17 12 17C13.3261 17 14.5979 16.4732 15.5355 15.5355C16.4732 14.5979 17 13.3261 17 12C17 10.6739 16.4732 9.40215 15.5355 8.46447C14.5979 7.52678 13.3261 7 12 7ZM18.5 6.75C18.5 6.41848 18.3683 6.10054 18.1339 5.86612C17.8995 5.6317 17.5815 5.5 17.25 5.5C16.9185 5.5 16.6005 5.6317 16.3661 5.86612C16.1317 6.10054 16 6.41848 16 6.75C16 7.08152 16.1317 7.39946 16.3661 7.63388C16.6005 7.8683 16.9185 8 17.25 8C17.5815 8 17.8995 7.8683 18.1339 7.63388C18.3683 7.39946 18.5 7.08152 18.5 6.75ZM12 9C12.7956 9 13.5587 9.31607 14.1213 9.87868C14.6839 10.4413 15 11.2044 15 12C15 12.7956 14.6839 13.5587 14.1213 14.1213C13.5587 14.6839 12.7956 15 12 15C11.2044 15 10.4413 14.6839 9.87868 14.1213C9.31607 13.5587 9 12.7956 9 12C9 11.2044 9.31607 10.4413 9.87868 9.87868C10.4413 9.31607 11.2044 9 12 9Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>
+                    <div class="copyright">Coffee, Inc. — ©2025</div>
+                </div>
+
+                <div class="tagline">COFFEE SHOULD BE SOMETHING SPECIAL.</div>
+            </div>
+
+            <a href="#" class="back-to-top">↑ To Top</a>
+        </div>
+        {% endblock %}
+    </footer>
+
+    <script>
+        // Animations on scroll
+        function checkVisible() {
+            const elements = document.querySelectorAll('.animate-fade-up');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if (position.top < window.innerHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkVisible);
+        window.addEventListener('resize', checkVisible);
+        window.addEventListener('load', checkVisible);
+
+        // Cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartCount = document.querySelector('.cart-count');
+        let count = 0;
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                count++;
+                cartCount.textContent = count;
+
+                button.textContent = 'Added!';
+                button.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    button.textContent = 'Add to Cart';
+                    button.style.backgroundColor = '';
+                }, 1500);
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            }
+        });
+    </script>
+    {% block extra_js %}
+    {% endblock %}
+</body>
+
+</html>

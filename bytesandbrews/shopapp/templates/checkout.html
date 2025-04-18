@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Checkout - Bytes & Brew Coffee{% endblock %}
+{% block extra_css %}
+ <style> 
+    .checkout-container {
+        display: flex;
+        gap: 30px;
+        margin: 40px 0;
+    }
+    
+    .checkout-left {
+        flex: 2;
+    }
+    
+    .checkout-right {
+        flex: 1;
+    }
+    
+    .product-summary {
+        display: flex;
+        gap: 20px;
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .checkout-product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    
+    .product-summary-details h4 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+    }
+    
+    .product-summary-details p {
+        margin: 0;
+        font-weight: bold;
+        color: var(--accent);
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .form-group {
+        flex: 1;
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #555;
+    }
+    
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    input.error, select.error {
+        border-color: #ff5252;
+    }
+    
+    .payment-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .payment-option {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .payment-option.selected {
+        border-color: var(--accent);
+        background-color: rgba(var(--accent-rgb), 0.1);
+    }
+    
+    .payment-option-radio {
+        margin-right: 10px;
+    }
+    
+    .payment-details {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 8px;
+    }
+    
+    .checkout-button {
+        background-color: var(--secondary);
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+    
+    .checkout-button:hover {
+        background-color: #45a049;
+    }
+    
+    .order-summary {
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .summary-row.total {
+        font-weight: bold;
+        border-bottom: none;
+        font-size: 18px;
+    }
+    
+    .discount-section {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .discount-input {
+        flex: 1;
+    }
+    
+    .discount-button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    </style>
+    {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="checkout-container">
+        <div class="checkout-left">
+            <h2>Checkout</h2>
+            
+            <!-- Product Summary -->
+            <div class="selected-product">
+                <h3>Your Order</h3>
+                <div class="product-summary">
+                    <img id="product-image" src="" alt="Selected coffee" class="checkout-product-image">
+                    <div class="product-summary-details">
+                        <h4 id="product-title"></h4>
+                        <p id="product-price"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Checkout Form -->
+            <form id="checkout-form" method="post" action="/process-payment/">
+                {% csrf_token %}
+                <input type="hidden" name="product_title" id="form-product-title">
+                <input type="hidden" name="product_price" id="form-product-price">
+                
+                <h3>Contact Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <h3>Shipping Address</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="AP">Andhra Pradesh</option>
+                            <option value="AR">Arunachal Pradesh</option>
+                            <option value="AS">Assam</option>
+                            <option value="BR">Bihar</option>
+                            <!-- Add more states as needed -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="zip_code">ZIP Code</label>
+                        <input type="text" id="zip_code" name="zip_code" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" required>
+                            <option value="IN">India</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h3>Payment Method</h3>
+                <div class="payment-options">
+                    <div class="payment-option selected">
+                        <input type="radio" name="payment_method" value="credit_card" id="credit_card" class="payment-option-radio" checked>
+                        <label for="credit_card" class="payment-option-label">Credit Card</label>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <input type="radio" name="payment_method" value="upi" id="upi" class="payment-option-radio">
+                        <label for="upi" class="payment-option-label">UPI</label>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery" class="payment-option-radio">
+                        <label for="cash_on_delivery" class="payment-option-label">Cash on Delivery</label>
+                    </div>
+                </div>
+                
+                <div class="payment-details">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card_number">Card Number</label>
+                            <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiration_date">Expiration Date</label>
+                            <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="security_code">Security Code</label>
+                            <input type="text" id="security_code" name="security_code" placeholder="CVC">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name_on_card">Name on Card</label>
+                        <input type="text" id="name_on_card" name="name_on_card">
+                    </div>
+                </div>
+                
+                <button type="submit" class="checkout-button">Complete Payment</button>
+            </form>
+        </div>
+        
+        <div class="checkout-right">
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-row">
+                    <div>Subtotal</div>
+                    <div id="summary-subtotal"></div>
+                </div>
+                
+                <div class="summary-row">
+                    <div>Shipping</div>
+                    <div>₹40.00</div>
+                </div>
+                
+                <div class="summary-row">
+                    <div>Service Fee</div>
+                    <div>₹20.00</div>
+                </div>
+                
+                <div class="summary-row total">
+                    <div>Total</div>
+                    <div id="summary-total"></div>
+                </div>
+                
+                <div class="discount-section">
+                    <input type="text" class="discount-input" placeholder="Discount code">
+                    <button class="discount-button">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get product data from session storage
+        const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
+        
+        if (productData) {
+            // Update product display
+            document.getElementById('product-title').textContent = productData.title;
+            document.getElementById('product-price').textContent = productData.price;
+            document.getElementById('product-image').src = productData.image;
+            
+            // Update form hidden fields
+            document.getElementById('form-product-title').value = productData.title;
+            document.getElementById('form-product-price').value = productData.price;
+            
+            // Update order summary
+            document.getElementById('summary-subtotal').textContent = productData.price;
+            
+            // Calculate total (subtotal + shipping + service fee)
+            const priceValue = parseInt(productData.price.replace('₹', '').trim());
+            const total = priceValue + 40 + 20; // Adding shipping and service fee
+            document.getElementById('summary-total').textContent = `₹${total}`;
+        }
+        
+        // Initialize checkout functionality
+        initCheckout();
+        initEventListeners();
+    });
+
+    // You can reuse the checkout.js functions here
+    function initCheckout() {
+        // Set up form validation
+        const checkoutForm = document.querySelector('#checkout-form');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+    }
+
+    function initEventListeners() {
+        // Payment method selection
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Check the radio button
+                const radio = this.querySelector('.payment-option-radio');
+                radio.checked = true;
+                
+                // Show/hide payment details based on selection
+                togglePaymentDetails(radio.value);
+            });
+        });
+        
+        // Apply discount code
+        const discountButton = document.querySelector('.discount-button');
+        if (discountButton) {
+            discountButton.addEventListener('click', applyDiscount);
+        }
+    }
+
+    function validateForm() {
+        // Basic validation - can be expanded
+        let isValid = true;
+        
+        // Required fields
+        const requiredFields = [
+            'email', 'first_name', 'last_name', 'address', 
+            'city', 'state', 'zip_code'
+        ];
+        
+        requiredFields.forEach(field => {
+            const input = document.querySelector(`#${field}`);
+            if (input && !input.value.trim()) {
+                input.classList.add('error');
+                isValid = false;
+            } else if (input) {
+                input.classList.remove('error');
+            }
+        });
+        
+        // Email validation
+        const emailInput = document.querySelector('#email');
+        if (emailInput && !validateEmail(emailInput.value)) {
+            emailInput.classList.add('error');
+            isValid = false;
+        }
+        
+        // Credit card validation if selected
+        const creditCardOption = document.querySelector('#credit_card');
+        if (creditCardOption && creditCardOption.checked) {
+            const cardFields = ['card_number', 'expiration_date', 'security_code', 'name_on_card'];
+            
+            cardFields.forEach(field => {
+                const input = document.querySelector(`#${field}`);
+                if (input && !input.value.trim()) {
+                    input.classList.add('error');
+                    isValid = false;
+                } else if (input) {
+                    input.classList.remove('error');
+                }
+            });
+        }
+        
+        return isValid;
+    }
+
+    function validateEmail(email) {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(email);
+    }
+
+    function togglePaymentDetails(paymentType) {
+        const paymentDetails = document.querySelector('.payment-details');
+        
+        if (paymentType === 'credit_card') {
+            paymentDetails.style.display = 'block';
+        } else {
+            paymentDetails.style.display = 'none';
+        }
+    }
+
+    function applyDiscount() {
+        const discountInput = document.querySelector('.discount-input');
+        const discountCode = discountInput.value.trim().toUpperCase();
+        
+        // Simple discount code example - normally would verify with server
+        if (discountCode === 'COFFEE25') {
+            // Get current total
+            const subtotalElement = document.getElementById('summary-subtotal');
+            const subtotal = parseInt(subtotalElement.textContent.replace('₹', '').trim());
+            
+            // Calculate discount (25% off)
+            const discountAmount = Math.round(subtotal * 0.25);
+            
+            // Update order summary
+            let discountElement = document.querySelector('.summary-row-discount');
+            
+            if (!discountElement) {
+                // Create discount row
+                discountElement = document.createElement('div');
+                discountElement.className = 'summary-row summary-row-discount';
+                discountElement.innerHTML = `
+                    <div>Discount (25%)</div>
+                    <div>-₹${discountAmount}</div>
+                `;
+                
+                // Insert before total
+                const totalRow = document.querySelector('.summary-row.total');
+                totalRow.parentNode.insertBefore(discountElement, totalRow);
+            } else {
+                // Update existing discount row
+                discountElement.querySelector('div:nth-child(2)').textContent = `-₹${discountAmount}`;
+            }
+            
+            // Update total
+            const total = subtotal + 40 + 20 - discountAmount;
+            document.getElementById('summary-total').textContent = `₹${total}`;
+            
+            alert('Discount code applied successfully!');
+        } else {
+            alert('Invalid discount code.');
+        }
+    }
+</script>
+{% endblock %}

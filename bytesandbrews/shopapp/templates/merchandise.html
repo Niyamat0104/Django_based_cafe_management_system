@@ -1,0 +1,945 @@
+<!-- merchandise.html -->
+ 
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Bytes & Brew Merchandise{% endblock %}
+
+{% block extra_css %}
+<style> 
+/* Merchandise-specific styles */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin: 40px auto;
+  max-width: 1300px;
+  padding: 0 20px;
+}
+
+.item {
+  width: 300px;
+  margin-bottom: 30px;
+  position: relative;
+  margin-right: 10px;
+  margin-left: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.item-image-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  margin-bottom: 0;
+  overflow: hidden;
+  border-radius: 15px 15px 0 0;
+  background: #fff;
+  display: block;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.flip-container {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
+
+.flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-checkbox:checked + .item-image-container .flipper {
+  transform: rotateY(180deg);
+}
+
+.front-image, .back-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px 15px 0 0;
+  box-sizing: border-box;
+}
+
+.front-image img, .back-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.front-image img:hover {
+  transform: scale(1.05);
+}
+
+.back-image {
+  transform: rotateY(180deg);
+  background: var(--accent);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.back-content {
+  text-align: left;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.back-content h3 {
+  margin-top: 0;
+  color: var(--primary);
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(212, 165, 106, 0.3);
+  padding-bottom: 8px;
+}
+
+.back-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.price {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: var(--accent);
+  color: var(--primary);
+  padding: 10px 16px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-top-right-radius: 15px;
+  z-index: 3;
+  box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.item-details {
+  background: white;
+  padding: 18px;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.item-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--dark);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 1px;
+}
+
+.brand {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 5px 0 15px 0;
+  font-style: italic;
+}
+
+.buy-now {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.buy-button {
+  background: var(--secondary);
+  color: var(--dark);
+  border: none;
+  padding: 12px 20px;
+  width: 85%;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.buy-button:hover {
+  background: var(--primary);
+  color: var(--light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.buy-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.add-button {
+  width: 12%;
+  background: white;
+  border: 1px solid #ccc;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+  background: #f5f5f5;
+  transform: rotate(90deg);
+  border-color: var(--secondary);
+}
+
+.add-button:disabled {
+  color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sold-out {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  background: #e94e4e;
+  color: white;
+  padding: 8px 15px;
+  font-weight: bold;
+  z-index: 4;
+  border-radius: 0 0 0 15px;
+  box-shadow: -3px 3px 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(5px);
+}
+
+.sale-tag {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  background: var(--primary);
+  color: var(--light);
+  padding: 8px 15px;
+  font-weight: bold;
+  z-index: 4;
+  border-radius: 0 0 0 15px;
+  box-shadow: -3px 3px 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(5px);
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-weight: bold;
+  margin: 30px auto;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: rgba(212, 165, 106, 0.15);
+  border-radius: 12px;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.nav label {
+  cursor: pointer;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  color: var(--primary);
+  padding: 8px 15px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav label:hover {
+  background: rgba(212, 165, 106, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav label::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--secondary);
+  transition: width 0.3s ease;
+}
+
+.nav label:hover::after {
+  width: 100%;
+}
+
+input[name="category"] {
+  display: none;
+}
+
+input#new:checked ~ .nav label[for="new"],
+input#apparel:checked ~ .nav label[for="apparel"],
+input#mugs:checked ~ .nav label[for="mugs"],
+input#travel:checked ~ .nav label[for="travel"],
+input#tools:checked ~ .nav label[for="tools"],
+input#posters:checked ~ .nav label[for="posters"],
+input#sale:checked ~ .nav label[for="sale"],
+input#coffee:checked ~ .nav label[for="coffee"],
+input#nuts:checked ~ .nav label[for="nuts"] {
+  background: var(--secondary);
+  color: var(--dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+input#new:checked ~ .container .item:not(.new),
+input#apparel:checked ~ .container .item:not(.apparel),
+input#mugs:checked ~ .container .item:not(.mugs),
+input#travel:checked ~ .container .item:not(.travel),
+input#tools:checked ~ .container .item:not(.tools),
+input#posters:checked ~ .container .item:not(.posters),
+input#sale:checked ~ .container .item:not(.sale),
+input#coffee:checked ~ .container .item:not(.coffee),
+input#nuts:checked ~ .container .item:not(.nuts) {
+  display: none;
+}
+
+.category-highlight {
+  background: linear-gradient(to right, rgba(94, 58, 26, 0.1), rgba(212, 165, 106, 0.1));
+  padding: 20px;
+  margin: 30px auto;
+  border-radius: 15px;
+  max-width: 1200px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.category-highlight h2 {
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.category-highlight h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 10%;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+.category-highlight p {
+  color: var(--dark);
+  margin-bottom: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .grid {
+    gap: 15px;
+  }
+  
+  .item {
+    width: 45%;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  
+  .item-image-container {
+    height: 200px;
+  }
+  
+  .nav {
+    gap: 10px;
+  }
+  
+  .nav label {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+  
+  .back-content h3 {
+    font-size: 1rem;
+  }
+  
+  .back-content p {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .category-highlight h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .item {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  
+  .item-image-container {
+    height: 250px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+  <input type="radio" name="category" id="new" checked>
+  <input type="radio" name="category" id="coffee">
+  <input type="radio" name="category" id="nuts">
+  <input type="radio" name="category" id="apparel">
+  <input type="radio" name="category" id="mugs">
+  <input type="radio" name="category" id="travel">
+  <input type="radio" name="category" id="tools">
+  <input type="radio" name="category" id="posters">
+  <input type="radio" name="category" id="sale">
+
+  <div class="nav">
+    <label for="new">NEW!</label>
+    <label for="coffee">COFFEE</label>
+    <label for="nuts">NUTS & TRAIL</label>
+    <label for="apparel">APPAREL</label>
+    <label for="mugs">MUGS</label>
+    <label for="travel">TRAVEL</label>
+    <label for="tools">BREWING TOOLS</label>
+    <label for="posters">POSTERS</label>
+    <label for="sale">SALE</label>
+  </div>
+
+  <div class="category-highlight" id="coffee-highlight">
+    <h2>Fresh Roasted Coffee</h2>
+    <p>Explore our selection of premium coffee beans, convenient sachets, and refreshing cold brew options. From
+      single-origin to specialty blends, find your perfect cup.</p>
+  </div>
+
+  <div class="container grid">
+    <!-- NEW COFFEE ITEMS -->
+    <!-- ITEM 1: COFFEE SAMPLER PACK -->
+    <div class="item new coffee">
+      <input type="checkbox" id="flip15" class="flip-checkbox">
+      <label for="flip15" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item1.png' %}" alt="Coffee Sampler Pack">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Premium Coffee Sampler Pack</h3>
+              <p>Experience our top 4 single-origin coffees from different regions of India in a convenient tasting set.
+              </p>
+              <p><strong>Includes:</strong> 4 x 75g pouches</p>
+              <p><strong>Roast Levels:</strong> Light, Medium, Medium-Dark, Dark</p>
+              <p><strong>Regions:</strong> Chikmagalur, Coorg, Nilgiris, Araku Valley</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 799</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Premium Coffee Sampler Pack</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 2: COLD BREW PACKS -->
+    <div class="item coffee new">
+      <input type="checkbox" id="flip16" class="flip-checkbox">
+      <label for="flip16" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item2.png' %}" alt="Cold Brew Packs">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Cold Brew Filter Bags</h3>
+              <p>Easy-to-use cold brew coffee bags. Simply steep overnight in water for smooth, low-acid cold brew
+                coffee.</p>
+              <p><strong>Contains:</strong> 10 filter bags</p>
+              <p><strong>Each bag yields:</strong> 500ml of cold brew</p>
+              <p><strong>Flavor profile:</strong> Chocolatey with caramel notes</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 599</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Cold Brew Filter Bags</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 3: SINGLE ORIGIN BEANS -->
+    <div class="item coffee">
+      <input type="checkbox" id="flip17" class="flip-checkbox">
+      <label for="flip17" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item3.png' %}" alt="Single Origin Beans">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Attikan Estate Single Origin</h3>
+              <p>Medium-dark roast from Karnataka's Attikan Estate. Notes of dark chocolate, fig, and brown sugar.</p>
+              <p><strong>Weight:</strong> 250g</p>
+              <p><strong>Roast date:</strong> Fresh roasted weekly</p>
+              <p><strong>Process:</strong> Washed</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 449</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Attikan Estate Single Origin</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 4: INSTANT COFFEE SACHETS -->
+    <div class="item coffee">
+      <input type="checkbox" id="flip18" class="flip-checkbox">
+      <label for="flip18" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item4.png' %}" alt="Instant Coffee Sachets">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Premium Instant Coffee Sachets</h3>
+              <p>Artisanal freeze-dried coffee in convenient single-serve sachets. Superior to regular instant coffee.
+              </p>
+              <p><strong>Contains:</strong> 10 sachets</p>
+              <p><strong>Each sachet:</strong> Makes one 8oz cup</p>
+              <p><strong>Origin:</strong> Blend of Arabica beans</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 349</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Premium Instant Coffee Sachets</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 5: COFFEE SUBSCRIPTION BOX -->
+    <div class="item coffee new">
+      <div class="sale-tag">New</div>
+      <input type="checkbox" id="flip19" class="flip-checkbox">
+      <label for="flip19" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item5.png' %}" alt="Coffee Subscription Box">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Monthly Coffee Subscription</h3>
+              <p>Get two bags of our premium coffee delivered to your doorstep every month. Customize your preferences.
+              </p>
+              <p><strong>Includes:</strong> 2 x 250g bags monthly</p>
+              <p><strong>Options:</strong> Choose beans or ground</p>
+              <p><strong>Discount:</strong> 15% off regular price</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 799</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Monthly Coffee Subscription</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUTS & TRAIL MIXES -->
+    <!-- ITEM 6: PREMIUM NUT MIX -->
+    <div class="item nuts new">
+      <input type="checkbox" id="flip20" class="flip-checkbox">
+      <label for="flip20" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item6.png' %}" alt="Premium Nut Mix">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Premium Nut Mix</h3>
+              <p>Luxury blend of hand-selected cashews, almonds, walnuts, and pistachios. Lightly roasted with sea salt.
+              </p>
+              <p><strong>Weight:</strong> 200g</p>
+              <p><strong>Packaging:</strong> Resealable pouch</p>
+              <p><strong>Perfect with:</strong> Our single-origin coffees</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 699</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Premium Nut Mix</h3>
+        <div class="brand">Bytes & Brew Snacks</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 7: CHOCOLATE TRAIL MIX -->
+    <div class="item nuts">
+      <input type="checkbox" id="flip21" class="flip-checkbox">
+      <label for="flip21" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item7.png' %}" alt="Chocolate Trail Mix">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Chocolate Coffee Trail Mix</h3>
+              <p>A delicious blend of dark chocolate chunks, coffee-infused cranberries, and mixed nuts.</p>
+              <p><strong>Weight:</strong> 250g</p>
+              <p><strong>Contains:</strong> Dark chocolate, almonds, cranberries, cashews</p>
+              <p><strong>Perfect for:</strong> Hiking or coffee breaks</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 549</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Chocolate Coffee Trail Mix</h3>
+        <div class="brand">Bytes & Brew</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 8: ENERGY TRAIL MIX -->
+    <div class="item nuts">
+      <input type="checkbox" id="flip22" class="flip-checkbox">
+      <label for="flip22" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item8.png' %}" alt="Energy Trail Mix">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Energy Booster Trail Mix</h3>
+              <p>High-protein blend with nuts, seeds, and dried fruits. Perfect for a quick energy boost.</p>
+              <p><strong>Weight:</strong> 200g</p>
+              <p><strong>Contains:</strong> Almonds, pumpkin seeds, sunflower seeds, goji berries</p>
+              <p><strong>Benefits:</strong> Rich in omega-3, protein, and antioxidants</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 499</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Energy Booster Trail Mix</h3>
+        <div class="brand">Bytes & Brew Snacks</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 9: COROMANDEL SIPPER -->
+    <div class="item new travel">
+      <div class="sold-out">Sold Out</div>
+      <input type="checkbox" id="flip1" class="flip-checkbox">
+      <label for="flip1" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item9.png' %}" alt="Coromandel Sipper">
+            <div class="palm-decoration">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30,10 Q35,25 30,40 M30,10 Q25,25 30,40 M30,10 Q40,20 45,30 M30,10 Q20,20 15,30"
+                  stroke="#4b2e2e" fill="none" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div class="pattern-decoration">
+              <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="pattern1" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <circle cx="5" cy="5" r="1.5" fill="#4b2e2e" />
+                </pattern>
+                <rect width="80" height="60" fill="url(#pattern1)" />
+              </svg>
+            </div>
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Coromandel Ceramic Sipper</h3>
+              <p>Handcrafted ceramic sipper inspired by the coastal waters of Tamil Nadu.</p>
+              <p><strong>Capacity:</strong> 350ml</p>
+              <p><strong>Features:</strong> Double-walled, bamboo lid</p>
+              <p><strong>Care:</strong> Handwash only</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 1,199</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Coromandel Ceramic Sipper</h3>
+        <div class="brand">Bytes & Brew Collection</div>
+        <div class="buy-now">
+          <button class="buy-button" disabled>Sold Out</button>
+          <button class="add-button" disabled>+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 10: MONSOON MALABAR HOODIE -->
+    <div class="item apparel new">
+      <div class="sale-tag">New</div>
+      <input type="checkbox" id="flip2" class="flip-checkbox">
+      <label for="flip2" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item13.png' %}" alt="Monsoon Malabar Hoodie">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Monsoon Malabar Hoodie</h3>
+              <p>Premium cotton-blend hoodie featuring our Monsoon Malabar bean design.</p>
+              <p><strong>Material:</strong> 80% organic cotton, 20% recycled polyester</p>
+              <p><strong>Sizes:</strong> S, M, L, XL</p>
+              <p><strong>Care:</strong> Machine wash cold</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 1,899</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Monsoon Malabar Hoodie</h3>
+        <div class="brand">Bytes & Brew Apparel</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more items as needed -->
+    <!-- ITEM 11: SIGNATURE CERAMIC MUG -->
+    <div class="item mugs">
+      <input type="checkbox" id="flip3" class="flip-checkbox">
+      <label for="flip3" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/coffee_mug.jpg' %}" alt="Signature Ceramic Mug">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Signature Ceramic Mug</h3>
+              <p>Our best-selling ceramic mug with a comfortable handle and perfect heat retention.</p>
+              <p><strong>Capacity:</strong> 300ml</p>
+              <p><strong>Material:</strong> High-fired ceramic</p>
+              <p><strong>Features:</strong> Microwave and dishwasher safe</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 599</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Signature Ceramic Mug</h3>
+        <div class="brand">Bytes & Brew Home</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 12: COFFEE BREWING TOOLKIT -->
+    <div class="item tools">
+      <input type="checkbox" id="flip4" class="flip-checkbox">
+      <label for="flip4" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/cup.jpg' %}" alt="Coffee Brewing Toolkit">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Coffee Brewing Toolkit</h3>
+              <p>Essential toolkit for the home barista. Includes scale, timer, and thermometer.</p>
+              <p><strong>Includes:</strong> Digital scale (0.1g precision), thermometer, timer</p>
+              <p><strong>Battery:</strong> Rechargeable USB</p>
+              <p><strong>Perfect for:</strong> Pour-over, French press, AeroPress</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 2,499</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Coffee Brewing Toolkit</h3>
+        <div class="brand">Bytes & Brew Tools</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 13: BEAN ORIGIN POSTER -->
+    <div class="item posters sale">
+      <div class="sale-tag">20% Off</div>
+      <input type="checkbox" id="flip5" class="flip-checkbox">
+      <label for="flip5" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/poster.jpg' %}" alt="Bean Origin Poster">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Coffee Bean Origins Poster</h3>
+              <p>Educational poster showcasing the major coffee-growing regions of India with tasting notes.</p>
+              <p><strong>Size:</strong> 18" x 24" (45cm x 60cm)</p>
+              <p><strong>Material:</strong> 250gsm matte paper</p>
+              <p><strong>Frame:</strong> Not included</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 799</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title">Coffee Bean Origins Poster</h3>
+        <div class="brand">Bytes & Brew Art</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 14: INSULATED TRAVEL MUG -->
+    <div class="item travel">
+      <input type="checkbox" id="flip6" class="flip-checkbox">
+      <label for="flip6" class="item-image-container">
+        <div class="flipper">
+          <div class="front-image">
+            <img src="{% static 'images/item14.png' %}" alt="Insulated Travel Mug">
+          </div>
+          <div class="back-image">
+            <div class="back-content">
+              <h3>Stainless Steel Travel Mug</h3>
+              <p>Double-walled vacuum insulated travel mug that keeps beverages hot for 8 hours or cold for 12 hours.
+              </p>
+              <p><strong>Capacity:</strong> 450ml</p>
+              <p><strong>Material:</strong> 18/8 food-grade stainless steel</p>
+              <p><strong>Features:</strong> Leakproof lid, fits car cup holders</p>
+            </div>
+          </div>
+        </div>
+        <div class="price">₹ 1,299</div>
+      </label>
+      <div class="item-details">
+        <h3 class="item-title"> Travel Mug</h3>
+        <div class="brand">Bytes & Brew Travel</div>
+        <div class="buy-now">
+          <button class="buy-button">Buy Now</button>
+          <button class="add-button">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  // Merchandise-specific JavaScript
+  <script> 
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show appropriate category highlight based on selected filter
+    const categoryInputs = document.querySelectorAll('input[name="category"]');
+    const highlights = document.querySelectorAll('.category-highlight');
+
+    categoryInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        // Hide all highlights first
+        highlights.forEach(highlight => {
+          highlight.style.display = 'none';
+        });
+
+        // Show only the relevant highlight
+        const selectedCategory = this.id;
+        const relatedHighlight = document.getElementById(selectedCategory + '-highlight');
+        if (relatedHighlight) {
+          relatedHighlight.style.display = 'block';
+        }
+      });
+    });
+    
+    // Add event listeners for buy buttons
+    const buyButtons = document.querySelectorAll('.buy-button:not([disabled])');
+    buyButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const itemTitle = this.closest('.item-details').querySelector('.item-title').textContent;
+        alert(Adding ${itemTitle} to cart!);
+        // Add your cart functionality here
+      });
+    });
+    
+    // Add event listeners for add buttons
+    const addButtons = document.querySelectorAll('.add-button:not([disabled])');
+    addButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const itemTitle = this.closest('.item-details').querySelector('.item-title').textContent;
+        alert(Adding ${itemTitle} to wishlist!);
+        // Add your wishlist functionality here
+      });
+    });
+  });
+</script>
+{% endblock %}

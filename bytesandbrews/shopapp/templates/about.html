@@ -1,0 +1,428 @@
+<!-- About.html -->
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Bytes & Brew About{% endblock %}
+{% block extra_css%}
+<style>
+    .hero {
+        position: relative;
+        width: 100%;
+        height: 950px;
+        /* Full screen */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+    }
+
+    .hero-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        z-index: -1;
+        filter: brightness(0.4);
+        /* Darken video for better text readability */
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #fff;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto;
+        color: #eee;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    section {
+        padding: 80px 0;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+        font-size: 36px;
+        color: var(--dark);
+        margin-bottom: 20px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(to right, var(--dark), #d76d77, #ffaf7b);
+    }
+
+    .journey {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .milestone {
+        flex-basis: calc(33.33% - 30px);
+        margin-bottom: 40px;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .milestone:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .milestone-img {
+        height: 300px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .milestone-content {
+        padding: 20px;
+    }
+
+    .milestone h3 {
+        color: var(--dark);
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .milestone p {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .team {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .team-member {
+        flex-basis: calc(25% - 30px);
+        text-align: center;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .team-member.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .team-member img {
+        height: 300px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 5px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .team-member h3 {
+        color: var(--dark);
+        margin-bottom: 5px;
+        font-size: 20px;
+    }
+
+    .team-member p {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .values {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    .value-item {
+        flex-basis: calc(50% - 15px);
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .value-icon {
+        font-size: 40px;
+        margin-right: 20px;
+        color: #d76d77;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .value-content h3 {
+        color: var(--dark);
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .value-content p {
+        color: #666;
+        font-size: 16px;
+    }
+
+
+    @media (max-width: 992px) {
+        .milestone {
+            flex-basis: calc(50% - 15px);
+        }
+
+        .team-member {
+            flex-basis: calc(33.33% - 20px);
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .milestone,
+        .value-item {
+            flex-basis: 100%;
+        }
+
+        .team-member {
+            flex-basis: calc(50% - 15px);
+        }
+
+        .footer-column {
+            flex-basis: calc(50% - 15px);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .team-member {
+            flex-basis: 100%;
+        }
+
+        .footer-column {
+            flex-basis: 100%;
+        }
+    }
+
+    /* Icons */
+    .icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        stroke-width: 0;
+        stroke: currentColor;
+        fill: currentColor;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+        <source src="{% static 'images/BYTE’S & BREW.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="hero-content">
+        <h1>Our Story</h1>
+        <p>Where tech meets coffee culture in a space designed for innovation, community, and great conversation.
+        </p>
+    </div>
+</div>
+
+<section>
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Journey</h2>
+            <p>From a simple idea to a thriving tech-coffee hub</p>
+        </div>
+
+        <div class="journey">
+            <div class="milestone">
+                <img src="{% static 'images/idea.jpg' %}" alt="The Beginning" class="milestone-img" style="width:300px;background-size: cover;background-position: center;">
+                <div class="milestone-content">
+                    <h3>The Beginning</h3>
+                    <p>January 2025</p>
+                    <p>Bytes & Brews was born from a simple idea: create a space where tech enthusiasts could enjoy
+                        premium coffee while collaborating on projects, attending workshops, or simply working in a
+                        comfortable environment.</p>
+                </div>
+            </div>
+
+            <div class="milestone">
+                <img src="{% static 'images/grand_opening.jpg' %}" alt="Grand Opening" class="milestone-img">
+                <div class="milestone-content">
+                    <h3>Grand Opening</h3>
+                    <p>March 2025</p>
+                    <p>After months of planning and preparation, we opened our doors to the public, introducing our
+                        unique blend of tech workspace and specialty coffee bar to the community.</p>
+                </div>
+            </div>
+
+            <div class="milestone">
+                <img src="{% static 'images/tech_meetup.jpg' %}" alt="First Tech Meetup" class="milestone-img">
+                <div class="milestone-content">
+                    <h3>First Tech Meetup</h3>
+                    <p>April 2025</p>
+                    <p>We hosted our first successful tech meetup, bringing together local developers, designers,
+                        and tech enthusiasts for an evening of knowledge sharing and networking.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="background-color: #f0f4f9;">
+    <div class="container">
+        <div class="section-header">
+            <h2>Meet Our Team</h2>
+            <p>The passionate people behind Bytes & Brews</p>
+        </div>
+
+        <div class="team">
+            <div class="team-member">
+                <img src="{% static 'images/niyamat.jpg' %}" alt="Niyamat">
+                <h3>Niyamat</h3>
+            </div>
+
+            <div class="team-member">
+                <img src="{% static 'images/namha.png' %}" alt="Namha">
+                <h3>Namha</h3>
+            </div>
+
+            <div class="team-member">
+                <img src="{% static 'images/diksha.jpg' %}" alt="Diksha">
+                <h3>Diksha</h3>
+            </div>
+
+            <div class="team-member">
+                <img src="{% static 'images/natasha.jpg' %}" alt="Natasha">
+                <h3>Natasha</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Core Values</h2>
+            <p>What drives us every day</p>
+        </div>
+
+        <div class="values">
+            <div class="value-item">
+                <div class="value-icon">🔄</div>
+                <div class="value-content">
+                    <h3>Innovation</h3>
+                    <p>We embrace new technologies and ideas, constantly seeking ways to improve our space and
+                        offerings for our community.</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">🤝</div>
+                <div class="value-content">
+                    <h3>Community</h3>
+                    <p>We believe in the power of bringing people together, fostering connections and collaborations
+                        among tech enthusiasts.</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">♻</div>
+                <div class="value-content">
+                    <h3>Sustainability</h3>
+                    <p>We're committed to environmentally conscious practices, from our ethically sourced coffee
+                        beans to our energy-efficient tech setup.</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">🏆</div>
+                <div class="value-content">
+                    <h3>Excellence</h3>
+                    <p>We strive for excellence in everything we do, from brewing the perfect cup to hosting
+                        engaging tech events.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+ 
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+{% block extra_js %}
+<script>
+    // Animation for team members
+    document.addEventListener('DOMContentLoaded', function () {
+        const teamMembers = document.querySelectorAll('.team-member');
+
+        function checkVisibility() {
+            const windowHeight = window.innerHeight;
+
+            teamMembers.forEach(member => {
+                const rect = member.getBoundingClientRect();
+                const isVisible = rect.top < windowHeight - 100;
+
+                if (isVisible) {
+                    member.classList.add('visible');
+                }
+            });
+        }
+
+        // Initial check
+        checkVisibility();
+
+        // Check on scroll
+        window.addEventListener('scroll', checkVisibility);
+    });
+</script>
+{% endblock %}
