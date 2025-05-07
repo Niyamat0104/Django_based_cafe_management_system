@@ -88,7 +88,11 @@
                               <button style="background-color:#6f4e37;color:antiquewhite;border-radius: 20px;">Update</button>
                             </a>
                           {% endif %}
-                          <img src="{% static item.image_path %}" alt="{{ item.name }}">
+                          {% if item.image and item.image|slice:":4" == "http" %}
+    <img src="{{ item.image }}" alt="{{ item.name }}">
+{% else %}
+    <img src="{% static item.image %}" alt="{{ item.name }}">
+{% endif %}
                           <a style="text-decoration: none; color: #543310" href="{% url 'order_app:order_selection' id=item.id %}">
                             <p>{{ item.name }}</p>
                           </a>

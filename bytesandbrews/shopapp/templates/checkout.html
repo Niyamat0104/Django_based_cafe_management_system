@@ -2,502 +2,818 @@
 {% load static %}
 {% block title %}Checkout - Bytes & Brew Coffee{% endblock %}
 {% block extra_css %}
- <style> 
-    .checkout-container {
-        display: flex;
-        gap: 30px;
-        margin: 40px 0;
-    }
-    
-    .checkout-left {
-        flex: 2;
-    }
-    
-    .checkout-right {
-        flex: 1;
-    }
-    
-    .product-summary {
-        display: flex;
-        gap: 20px;
-        background-color: #f8f8f8;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-    
-    .checkout-product-image {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-    
-    .product-summary-details h4 {
-        margin: 0 0 10px 0;
-        font-size: 16px;
-    }
-    
-    .product-summary-details p {
-        margin: 0;
-        font-weight: bold;
-        color: var(--accent);
-    }
-    
-    .form-row {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .form-group {
-        flex: 1;
-        margin-bottom: 15px;
-    }
-    
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 14px;
-        color: #555;
-    }
-    
-    input, select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-    
-    input.error, select.error {
-        border-color: #ff5252;
-    }
-    
-    .payment-options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-    
-    .payment-option {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    
-    .payment-option.selected {
-        border-color: var(--accent);
-        background-color: rgba(var(--accent-rgb), 0.1);
-    }
-    
-    .payment-option-radio {
-        margin-right: 10px;
-    }
-    
-    .payment-details {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 8px;
-    }
-    
-    .checkout-button {
-        background-color: var(--secondary);
-        color: white;
-        padding: 15px;
-        border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 20px;
-        font-size: 16px;
-    }
-    
-    .checkout-button:hover {
-        background-color: #45a049;
-    }
-    
-    .order-summary {
-        background-color: #f8f8f8;
-        padding: 20px;
-        border-radius: 8px;
-    }
-    
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .summary-row.total {
-        font-weight: bold;
-        border-bottom: none;
-        font-size: 18px;
-    }
-    
-    .discount-section {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-    
-    .discount-input {
-        flex: 1;
-    }
-    
-    .discount-button {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    </style>
-    {% endblock %}
+<style>
+  .checkout-container {
+    display: flex;
+    gap: 30px;
+    margin: 40px 0;
+  }
+
+  .checkout-left {
+    flex: 2;
+  }
+
+  .checkout-right {
+    flex: 1;
+  }
+
+  .product-summary {
+    display: flex;
+    gap: 20px;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .checkout-product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+
+  .product-summary-details h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+  }
+
+  .product-summary-details p {
+    margin: 0;
+    font-weight: bold;
+    color: var(--accent);
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    flex: 1;
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  input.error,
+  select.error {
+    border-color: #ff5252;
+  }
+
+  .payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .payment-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .payment-option.selected {
+    border-color: var(--accent);
+    background-color: rgba(var(--accent-rgb), 0.1);
+  }
+
+  .payment-option-radio {
+    margin-right: 10px;
+  }
+
+  .payment-details {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+  }
+
+  .checkout-button {
+    background-color: var(--secondary);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+  }
+
+  .checkout-button:hover {
+    background-color: #45a049;
+  }
+
+  .order-summary {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .summary-row.total {
+    font-weight: bold;
+    border-bottom: none;
+    font-size: 18px;
+  }
+
+  .discount-section {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .discount-input {
+    flex: 1;
+  }
+
+  .discount-button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* New styles for cart items */
+  .cart-items-container {
+    margin-bottom: 20px;
+  }
+
+  .no-items-message {
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    text-align: center;
+    color: #777;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="checkout-container">
-        <div class="checkout-left">
-            <h2>Checkout</h2>
-            
-            <!-- Product Summary -->
-            <div class="selected-product">
-                <h3>Your Order</h3>
-                <div class="product-summary">
-                    <img id="product-image" src="" alt="Selected coffee" class="checkout-product-image">
-                    <div class="product-summary-details">
-                        <h4 id="product-title"></h4>
-                        <p id="product-price"></p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Checkout Form -->
-            <form id="checkout-form" method="post" action="/process-payment/">
-                {% csrf_token %}
-                <input type="hidden" name="product_title" id="form-product-title">
-                <input type="hidden" name="product_price" id="form-product-price">
-                
-                <h3>Contact Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                </div>
-                
-                <h3>Shipping Address</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" id="first_name" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="address" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" id="city" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State</label>
-                        <select id="state" name="state" required>
-                            <option value="">Select State</option>
-                            <option value="AP">Andhra Pradesh</option>
-                            <option value="AR">Arunachal Pradesh</option>
-                            <option value="AS">Assam</option>
-                            <option value="BR">Bihar</option>
-                            <!-- Add more states as needed -->
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="zip_code">ZIP Code</label>
-                        <input type="text" id="zip_code" name="zip_code" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <select id="country" name="country" required>
-                            <option value="IN">India</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <h3>Payment Method</h3>
-                <div class="payment-options">
-                    <div class="payment-option selected">
-                        <input type="radio" name="payment_method" value="credit_card" id="credit_card" class="payment-option-radio" checked>
-                        <label for="credit_card" class="payment-option-label">Credit Card</label>
-                    </div>
-                    
-                    <div class="payment-option">
-                        <input type="radio" name="payment_method" value="upi" id="upi" class="payment-option-radio">
-                        <label for="upi" class="payment-option-label">UPI</label>
-                    </div>
-                    
-                    <div class="payment-option">
-                        <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery" class="payment-option-radio">
-                        <label for="cash_on_delivery" class="payment-option-label">Cash on Delivery</label>
-                    </div>
-                </div>
-                
-                <div class="payment-details">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="card_number">Card Number</label>
-                            <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="expiration_date">Expiration Date</label>
-                            <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY">
-                        </div>
-                        <div class="form-group">
-                            <label for="security_code">Security Code</label>
-                            <input type="text" id="security_code" name="security_code" placeholder="CVC">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="name_on_card">Name on Card</label>
-                        <input type="text" id="name_on_card" name="name_on_card">
-                    </div>
-                </div>
-                
-                <button type="submit" class="checkout-button">Complete Payment</button>
-            </form>
+  <div class="checkout-container">
+    <div class="checkout-left">
+      <h2>Checkout</h2>
+
+      <!-- Product Summary -->
+      <div class="selected-product">
+        <h3>Your Order</h3>
+        <div id="cart-items-container" class="cart-items-container">
+          <!-- Cart items will be dynamically inserted here -->
+          <div class="no-items-message">No items in cart</div>
         </div>
-        
-        <div class="checkout-right">
-            <div class="order-summary">
-                <h3>Order Summary</h3>
-                
-                <div class="summary-row">
-                    <div>Subtotal</div>
-                    <div id="summary-subtotal"></div>
-                </div>
-                
-                <div class="summary-row">
-                    <div>Shipping</div>
-                    <div>₹40.00</div>
-                </div>
-                
-                <div class="summary-row">
-                    <div>Service Fee</div>
-                    <div>₹20.00</div>
-                </div>
-                
-                <div class="summary-row total">
-                    <div>Total</div>
-                    <div id="summary-total"></div>
-                </div>
-                
-                <div class="discount-section">
-                    <input type="text" class="discount-input" placeholder="Discount code">
-                    <button class="discount-button">Apply</button>
-                </div>
-            </div>
+      </div>
+
+      <!-- Checkout Form -->
+      <form id="checkout-form" method="post" action="{% url 'shop_app:process-payment' %}">
+        {% csrf_token %}
+        <input type="hidden" id="cart-data" name="cart_data" value="" />
+
+        <h3>Contact Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
         </div>
+
+        <h3>Shipping Address</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" required />
+          </div>
+          <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required />
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <select id="state" name="state" required>
+                <option value="">Select State</option>
+                <option value="AP">Andhra Pradesh</option>
+                <option value="AR">Arunachal Pradesh</option>
+                <option value="AS">Assam</option>
+                <option value="BR">Bihar</option>
+                <option value="CT">Chhattisgarh</option>
+                <option value="GA">Goa</option>
+                <option value="GJ">Gujarat</option>
+                <option value="HR">Haryana</option>
+                <option value="HP">Himachal Pradesh</option>
+                <option value="JH">Jharkhand</option>
+                <option value="KA">Karnataka</option>
+                <option value="KL">Kerala</option>
+                <option value="MP">Madhya Pradesh</option>
+                <option value="MH">Maharashtra</option>
+                <option value="MN">Manipur</option>
+                <option value="ML">Meghalaya</option>
+                <option value="MZ">Mizoram</option>
+                <option value="NL">Nagaland</option>
+                <option value="OD">Odisha</option>
+                <option value="PB">Punjab</option>
+                <option value="RJ">Rajasthan</option>
+                <option value="SK">Sikkim</option>
+                <option value="TN">Tamil Nadu</option>
+                <option value="TG">Telangana</option>
+                <option value="TR">Tripura</option>
+                <option value="UP">Uttar Pradesh</option>
+                <option value="UK">Uttarakhand</option>
+                <option value="WB">West Bengal</option>
+                <option value="AN">Andaman and Nicobar Islands</option>
+                <option value="CH">Chandigarh</option>
+                <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
+                <option value="DL">Delhi</option>
+                <option value="JK">Jammu and Kashmir</option>
+                <option value="LA">Ladakh</option>
+                <option value="LD">Lakshadweep</option>
+                <option value="PY">Puducherry</option>
+              <!-- Add more states as needed -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="zip_code">ZIP Code</label>
+            <input type="text" id="zip_code" name="zip_code" required />
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" required>
+              <option value="IN">India</option>
+            </select>
+          </div>
+        </div>
+
+        <h3>Payment Method</h3>
+        <div class="payment-options">
+          <div class="payment-option selected">
+            <input
+              type="radio"
+              name="payment_method"
+              value="credit_card"
+              id="credit_card"
+              class="payment-option-radio"
+              checked
+            />
+            <label for="credit_card" class="payment-option-label">Credit Card</label>
+          </div>
+
+          <div class="payment-option">
+            <input
+              type="radio"
+              name="payment_method"
+              value="upi"
+              id="upi"
+              class="payment-option-radio"
+            />
+            <label for="upi" class="payment-option-label">UPI</label>
+          </div>
+        </div>
+
+        <div class="payment-details">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="card_number">Card Number</label>
+              <input
+                type="text"
+                id="card_number"
+                name="card_number"
+                placeholder="1234 5678 9012 3456"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expiration_date">Expiration Date</label>
+              <input
+                type="text"
+                id="expiration_date"
+                name="expiration_date"
+                placeholder="MM/YY"
+              />
+            </div>
+            <div class="form-group">
+              <label for="security_code">Security Code</label>
+              <input
+                type="text"
+                id="security_code"
+                name="security_code"
+                placeholder="CVC"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="name_on_card">Name on Card</label>
+            <input type="text" id="name_on_card" name="name_on_card" />
+          </div>
+        </div>
+
+        <button type="submit" class="checkout-button">Complete Payment</button>
+      </form>
     </div>
+
+    <div class="checkout-right">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-row">
+          <div>Subtotal</div>
+          <div id="summary-subtotal">₹0.00</div>
+        </div>
+
+        <div class="summary-row">
+          <div>Shipping</div>
+          <div>₹40.00</div>
+        </div>
+
+        <div class="summary-row">
+          <div>Service Fee</div>
+          <div>₹20.00</div>
+        </div>
+
+        <div class="summary-row total">
+          <div>Total</div>
+          <div id="summary-total">₹60.00</div>
+        </div>
+
+        <div class="discount-section">
+          <input
+            type="text"
+            class="discount-input"
+            placeholder="Discount code"
+          />
+          <button class="discount-button">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get product data from session storage
-        const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
-        
-        if (productData) {
-            // Update product display
-            document.getElementById('product-title').textContent = productData.title;
-            document.getElementById('product-price').textContent = productData.price;
-            document.getElementById('product-image').src = productData.image;
-            
-            // Update form hidden fields
-            document.getElementById('form-product-title').value = productData.title;
-            document.getElementById('form-product-price').value = productData.price;
-            
-            // Update order summary
-            document.getElementById('summary-subtotal').textContent = productData.price;
-            
-            // Calculate total (subtotal + shipping + service fee)
-            const priceValue = parseInt(productData.price.replace('₹', '').trim());
-            const total = priceValue + 40 + 20; // Adding shipping and service fee
-            document.getElementById('summary-total').textContent = `₹${total}`;
+// DEBUG HELPER - Log the contents of localStorage and sessionStorage
+function debugStorage() {
+    console.log("==== STORAGE DEBUG ====");
+    console.log("localStorage keys:", Object.keys(localStorage));
+    console.log("sessionStorage keys:", Object.keys(sessionStorage));
+    
+    try {
+        if (localStorage.getItem('cartItems')) {
+            console.log("localStorage cartItems:", localStorage.getItem('cartItems'));
+            console.log("Parsed:", JSON.parse(localStorage.getItem('cartItems')));
         }
+    } catch (e) {
+        console.error("Error parsing localStorage cartItems:", e);
+    }
+    
+    try {
+        if (sessionStorage.getItem('selectedProduct')) {
+            console.log("sessionStorage selectedProduct:", sessionStorage.getItem('selectedProduct'));
+            console.log("Parsed:", JSON.parse(sessionStorage.getItem('selectedProduct')));  
+        }
+    } catch (e) {
+        console.error("Error parsing sessionStorage selectedProduct:", e);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Page loaded, checking for cart data...");
+
+    debugStorage();
+
+    let cartItems = [];
+
+    // Check for localStorage 'cartItems'
+    const storedCart = localStorage.getItem('bytesBrewCart');
+    if (storedCart) {
+        try {
+            const parsedCart = JSON.parse(storedCart);
+            console.log("Parsed cart from localStorage:", parsedCart);
+
+            if (Array.isArray(parsedCart)) {
+                cartItems = parsedCart;
+            } else if (parsedCart && Array.isArray(parsedCart.items)) {
+                cartItems = parsedCart.items;
+            } else {
+                console.warn("Unrecognized cart format:", parsedCart);
+            }
+        } catch (e) {
+            console.error("Error parsing cartItems from localStorage:", e);
+        }
+    } else if (sessionStorage.getItem('selectedProduct')) {
+        try {
+            const product = JSON.parse(sessionStorage.getItem('selectedProduct'));
+            cartItems = [product];
+        } catch (e) {
+            console.error("Error parsing selectedProduct from sessionStorage:", e);
+        }
+    } else if (sessionStorage.getItem('cart')) {
+        try {
+            const parsedCart = JSON.parse(sessionStorage.getItem('cartItems'));
+            if (Array.isArray(parsedCart)) {
+                cartItems = parsedCart;
+            } else if (parsedCart && Array.isArray(parsedCart.items)) {
+                cartItems = parsedCart.items;
+            }
+        } catch (e) {
+            console.error("Error parsing cartItems from sessionStorage:", e);
+        }
+    }
+
+    console.log("Final cart items to render:", cartItems);
+
+    updateCartDisplay(cartItems);
+    const hiddenInput = document.getElementById('cart-data');
+    if (hiddenInput) hiddenInput.value = JSON.stringify(cartItems);
+
+    initCheckout();
+    initEventListeners();
+});
+
+function updateCartDisplay(cartItems) {
+    const cartContainer = document.getElementById('cart-items-container');
+    const summarySubtotal = document.getElementById('summary-subtotal');
+    const summaryTotal = document.getElementById('summary-total');
+    
+    // Clear existing content
+    cartContainer.innerHTML = '';
+    
+    if (cartItems && cartItems.length > 0) {
+        console.log("Displaying cart items:", cartItems);
+        let subtotal = 0;
         
-        // Initialize checkout functionality
-        initCheckout();
-        initEventListeners();
+        // Create and append each cart item
+        cartItems.forEach(item => {
+            console.log("Processing item:", item);
+            
+            // Extract price value (remove ₹ symbol and convert to number)
+            let priceValue = 0;
+            if (item.price) {
+                const priceString = item.price.replace('₹', '').trim();
+                priceValue = parseInt(priceString) || 0;
+                console.log(`Processing item: ${item.title}, Price: ${priceString} => ${priceValue}`);
+            } else {
+                console.warn("Item has no price:", item);
+            }
+            
+            subtotal += priceValue;
+            
+            const itemElement = document.createElement('div');
+            itemElement.className = 'product-summary';
+            
+            // Use a default image if not available
+            const imageUrl = item.image || '/static/images/placeholder.jpg';
+            
+            itemElement.innerHTML = `
+                <img src="${imageUrl}" alt="${item.title || 'Product'}" class="checkout-product-image">
+                <div class="product-summary-details">
+                    <h4>${item.title || 'Unknown Product'}</h4>
+                    <p>${item.price || '₹0'}</p>
+                </div>
+            `;
+            
+            cartContainer.appendChild(itemElement);
+        });
+        
+        // Update summary values
+        summarySubtotal.textContent = `₹${subtotal}`;
+        const total = subtotal + 40 + 20; // Add shipping and service fee
+        summaryTotal.textContent = `₹${total}`;
+    } else {
+        console.log("No cart items found");
+        // No items in cart
+        cartContainer.innerHTML = '<div class="no-items-message">No items in cart</div>';
+        summarySubtotal.textContent = '₹0.00';
+        summaryTotal.textContent = '₹60.00'; // Just shipping + service fee
+    }
+}
+     
+// Initialize checkout functionality
+function initCheckout() {
+    // Set up form validation
+    const checkoutForm = document.querySelector("#checkout-form");
+    if (checkoutForm) {
+        checkoutForm.addEventListener("submit", function (e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+}
+
+function initEventListeners() {
+    // Payment method selection
+    const paymentOptions = document.querySelectorAll(".payment-option");
+    paymentOptions.forEach((option) => {
+        option.addEventListener("click", function () {
+            // Remove selected class from all options
+            paymentOptions.forEach((opt) => opt.classList.remove("selected"));
+
+            // Add selected class to clicked option
+            this.classList.add("selected");
+
+            // Check the radio button
+            const radio = this.querySelector(".payment-option-radio");
+            radio.checked = true;
+
+            // Show/hide payment details based on selection
+            togglePaymentDetails(radio.value);
+        });
     });
 
-    // You can reuse the checkout.js functions here
-    function initCheckout() {
-        // Set up form validation
-        const checkoutForm = document.querySelector('#checkout-form');
-        if (checkoutForm) {
-            checkoutForm.addEventListener('submit', function(e) {
-                if (!validateForm()) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
+    // Apply discount code
+    const discountButton = document.querySelector(".discount-button");
+    if (discountButton) {
+        discountButton.addEventListener("click", applyDiscount);
+    }
+}
+
+function validateForm() {
+    // Basic validation - can be expanded
+    let isValid = true;
+
+    // Required fields
+    const requiredFields = [
+        "email",
+        "first_name",
+        "last_name",
+        "address",
+        "city",
+        "state",
+        "zip_code",
+    ];
+
+    requiredFields.forEach((field) => {
+        const input = document.querySelector(`#${field}`);
+        if (input && !input.value.trim()) {
+            input.classList.add("error");
+            isValid = false;
+        } else if (input) {
+            input.classList.remove("error");
         }
+    });
+
+    // Email validation
+    const emailInput = document.querySelector("#email");
+    if (emailInput && !validateEmail(emailInput.value)) {
+        emailInput.classList.add("error");
+        isValid = false;
     }
 
-    function initEventListeners() {
-        // Payment method selection
-        const paymentOptions = document.querySelectorAll('.payment-option');
-        paymentOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                // Remove selected class from all options
-                paymentOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                // Add selected class to clicked option
-                this.classList.add('selected');
-                
-                // Check the radio button
-                const radio = this.querySelector('.payment-option-radio');
-                radio.checked = true;
-                
-                // Show/hide payment details based on selection
-                togglePaymentDetails(radio.value);
-            });
-        });
-        
-        // Apply discount code
-        const discountButton = document.querySelector('.discount-button');
-        if (discountButton) {
-            discountButton.addEventListener('click', applyDiscount);
-        }
-    }
-
-    function validateForm() {
-        // Basic validation - can be expanded
-        let isValid = true;
-        
-        // Required fields
-        const requiredFields = [
-            'email', 'first_name', 'last_name', 'address', 
-            'city', 'state', 'zip_code'
+    // Credit card validation if selected
+    const creditCardOption = document.querySelector("#credit_card");
+    if (creditCardOption && creditCardOption.checked) {
+        const cardFields = [
+            "card_number",
+            "expiration_date",
+            "security_code",
+            "name_on_card",
         ];
-        
-        requiredFields.forEach(field => {
+
+        cardFields.forEach((field) => {
             const input = document.querySelector(`#${field}`);
             if (input && !input.value.trim()) {
-                input.classList.add('error');
+                input.classList.add("error");
                 isValid = false;
             } else if (input) {
-                input.classList.remove('error');
+                input.classList.remove("error");
             }
         });
-        
-        // Email validation
-        const emailInput = document.querySelector('#email');
-        if (emailInput && !validateEmail(emailInput.value)) {
-            emailInput.classList.add('error');
-            isValid = false;
-        }
-        
-        // Credit card validation if selected
-        const creditCardOption = document.querySelector('#credit_card');
-        if (creditCardOption && creditCardOption.checked) {
-            const cardFields = ['card_number', 'expiration_date', 'security_code', 'name_on_card'];
-            
-            cardFields.forEach(field => {
-                const input = document.querySelector(`#${field}`);
-                if (input && !input.value.trim()) {
-                    input.classList.add('error');
-                    isValid = false;
-                } else if (input) {
-                    input.classList.remove('error');
-                }
-            });
-        }
-        
-        return isValid;
     }
 
-    function validateEmail(email) {
-        const re = /\S+@\S+\.\S+/;
-        return re.test(email);
-    }
+    return isValid;
+}
 
-    function togglePaymentDetails(paymentType) {
-        const paymentDetails = document.querySelector('.payment-details');
-        
-        if (paymentType === 'credit_card') {
-            paymentDetails.style.display = 'block';
+function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+function togglePaymentDetails(paymentType) {
+    const paymentDetails = document.querySelector(".payment-details");
+
+    if (paymentType === "credit_card") {
+        paymentDetails.style.display = "block";
+    } else {
+        paymentDetails.style.display = "none";
+    }
+}
+
+function applyDiscount() {
+    const discountInput = document.querySelector(".discount-input");
+    const discountCode = discountInput.value.trim().toUpperCase();
+
+    // Simple discount code example - normally would verify with server
+    if (discountCode === "COFFEE25") {
+        // Get current total
+        const subtotalElement = document.getElementById("summary-subtotal");
+        const subtotal = parseInt(
+            subtotalElement.textContent.replace("₹", "").trim()
+        );
+
+        // Calculate discount (25% off)
+        const discountAmount = Math.round(subtotal * 0.25);
+
+        // Update order summary
+        let discountElement = document.querySelector(".summary-row-discount");
+
+        if (!discountElement) {
+            // Create discount row
+            discountElement = document.createElement("div");
+            discountElement.className = "summary-row summary-row-discount";
+            discountElement.innerHTML = `
+                <div>Discount (25%)</div>
+                <div>-₹${discountAmount}</div>
+            `;
+
+            // Insert before total
+            const totalRow = document.querySelector(".summary-row.total");
+            totalRow.parentNode.insertBefore(discountElement, totalRow);
         } else {
-            paymentDetails.style.display = 'none';
+            // Update existing discount row
+            discountElement.querySelector(
+                "div:nth-child(2)"
+            ).textContent = `-₹${discountAmount}`;
         }
-    }
 
-    function applyDiscount() {
-        const discountInput = document.querySelector('.discount-input');
-        const discountCode = discountInput.value.trim().toUpperCase();
-        
-        // Simple discount code example - normally would verify with server
-        if (discountCode === 'COFFEE25') {
-            // Get current total
-            const subtotalElement = document.getElementById('summary-subtotal');
-            const subtotal = parseInt(subtotalElement.textContent.replace('₹', '').trim());
+        // Update total
+        const total = subtotal + 40 + 20 - discountAmount;
+        document.getElementById("summary-total").textContent = `₹${total}`;
+
+        alert("Discount code applied successfully!");
+    } else {
+        alert("Invalid discount code.");
+    }
+}
+
+
+function initCheckout() {
+    // Set up form validation and submission
+    const checkoutForm = document.querySelector("#checkout-form");
+    if (checkoutForm) {
+        checkoutForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent normal form submission
             
-            // Calculate discount (25% off)
-            const discountAmount = Math.round(subtotal * 0.25);
-            
-            // Update order summary
-            let discountElement = document.querySelector('.summary-row-discount');
-            
-            if (!discountElement) {
-                // Create discount row
-                discountElement = document.createElement('div');
-                discountElement.className = 'summary-row summary-row-discount';
-                discountElement.innerHTML = `
-                    <div>Discount (25%)</div>
-                    <div>-₹${discountAmount}</div>
-                `;
-                
-                // Insert before total
-                const totalRow = document.querySelector('.summary-row.total');
-                totalRow.parentNode.insertBefore(discountElement, totalRow);
-            } else {
-                // Update existing discount row
-                discountElement.querySelector('div:nth-child(2)').textContent = `-₹${discountAmount}`;
+            if (!validateForm()) {
+                return false;
             }
             
-            // Update total
-            const total = subtotal + 40 + 20 - discountAmount;
-            document.getElementById('summary-total').textContent = `₹${total}`;
-            
-            alert('Discount code applied successfully!');
-        } else {
-            alert('Invalid discount code.');
+            // Process the checkout submission with our custom handler
+            handleCheckoutSubmission(e);
+        });
+    }
+}
+// This function handles the checkout form submission
+function handleCheckoutSubmission(event) {
+    event.preventDefault();
+    console.log("Checkout form submitted");
+    
+    // Get form data
+    const formData = new FormData(event.target);
+    
+    // Get cart items from localStorage
+    let cartItems = [];
+    const storedCart = localStorage.getItem('bytesBrewCart');
+    
+    if (storedCart) {
+        try {
+            const parsedCart = JSON.parse(storedCart);
+            console.log("Found cart in localStorage:", parsedCart);
+            if (Array.isArray(parsedCart)) {
+                cartItems = parsedCart;
+            } else if (parsedCart && Array.isArray(parsedCart.items)) {
+                cartItems = parsedCart.items;
+            }
+        } catch (e) {
+            console.error('Error parsing cartItems from localStorage:', e);
+        }
+    } else if (sessionStorage.getItem('selectedProduct')) {
+        try {
+            const product = JSON.parse(sessionStorage.getItem('selectedProduct'));
+            console.log("Found product in sessionStorage:", product);
+            cartItems = [product];
+        } catch (e) {
+            console.error('Error parsing selectedProduct from sessionStorage:', e);
         }
     }
+    
+    console.log("Final cart items being sent:", cartItems);
+    
+    // Calculate totals from the DOM
+    const subtotal = document.getElementById('summary-subtotal').textContent.replace('₹', '').trim();
+    const total = document.getElementById('summary-total').textContent.replace('₹', '').trim();
+    console.log(`Subtotal: ${subtotal}, Total: ${total}`);
+    
+    // Get discount code if applied
+    const discountInput = document.querySelector('.discount-input');
+    const discountCode = discountInput ? discountInput.value.trim() : '';
+    if (discountCode) {
+        console.log("Discount code applied:", discountCode);
+    }
+    
+    // Add cart data to form
+    formData.append('cart_data', JSON.stringify(cartItems));
+    
+    // Add discount code if any
+    if (discountCode) {
+        formData.append('discount_code', discountCode);
+    }
+    
+    console.log("Submitting payment form...");
+    
+    // Submit the form via AJAX
+    fetch('/shop/process_payment/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        console.log("Server response status:", response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log("Server response data:", data);
+        
+        if (data.success) {
+            // Clear storage on successful payment
+            console.log("Payment successful, clearing storage");
+            localStorage.removeItem('bytesBrewCart');
+            sessionStorage.removeItem('selectedProduct');
+            sessionStorage.removeItem('cart');
+            
+            // Redirect to the order confirmation page
+            console.log("Redirecting to:", data.redirect_url);
+            window.location.href = data.redirect_url;
+            
+            // Additional check to verify redirect is happening
+            setTimeout(function() {
+                console.log("Redirect may have failed, manually redirecting");
+                if (window.location.pathname !== data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            }, 1000);
+        } else {
+            // Handle payment failure
+            console.error("Payment failed:", data.error);
+            alert(data.error || 'Payment processing failed. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during checkout:', error);
+        alert('An error occurred during checkout. Please try again.');
+    });
+}
+
+
 </script>
 {% endblock %}

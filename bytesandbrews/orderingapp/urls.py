@@ -27,10 +27,11 @@ urlpatterns = [
     path("profile/<int:id>/",views.profile,name="profile"),
     path("reviews/",views.reviews_view,name="reviews"),
     path("deletemenuitem/<int:id>/",views.delete_menu_item_view,name="deletemenuitem"),
-    path("updatemenuitem/<int:id>/",views.upadte_menu_item_view,name="updatemenuitem"),
+    path("updatemenuitem/<int:id>/",views.update_menu_item_view,name="updatemenuitem"),
     path("superadmindashboard/",views.superadmin_view,name="superadmin"),
-     path("redeem_gift_card/",views.redeem_gift_card,name="redeem_gift_card"),
-     path("order_history/",views.order_history,name="order_history")
+    path("redeem_gift_card/",views.redeem_gift_card,name="redeem_gift_card"),
+    path("order_history/",views.order_history,name="order_history"),
+    path("delete_order/<int:id>",views.delete_order_view,name="delete_order")
 
 
 

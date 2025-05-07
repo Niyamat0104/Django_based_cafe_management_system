@@ -716,21 +716,55 @@
             const productPrice = productCard.querySelector('.product-price').textContent;
             const productImage = productCard.querySelector('.product-image').src;
             
-            // Store product info in session storage to access on checkout page
+            // Create product ID from title (simplified for example)
+            const productId = productTitle.toLowerCase().replace(/\s+/g, '_');
+            
+            // Create product data object
             const productData = {
+                id: productId,
                 title: productTitle,
                 price: productPrice,
                 image: productImage
             };
             
-            sessionStorage.setItem('selectedProduct', JSON.stringify(productData));
+            // Get current cart or initialize new cart
+            let cart;
+            try {
+                cart = JSON.parse(localStorage.getItem('cartItems')) || {items: [], totalItems: 0};
+                
+                // Ensure cart has the correct structure
+                if (!cart.items) cart.items = [];
+                if (!cart.totalItems) cart.totalItems = 0;
+            } catch (e) {
+                console.error("Error parsing cart:", e);
+                cart = {items: [], totalItems: 0};
+            }
             
-            // Redirect to checkout page
-            window.location.href = "/checkout/";
+            // Add product to cart
+            cart.items.push(productData);
+            cart.totalItems = cart.items.length;
+            
+            // Save updated cart
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            console.log("Updated cart:", cart);
+            
+            // Provide feedback to user
+            alert(`${productTitle} added to cart!`);
+            
+            // Optional: Redirect to checkout page
+            if (confirm('Would you like to proceed to checkout?')) {
+                window.location.href = "/checkout/";
+            }
+        });
+    });
+    
+    // Add a direct "Buy Now" handler that skips the cart
+    document.querySelectorAll('.buy-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Add standard click handling here if needed
         });
     });
 });
-    
 
 </script>
 {% endblock %}

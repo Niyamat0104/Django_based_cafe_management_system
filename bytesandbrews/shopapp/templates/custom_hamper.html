@@ -1,0 +1,1272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Custom Hamper Page Container -->
+<div id="merch-home-url" data-url="{% url 'shop_app:merch-home' %}" style="display:none;"></div>
+
+<div class="hamper-container">
+    <div class="product-section">
+        <div class="progress-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-title">Select Items</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Choose Packaging</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Add Message</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-title">Review & Checkout</div>
+            </div>
+        </div>
+
+        <section id="items-section">
+            <div class="category">
+                <h2>Coffee</h2>
+                <div class="products">
+                    <div class="product-card" data-id="coffee1" data-name="Premium Arabica Beans" data-price="549"
+                        data-category="coffee">
+                        <div class="product-image">
+                            <img src="{% static 'images/premium_arabian_beans.png' %}" alt="Premium Arabica Beans"></div>
+                        <div class="product-info">
+                            <h3>Premium Arabica Beans</h3>
+                            <div class="product-price"> ₹549</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="coffee2" data-name="Specialty Dark Roast" data-price="649"
+                        data-category="coffee">
+                        <div class="product-image">
+                            <img src="{% static 'images/dark_roast.png' %}" alt="Specialty Dark Roast">
+                        </div>
+                        <div class="product-info">
+                            <h3>Specialty Dark Roast</h3>
+                            <div class="product-price"> ₹649</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="coffee3" data-name="Single Origin Ethiopia" data-price="749"
+                        data-category="coffee">
+                        <div class="product-image">
+                            <img src="{% static 'images/simple_orign_euthopian.png' %}" alt="Single Origin Ethiopia">
+                        </div>
+                        <div class="product-info">
+                            <h3>Single Origin Ethiopia</h3>
+                            <div class="product-price"> ₹749</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="coffee4" data-name="Cold Brew Pack" data-price="499"
+                        data-category="coffee">
+                        <div class="product-image">
+                            <img src="{% static 'images/chai_latte.png' %}" alt="Cold Brew Pack">
+                        </div>
+                        <div class="product-info">
+                            <h3>Chai Latte</h3>
+                            <div class="product-price"> ₹499</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>Merchandise</h2>
+                <div class="products">
+                    <div class="product-card" data-id="merch1" data-name="Coffee Mug" data-price="349"
+                        data-category="merch">
+                        <div class="product-image">
+                            <img src="{% static 'images/coffee_mug1.png' %}" alt="Coffee Mug">
+                        </div>
+                        <div class="product-info">
+                            <h3>Coffee Mug</h3>
+                            <div class="product-price"> ₹349</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="merch2" data-name="Coffee T-shirt" data-price="799"
+                        data-category="merch">
+                        <div class="product-image">
+                            <img src="{% static 'images/tshirt.png' %}" alt="Coffee T-shirt">
+                        </div>
+                        <div class="product-info">
+                            <h3>Coffee T-shirt</h3>
+                            <div class="product-price"> ₹799</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="merch3" data-name="Coffee Journal" data-price="299"
+                        data-category="merch">
+                        <div class="product-image">
+                            <img src="{% static 'images/journal.jpeg' %}" alt="Coffee Journal">
+                        </div>
+                        <div class="product-info">
+                            <h3>Coffee Journal</h3>
+                            <div class="product-price"> ₹299</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="merch4" data-name="Branded Tote Bag" data-price="449"
+                        data-category="merch">
+                        <div class="product-image">
+                            <img src="{% static 'images/custom_tote_bag.png' %}" alt="Branded Tote Bag">
+                        </div>
+                        <div class="product-info">
+                            <h3>Branded Tote Bag</h3>
+                            <div class="product-price"> ₹449</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>To-Go Goods</h2>
+                <div class="products">
+                    <div class="product-card" data-id="togo1" data-name="Travel French Press" data-price="1299"
+                        data-category="togo">
+                        <div class="product-image">
+                            <img src="{% static 'images/french_press.jpeg' %}" alt="Travel French Press">
+                        </div>
+                        <div class="product-info">
+                            <h3>Travel French Press</h3>
+                            <div class="product-price"> ₹1299</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="togo2" data-name="Insulated Tumbler" data-price="899"
+                        data-category="togo">
+                        <div class="product-image">
+                            <img src="{% static 'images/tumbler.jpeg' %}" alt="Insulated Tumbler">
+                        </div>
+                        <div class="product-info">
+                            <h3>Insulated Tumbler</h3>
+                            <div class="product-price"> ₹899</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="togo3" data-name="Portable Coffee Grinder" data-price="1499"
+                        data-category="togo">
+                        <div class="product-image">
+                            <img src="{% static 'images/grinder.png' %}" alt="Portable Coffee Grinder">
+                        </div>
+                        <div class="product-info">
+                            <h3>Portable Coffee Grinder</h3>
+                            <div class="product-price"> ₹1499</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-id="togo4" data-name="Poster" data-price="249"
+                        data-category="togo">
+                        <div class="product-image">
+                            <img src="{% static 'images/poster1.jpg' %}" alt="Coffee Filters">
+                        </div>
+                        <div class="product-info">
+                            <h3>Poster</h3>
+                            <div class="product-price"> ₹249</div>
+                            <button class="add-to-cart">Add to Hamper</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="packaging-section" style="display: none;">
+            <div class="category">
+                <h2>Choose Your Packaging</h2>
+                <div class="products">
+                    <div class="packaging-card" data-id="pack1" data-name="Classic Box" data-price="99">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/standard_packaging.png' %}" alt="Classic Box">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Classic Box</h3>
+                            <div class="product-price"> ₹99</div>
+                        </div>
+                    </div>
+
+                    <div class="packaging-card" data-id="pack2" data-name="Premium Gift Box" data-price="199">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/premium_packaging.png' %}" alt="Premium Gift Box">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Premium Gift Box</h3>
+                            <div class="product-price"> ₹199</div>
+                        </div>
+                    </div>
+
+                    <div class="packaging-card" data-id="pack3" data-name="Eco-friendly Hamper" data-price="149">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/packaging.png' %}" alt="Eco-friendly Hamper">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Eco-friendly Hamper</h3>
+                            <div class="product-price"> ₹149</div>
+                        </div>
+                    </div>
+
+                    <div class="packaging-card" data-id="pack4" data-name="Luxury Wooden Crate" data-price="349">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/wooden_packaging.jpg' %}" alt="Luxury Wooden Crate">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Luxury Wooden Crate</h3>
+                            <div class="product-price"> ₹349</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>Add a Card</h2>
+                <div class="products">
+                    <div class="packaging-card" data-id="card1" data-name="Standard Card" data-price="49">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/standard_card.jpeg' %}" alt="Standard Card">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Standard Card</h3>
+                            <div class="product-price"> ₹49</div>
+                        </div>
+                    </div>
+
+                    <div class="packaging-card" data-id="card2" data-name="Premium Card" data-price="99">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/premium_card.jpeg' %}" alt="Premium Card">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Premium Card</h3>
+                            <div class="product-price"> ₹99</div>
+                        </div>
+                    </div>
+
+                    <div class="packaging-card" data-id="card3" data-name="Handwritten Note" data-price="149">
+                        <div class="packaging-image">
+                            <img src="{% static 'images/handwritten_card.jpeg' %}" alt="Handwritten Note">
+                        </div>
+                        <div class="packaging-info">
+                            <h3>Handwritten Note</h3>
+                            <div class="product-price"> ₹149</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="message-section" style="display: none;">
+            <div class="category">
+                <h2>Add a Gift Message</h2>
+                <div class="gift-message">
+                    <p>Add a personal message to your gift:</p>
+                    <textarea id="gift-message" placeholder="Write your message here..."></textarea>
+                </div>
+            </div>
+
+            <div class="category">
+                <h2>Special Instructions</h2>
+                <div class="gift-message">
+                    <p>Any special instructions for your order:</p>
+                    <textarea id="special-instructions" placeholder="Add any special instructions here..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section id="review-section" style="display: none;">
+            <div class="category">
+                <h2>Review Your Custom Hamper</h2>
+                <div id="review-items">
+                </div>
+            </div>
+        </section>
+
+        <div id="navigation-buttons">
+            <button id="prev-btn" class="nav-button prev-button">Previous</button>
+            <button id="next-btn" class="nav-button next-button">Next: Choose Packaging</button>
+        </div>
+    </div>
+
+    <div class="cart-section">
+        <div class="cart-header">
+            <h2>Your Hamper</h2>
+            <div class="cart-count">0</div>
+        </div>
+
+        <div id="cart-items" class="cart-items">
+            <div class="empty-cart-message">
+                <p>Your hamper is empty</p>
+                <p>Add items to get started</p>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="limit-reached">
+                You have reached the maximum item limit!
+            </div>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span>Packaging:</span>
+                <span id="packaging-cost">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span>Card:</span>
+                <span id="card-cost">₹0</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span id="total-cost">₹0</span>
+            </div>
+        </div>
+
+        <button id="checkout-btn" class="checkout-btn" disabled>Complete Purchase</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Reset any conflicting styles */
+    .hamper-container {
+        display: flex;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    .hamper-container * {
+        box-sizing: border-box;
+    }
+
+    .product-section {
+        width: 70%;
+        padding: 1rem 2rem 2rem 0;
+    }
+
+    .cart-section {
+        width: 30%;
+        background-color: #fff;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+        padding: 1.5rem;
+        margin-left: 20px;
+        border-radius: 8px;
+    }
+
+    .category {
+        margin-bottom: 2rem;
+    }
+
+    .hamper-container h2 {
+        color: #4a3520;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #d7c9b8;
+        padding-bottom: 0.5rem;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 230px;
+        background-color: #f5f5f5;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-info h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .product-price {
+        color: #4a3520;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .add-to-cart {
+        background-color: #4a3520;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+
+    .add-to-cart:hover {
+        background-color: #614632;
+    }
+
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .cart-items {
+        margin-bottom: 1.5rem;
+        max-height: calc(100vh - 300px);
+        overflow-y: auto;
+    }
+
+    .cart-item {
+        display: flex;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .cart-item-info {
+        flex-grow: 1;
+        padding-right: 1rem;
+    }
+
+    .cart-item-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: #333;
+    }
+
+    .cart-item-price {
+        color: #4a3520;
+    }
+
+    .cart-item-quantity {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        background-color: #e6dfd5;
+        border: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .quantity-input {
+        width: 30px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-weight: bold;
+        margin: 0 0.5rem;
+    }
+
+    .summary {
+        background-color: #f7f4f0;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .total {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid #ddd;
+    }
+
+    .checkout-btn {
+        background-color: #4a3520;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem;
+        width: 100%;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s;
+    }
+
+    .checkout-btn:hover {
+        background-color: #614632;
+    }
+
+    .checkout-btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    .packaging-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        transition: transform 0.3s ease;
+        display: block;
+        cursor: pointer;
+    }
+
+    .packaging-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .packaging-card.selected {
+        border: 2px solid #4a3520;
+        background-color: #f7f4f0;
+    }
+
+    .packaging-image {
+        width: 100%;
+        height: 180px;
+        background-color: #f5f5f5;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .packaging-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .packaging-info h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .empty-cart-message {
+        text-align: center;
+        color: #888;
+        padding: 1.5rem 0;
+    }
+
+    .limit-reached {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .gift-message {
+        margin-top: 1rem;
+    }
+
+    .gift-message textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+        height: 100px;
+        margin-top: 0.5rem;
+    }
+
+    /* Progress indicator */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding: 0 10px;
+    }
+
+    .step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+    }
+
+    .step::after {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background-color: #ddd;
+        z-index: 1;
+    }
+
+    .step:last-child::after {
+        display: none;
+    }
+
+    .step-number {
+        width: 30px;
+        height: 30px;
+        background-color: #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step.active .step-number {
+        background-color: #4a3520;
+        color: white;
+    }
+
+    .step-title {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .step.active .step-title {
+        color: #4a3520;
+        font-weight: bold;
+    }
+
+    .cart-count {
+        background-color: #e74c3c;
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    #review-section {
+        padding: 1.5rem;
+        background-color: #f9f5f0;
+        border-radius: 8px;
+    }
+
+    #review-items {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+    }
+
+    .review-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .review-item:last-child {
+        border-bottom: none;
+    }
+
+    .review-item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-right: 1rem;
+        background-color: #eee;
+    }
+
+    .review-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .review-item-details {
+        flex-grow: 1;
+    }
+
+    .review-item-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: #333;
+    }
+
+    .review-item-price {
+        color: #4a3520;
+        font-weight: bold;
+    }
+
+    .review-total {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid #ddd;
+    }
+
+    #navigation-buttons {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+    }
+
+    .prev-button {
+        background-color: #e6dfd5;
+        color: #4a3520;
+        border: 1px solid #d7c9b8;
+        display: none;
+    }
+
+    .prev-button:hover {
+        background-color: #d7c9b8;
+    }
+
+    .next-button {
+        background-color: #4a3520;
+        color: white;
+        border: none;
+    }
+
+    .next-button:hover {
+        background-color: #614632;
+    }
+
+    .next-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .hamper-container {
+            flex-direction: column;
+        }
+        
+        .product-section, 
+        .cart-section {
+            width: 100%;
+        }
+        
+        .cart-section {
+            
+            margin-top: 2rem;
+            margin-left: 20px;
+            height: auto;
+            max-height: none;
+        }
+        
+        .cart-items {
+            max-height: 300px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .products {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+        
+        .product-image {
+            height: 150px;
+        }
+        
+        .step-title {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Maximum number of items allowed in the hamper
+    const MAX_ITEMS = 10;
+
+    // Store cart items
+    let cart = [];
+    let selectedPackaging = null;
+    let selectedCard = null;
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    // DOM Elements
+    const cartItemsContainer = document.getElementById('cart-items');
+    const subtotalElement = document.getElementById('subtotal');
+    const packagingCostElement = document.getElementById('packaging-cost');
+    const cardCostElement = document.getElementById('card-cost');
+    const totalCostElement = document.getElementById('total-cost');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const cartCountElement = document.querySelector('.cart-count');
+    const limitReachedElement = document.querySelector('.limit-reached');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const merchHomeUrl = document.getElementById('merch-home-url')?.dataset?.url;
+
+    // Sections
+    const itemsSection = document.getElementById('items-section');
+    const packagingSection = document.getElementById('packaging-section');
+    const messageSection = document.getElementById('message-section');
+    const reviewSection = document.getElementById('review-section');
+    const steps = document.querySelectorAll('.step');
+
+    // Function to navigate back to merch home
+    window.goToMerchHome = function() {
+        if (merchHomeUrl) {
+            window.location.href = merchHomeUrl;
+        }
+    };
+
+    // Navigation buttons
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            }
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+    }
+
+    // Update UI based on current step
+    function updateUI() {
+        // Update step indicators
+        steps.forEach((step, index) => {
+            if (index + 1 === currentStep) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+
+        // Hide all sections
+        if (itemsSection) itemsSection.style.display = 'none';
+        if (packagingSection) packagingSection.style.display = 'none';
+        if (messageSection) messageSection.style.display = 'none';
+        if (reviewSection) reviewSection.style.display = 'none';
+
+        // Show current section
+        switch (currentStep) {
+            case 1:
+                if (itemsSection) itemsSection.style.display = 'block';
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) {
+                    nextBtn.style.display = 'block';
+                    nextBtn.textContent = 'Next: Choose Packaging';
+                    nextBtn.disabled = cart.length === 0;
+                }
+                break;
+            case 2:
+                if (packagingSection) packagingSection.style.display = 'block';
+                if (prevBtn) prevBtn.style.display = 'block';
+                if (nextBtn) {
+                    nextBtn.style.display = 'block';
+                    nextBtn.textContent = 'Next: Add Message';
+                    nextBtn.disabled = !selectedPackaging;
+                }
+                break;
+            case 3:
+                if (messageSection) messageSection.style.display = 'block';
+                if (prevBtn) prevBtn.style.display = 'block';
+                if (nextBtn) {
+                    nextBtn.style.display = 'block';
+                    nextBtn.textContent = 'Next: Review & Checkout';
+                    nextBtn.disabled = false;
+                }
+                break;
+            case 4:
+                if (reviewSection) reviewSection.style.display = 'block';
+                if (prevBtn) prevBtn.style.display = 'block';
+                if (nextBtn) nextBtn.style.display = 'none';
+                generateReviewContent();
+                if (checkoutBtn) checkoutBtn.disabled = false;
+                break;
+        }
+    }
+
+    // Add items to cart
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalQuantity >= MAX_ITEMS) {
+                if (limitReachedElement) limitReachedElement.style.display = 'block';
+                return;
+            }
+
+            const card = button.closest('.product-card');
+            if (!card) return;
+
+            const itemId = card.dataset.id;
+            const itemName = card.dataset.name;
+            const itemPrice = parseInt(card.dataset.price);
+            const itemCategory = card.dataset.category;
+            const itemImageEl = card.querySelector('.product-image img');
+            const itemImage = itemImageEl ? itemImageEl.src : '';
+
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => item.id === itemId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: 1,
+                    category: itemCategory,
+                    image: itemImage
+                });
+            }
+
+            updateCart();
+            if (nextBtn) nextBtn.disabled = false;
+        });
+    });
+
+    // Update cart display
+    function updateCart() {
+        if (!cartItemsContainer) return;
+        
+        // Clear cart display
+        cartItemsContainer.innerHTML = '';
+
+        let subtotal = 0;
+        let totalItems = 0;
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="empty-cart-message">
+                    <p>Your hamper is empty</p>
+                    <p>Add items to get started</p>
+                </div>
+            `;
+            if (checkoutBtn) checkoutBtn.disabled = true;
+        } else {
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                totalItems += item.quantity;
+
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">₹${item.price}</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                        <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                        <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                    </div>
+                    <button class="remove-btn" data-id="${item.id}">×</button>
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+
+            // Add event listeners to quantity buttons
+            const decreaseButtons = document.querySelectorAll('.quantity-btn.decrease');
+            const increaseButtons = document.querySelectorAll('.quantity-btn.increase');
+            const removeButtons = document.querySelectorAll('.remove-btn');
+
+            decreaseButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemId = button.dataset.id;
+                    const item = cart.find(item => item.id === itemId);
+                    
+                    if (item && item.quantity > 1) {
+                        item.quantity--;
+                    } else {
+                        cart = cart.filter(item => item.id !== itemId);
+                    }
+                    
+                    updateCart();
+                    if (currentStep === 1 && nextBtn) {
+                        nextBtn.disabled = cart.length === 0;
+                    }
+                });
+            });
+
+            increaseButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+                    if (totalQuantity >= MAX_ITEMS) {
+                        if (limitReachedElement) limitReachedElement.style.display = 'block';
+                        return;
+                    }
+
+                    const itemId = button.dataset.id;
+                    const item = cart.find(item => item.id === itemId);
+                    if (item) item.quantity++;
+                    
+                    updateCart();
+                });
+            });
+
+            removeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemId = button.dataset.id;
+                    cart = cart.filter(item => item.id !== itemId);
+                    
+                    updateCart();
+                    if (currentStep === 1 && nextBtn) {
+                        nextBtn.disabled = cart.length === 0;
+                    }
+                });
+            });
+        }
+
+        // Update cart count
+        if (cartCountElement) cartCountElement.textContent = totalItems;
+
+        // Update subtotal
+        if (subtotalElement) subtotalElement.textContent = `₹${subtotal}`;
+
+        // Calculate total
+        calculateTotal();
+
+        // Hide limit message if we're under the limit
+        if (limitReachedElement && totalItems < MAX_ITEMS) {
+            limitReachedElement.style.display = 'none';
+        }
+    }
+
+    // Set up package selection
+    const packagingCards = document.querySelectorAll('.packaging-card');
+    if (packagingCards.length > 0) {
+        packagingCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const cardCategory = card.closest('.category');
+                if (!cardCategory) return;
+                
+                const categoryTitle = cardCategory.querySelector('h2')?.textContent || '';
+                
+                // If clicked on a packaging option
+                if (categoryTitle.includes('Packaging')) {
+                    document.querySelectorAll('.packaging-card').forEach(c => {
+                        const cCategory = c.closest('.category');
+                        if (cCategory && cCategory.querySelector('h2')?.textContent.includes('Packaging')) {
+                            c.classList.remove('selected');
+                        }
+                    });
+                    
+                    card.classList.add('selected');
+                    selectedPackaging = {
+                        id: card.dataset.id,
+                        name: card.dataset.name,
+                        price: parseInt(card.dataset.price)
+                    };
+                } 
+                // If clicked on a card option
+                else if (categoryTitle.includes('Card')) {
+                    document.querySelectorAll('.packaging-card').forEach(c => {
+                        const cCategory = c.closest('.category');
+                        if (cCategory && cCategory.querySelector('h2')?.textContent.includes('Card')) {
+                            c.classList.remove('selected');
+                        }
+                    });
+                    
+                    card.classList.add('selected');
+                    selectedCard = {
+                        id: card.dataset.id,
+                        name: card.dataset.name,
+                        price: parseInt(card.dataset.price)
+                    };
+                }
+                
+                calculateTotal();
+                if (nextBtn) nextBtn.disabled = !selectedPackaging;
+            });
+        });
+    }
+
+    // Calculate total cost
+    function calculateTotal() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const packagingCost = selectedPackaging ? selectedPackaging.price : 0;
+        const cardCost = selectedCard ? selectedCard.price : 0;
+        const total = subtotal + packagingCost + cardCost;
+        
+        if (packagingCostElement) packagingCostElement.textContent = `₹${packagingCost}`;
+        if (cardCostElement) cardCostElement.textContent = `₹${cardCost}`;
+        if (totalCostElement) totalCostElement.textContent = `₹${total}`;
+    }
+
+    // Generate review content
+    function generateReviewContent() {
+        const reviewItemsContainer = document.getElementById('review-items');
+        if (!reviewItemsContainer) return;
+        
+        reviewItemsContainer.innerHTML = '';
+
+        // Add items
+        let reviewHTML = '<h3>Items</h3>';
+        cart.forEach(item => {
+            reviewHTML += `
+                <div class="review-item">
+                    <div class="review-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="review-item-details">
+                        <div class="review-item-title">${item.name}</div>
+                        <div class="review-item-quantity">Quantity: ${item.quantity}</div>
+                        <div class="review-item-price">₹${item.price * item.quantity}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add packaging
+        if (selectedPackaging) {
+            reviewHTML += `
+                <h3>Packaging</h3>
+                <div class="review-item">
+                    <div class="review-item-details">
+                        <div class="review-item-title">${selectedPackaging.name}</div>
+                        <div class="review-item-price">₹${selectedPackaging.price}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add card
+        if (selectedCard) {
+            reviewHTML += `
+                <h3>Card</h3>
+                <div class="review-item">
+                    <div class="review-item-details">
+                        <div class="review-item-title">${selectedCard.name}</div>
+                        <div class="review-item-price">₹${selectedCard.price}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add message
+        const giftMessage = document.getElementById('gift-message')?.value;
+        if (giftMessage) {
+            reviewHTML += `
+                <h3>Gift Message</h3>
+                <div class="review-item">
+                    <div class="review-item-details">
+                        <div class="review-message">${giftMessage}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add special instructions
+        const specialInstructions = document.getElementById('special-instructions')?.value;
+        if (specialInstructions) {
+            reviewHTML += `
+                <h3>Special Instructions</h3>
+                <div class="review-item">
+                    <div class="review-item-details">
+                        <div class="review-message">${specialInstructions}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Calculate total
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const packagingCost = selectedPackaging ? selectedPackaging.price : 0;
+        const cardCost = selectedCard ? selectedCard.price : 0;
+        const total = subtotal + packagingCost + cardCost;
+
+        reviewHTML += `
+            <div class="review-total">
+                <div>Total: ₹${total}</div>
+            </div>
+        `;
+
+        reviewItemsContainer.innerHTML = reviewHTML;
+    }
+
+    // Checkout button
+    if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        // Optional: Show an alert before redirecting
+        alert('Thank you for your order! Redirecting to merchandise homepage...');
+
+        // Redirect to the Django named URL route
+        window.location.href = "{% url 'shop_app:merch-home' %}";
+    });
+}
+
+
+    // Initialize UI
+    updateUI();
+    updateCart();
+});
+</script>
+{% endblock %}

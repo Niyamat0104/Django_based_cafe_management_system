@@ -377,8 +377,8 @@
         <div class="review-card" id="review-{{review.id}}">
             <div class="review-header">
 
-                <div class="avatar">{{review.custname|slice:":1"}}</div>
-                <div class="name">{{review.custname}}</div>
+                <div class="avatar">{{review.username|slice:":1"}}</div>
+                <div class="name">{{review.username}}</div>
                 <div class="user-info">
                     <div class="user-name">
                         {{ review.name }} 
@@ -486,48 +486,7 @@
         </div>
     </footer>
 
-    <!-- <script>
-        const reviews = [
-            { id: 1, name: "Sarah Chen", date: "Feb 12, 2025", content: "The cold brew here is perfectly balanced.", initials: "SC", emoji: "😊" },
-            { id: 2, name: "Mike Rodriguez", date: "Feb 11, 2025", content: "Best breakfast spot in town!", initials: "MR", emoji: "😍" },
-            { id: 3, name: "Emma Wilson", date: "Feb 10, 2025", content: "Love their seasonal drink specials.", initials: "EW", emoji: "😊" },
-            { id: 4, name: "David Park", date: "Feb 9, 2025", content: "Their pastries are baked fresh daily.", initials: "DP", emoji: "😐" },
-            { id: 5, name: "Lisa Thompson", date: "Feb 8, 2025", content: "Perfect spot for remote work.", initials: "LT", emoji: "😍" },
-            { id: 6, name: "James Kumar", date: "Feb 7, 2025", content: "The grilled chicken sandwich is delicious.", initials: "JK", emoji: "😊" },
-            { id: 7, name: "Anna Martinez", date: "Feb 6, 2025", content: "Great coffee and atmosphere.", initials: "AM", emoji: "😊" },
-            { id: 8, name: "Tom Anderson", date: "Feb 5, 2025", content: "Love the minimalist decor.", initials: "TA", emoji: "😐" },
-            { id: 9, name: "Rachel Kim", date: "Feb 4, 2025", content: "Amazing latte art!", initials: "RK", emoji: "😍" },
-            { id: 10, name: "Chris Baker", date: "Feb 3, 2025", content: "The weekend brunch is outstanding.", initials: "CB", emoji: "😊" },
-            { id: 11, name: "Olivia Chen", date: "Feb 2, 2025", content: "The chai latte is perfect for study.", initials: "OC", emoji: "😊" },
-            { id: 12, name: "Peter Smith", date: "Feb 1, 2025", content: "Great selection of vegan options.", initials: "PS", emoji: "😐" },
-            { id: 13, name: "Maya Patel", date: "Jan 31, 2025", content: "The breakfast burrito is amazing.", initials: "MP", emoji: "😊" },
-            { id: 14, name: "Kevin Lee", date: "Jan 30, 2025", content: "c", initials: "KL", emoji: "😍" },
-            { id: 15, name: "Sophie Turner", date: "Jan 29, 2025", content: "The atmosphere is cozy and welcoming.", initials: "ST", emoji: "😊" }
-        ];
-
-        function createReviewCard(review) {
-            return `
-                <div class="review-card" id="review-${review.id}">
-                    <div class="review-header">
-                        <div class="avatar">${review.initials}</div>
-                        <div class="user-info">
-                            <div class="user-name">${review.name} ${review.emoji}</div>
-                            <div class="review-date">${review.date}</div>
-                        </div>
-                    </div>
-                    <div class="review-content">${review.content}</div>
-                </div>
-            `;
-        }
-
-        function displayReviews() {
-            const container = document.getElementById('reviewsContainer');
-            container.innerHTML = reviews.map(review => createReviewCard(review)).join('');
-        }
-
-        // Initial display
-        displayReviews();
-    </script> -->
+    
 </body>
 </html>
 

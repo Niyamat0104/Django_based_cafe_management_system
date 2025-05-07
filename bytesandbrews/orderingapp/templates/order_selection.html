@@ -35,7 +35,7 @@
     <main>
         <h2 style="margin-left:30px;">{{ item.subsubcategory }}</h2>
         <div id="main_pic"> 
-            <img src="{% static item.image_path %}" class="main_image">
+            <img src="{% static item.image %}" class="main_image">
             <div style="margin-top: 100px; font-size: 20px;"> 
                 <h1 style="color: #feb;">{{ item.name }}</h1>
                 <h2>Price : ₹{{item.price}}</h2>
@@ -178,7 +178,7 @@
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
             const itemName = "{{ item.name }}";
-            const itemImage = "{% static item.image_path %}";
+            const itemImage = "{% static item.image %}";
             const itemPrice = parseFloat("{{ item.price }}");
             const selectedSize = selectedCup || "Regular";
             const selectedMilk = document.getElementById("milkSelection")?.value || "";

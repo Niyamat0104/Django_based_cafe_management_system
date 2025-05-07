@@ -27,6 +27,7 @@ from twilio.rest import Client
 import decimal
 
 from django.db.models import Count, Sum
+import requests
 
 # Twilio credentials (from your console)
 account_sid = 'AC4056bdd967749c0e84df8ee374e2db7c'
@@ -36,11 +37,13 @@ client = Client(account_sid, auth_token)
 # Your Twilio WhatsApp-enabled number
 twilio_whatsapp_number = 'whatsapp:+14155238886'
 
+flask_api='http://Niyamat.pythonanywhere.com'
+
 # List of recipients (they must have joined sandbox or be approved in production)
 @login_required
 def order_history(request):
-    orders=Order.objects.all()
-    return render(request,'order_history.html',{"orders":orders})
+    response=requests.get(f'{flask_api}/orderresource').json()
+    return render(request,'order_history.html',{"orders":response})
 
 @csrf_exempt
 def redeem_gift_card(request):
@@ -137,17 +140,21 @@ def redeem_gift_card(request):
 
 
 def menu_view(request):
-     
+    response = requests.get(f'{flask_api}/all_items_in_menu_resource')
+    data = response.json()
 
+    # 'ALL MENU ITEMS' is a list of dictionaries
+    menu_items = data.get("ALL MENU ITEMS", [])
     menu_data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-    for item in Menu.objects.all():
-        menu_data[item.category][item.subcategory][item.subsubcategory].append(item)
+    # Fix: use dictionary key access instead of dot access
+    for item in menu_items:
+        menu_data[item['category']][item['subcategory']][item['subsubcategory']].append(item)
+
+    
+         
 
     # Convert to regular dict to make it template-safe
-    import json
-    import copy
-
     def recursive_dict(d):
         if isinstance(d, defaultdict):
             d = {k: recursive_dict(v) for k, v in d.items()}
@@ -157,9 +164,8 @@ def menu_view(request):
         'menu_data': recursive_dict(menu_data),
         'user': request.user,
     }
+
     return render(request, 'menu1.html', context)
-
-
 def home(request):
      return render(request,"index.html")
 
@@ -170,7 +176,9 @@ def learn(request):
      return render(request,"learn.html")
 
 def order_selection(request,id):
-    item=Menu.objects.get(id=id)
+    response=requests.get(f'{flask_api}/product/{id}')
+    item=response.json()
+
     return render(request,"order_selection.html",{"item":item})
 
 def drinks(request):
@@ -193,17 +201,12 @@ def food(request):
 def cart(request):
     return render(request,"cart.html")
 def payment(request):
-     if request.method == 'POST':
+    if request.method == 'POST':
         # Get cart data from form submission
-        
-        
         cart_data = request.POST.get('cart_data', '[]')
         subtotal = request.POST.get('subtotal', '0.00')
         gst = request.POST.get('gst', '0.00')
         total = request.POST.get('total', '0.00')
-        
-        # Handle the data...
-
         
         # Parse the cart data to extract just the names
         try:
@@ -213,56 +216,107 @@ def payment(request):
         except:
             items_string = "Your order"
         
-        # Store in session for later use
-        request.session['order_items'] = items_string
-        request.session['subtotal'] = subtotal
-        request.session['gst'] = gst
-        request.session['total'] = total
+        # Store order in Flask API immediately
+        new_order = {
+            "items": items_string,
+            "subtotal": subtotal,
+            "gst": gst,
+            "total": total
+        }
         
-     else:  # GET request
-        # Check if we have data in session
-          if 'order_items' not in request.session:
-               return redirect('cart') 
+        try:
+            response = requests.post(f'{flask_api}/orderresource', json=new_order)
+            response.raise_for_status()  # Raise an exception for 4XX/5XX responses
+            print("Order saved successfully:", new_order)
+            
+            # Redirect to success page after API call succeeds
+            return redirect('order_app:payment_successfull')
+        except Exception as e:
+            print(f"Error saving order to API: {str(e)}")
+            # Still store in session as fallback
+            request.session['order_items'] = items_string
+            request.session['subtotal'] = subtotal
+            request.session['gst'] = gst
+            request.session['total'] = total
+            
+        context = {
+            "order_items": items_string,
+            "subtotal": subtotal,
+            "gst": gst,
+            "total": total
+        }
+        return render(request, "payment.html", context)
         
-          items_string = request.session.get('order_items', "Your order")
-          subtotal = request.session.get('subtotal', '0.00')
-          gst = request.session.get('gst', '0.00')
-          total = request.session.get('total', '0.00')
+    else:  # GET request
+        # Check if we have data in session (fallback)
+        if 'order_items' not in request.session:
+            return redirect('cart')
+        
+        items_string = request.session.get('order_items', "Your order")
+        subtotal = request.session.get('subtotal', '0.00')
+        gst = request.session.get('gst', '0.00')
+        total = request.session.get('total', '0.00')
 
-          new_order = Order.objects.create(
-            items=items_string,
-            subtotal=subtotal,
-            gst=gst,
-            total=total
-        )
-          new_order.save()
-          print("Order saved successfully:", new_order)
+        # Try to store the order from session data
+        new_order = {
+            "items": items_string,
+            "subtotal": subtotal,
+            "gst": gst,
+            "total": total
+        }
         
-          del request.session['order_items']
-          del request.session['subtotal']
-          del request.session['gst']
-          del request.session['total']
-          return redirect('order_app:ordernow')
-     
-     context={"order_items":items_string,
-                           "subtotal":subtotal,
-                           "gst":gst,
-                           "total":total}
-     return render(request,"payment.html",context)
+        try:
+            response = requests.post(f'{flask_api}/orderresource', json=new_order)
+            response.raise_for_status()
+            print("Order saved successfully from session:", new_order)
+            
+            # Clear session data
+            del request.session['order_items']
+            del request.session['subtotal']
+            del request.session['gst']
+            del request.session['total']
+            
+            return redirect('order_app:payment_successfull')
+        except Exception as e:
+            print(f"Error saving order to API: {str(e)}")
+        
+        context = {
+            "order_items": items_string,
+            "subtotal": subtotal,
+            "gst": gst,
+            "total": total
+        }
+        return render(request, "payment.html", context)
 
 def payment_successfull(request):
-    return render(request,"payment_successfull.html")
+    return render(request, "payment_successfull.html")
 
 def admin(request):
     return render(request,'admin.html')
 
 def feedback(request):
-     if request.method == "POST":
+     
+    if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
         rating = request.POST.get("rating")
         comment = request.POST.get("comment")
-        new_comment=Feedback.objects.create(custname=username,email=email,rating=rating,comment=comment)
+        new_comment={
+            "username" : username,
+            "email" : email,
+            "rating" :rating,
+            "comment" :comment
+        }
+         
+        response=requests.post(f'{flask_api}/feedbacks',json=new_comment)
+        
+        if response.status_code == 201:
+            created_post = response.json()
+            print(f"Created Post is: {created_post}")
+        else:
+            print(
+            f"Failed to create a new post Status code: {response.status_code}")
+
         messages.success(request,"Feedback submitted successfully!")
          
         
@@ -270,18 +324,24 @@ def feedback(request):
         return redirect('order_app:ordernow')
 
     
-     return render(request,"feedback.html")
+    return render(request,"feedback.html")
  
 @login_required
 def dashboard(request,id):
      target_user = get_object_or_404(User, id=id)
-     menu_items = Menu.objects.filter(user=target_user)
-     feedbacks = Feedback.objects.filter(user=target_user)
-     orders_history=Order.objects.filter(user=target_user)
+     response3 = requests.get(f'{flask_api}/all_items_in_menu_resource')
+     data = response3.json()
+
+    # 'ALL MENU ITEMS' is a list of dictionaries
+     menu_items = data.get("ALL MENU ITEMS", [])
+     response=requests.get(f'{flask_api}/feedbacks')
+     feedbacks=response.json()
+     response2=requests.get(f'{flask_api}/orderresource')
+     orders_history=response2.json()
     
-     has_menu = menu_items.exists()
-     has_reviews = feedbacks.exists()
-     has_orders=orders_history.exists()
+     has_menu = bool(menu_items)
+     has_reviews = bool(feedbacks)
+     has_orders=bool(order_history)
     
      context = {
         'has_menu': has_menu,
@@ -447,47 +507,92 @@ def profile(request,id):
 
 @login_required
 def reviews_view(request):
-    reviews=Feedback.objects.all()
-    return render(request,"reviews.html",context={"reviews":reviews})
-@login_required
-def delete_menu_item_view(request,id):
-    
-    menu_item = get_object_or_404(Menu, id=id)
-    if menu_item.user != request.user:
-        messages.error(request,"You are not allowed to delete this menu item.")
-        return redirect('order_app:home')
+    response = requests.get(f'{flask_api}/feedbacks')
+    json_data = response.json()
 
-    menu_item.delete()
-    return redirect('order_app:order-menu')  
-
+    all_feedbacks = json_data.get("All Feedbacks", [])  # Extract only the list
+    return render(request, "reviews.html", context={"reviews": all_feedbacks})
 
 @login_required
-def upadte_menu_item_view(request,id):
+def delete_menu_item_view(request, id):
+    # Check if the user has permission to delete (you can customize this check)
     
-     item = get_object_or_404(Menu, id=id)
-     if item.user != request.user:
-        messages.error(request,"You are not allowed to update this menu item.")
-        return redirect('order_app:order-home')
-
-     if request.method == 'POST':
-        # Update item details
-        item.subcategory = request.POST.get('subcategory', '').strip().title()
-        item.subsubcategory = request.POST.get('subsubcategory', '').strip().title()
-        item.name = request.POST.get('name').strip()
-        item.price = request.POST.get('price')
-         
+    
+    # For API interaction, we need to get or generate a token
+    # Option 1: If you have a token-based system but store tokens elsewhere
+    # token = get_user_token(request.user)  # Implement this function based on your auth system
+    
+    # Option 2: If you don't have tokens yet, use basic authentication for API calls
+    # Here's a simpler approach that doesn't require tokens:
+    try:
+        response = requests.delete(f"http://127.0.0.1:5000/product/{id}")
         
-        item.save()
-        messages.success(request,'Menu item updated successfully', 'success')
+        # Handle the response
+        if response.status_code == 200:
+            messages.success(request, "Menu item deleted successfully")
+        elif response.status_code == 403:
+            messages.error(request, "API rejected the delete request")
+        elif response.status_code == 404:
+            messages.error(request, "Menu item not found")
+        else:
+            messages.error(request, f"Error: {response.status_code}")
+    except requests.RequestException as e:
+        messages.error(request, f"Connection error: {str(e)}")
+    
+    return redirect('order_app:order-menu')
+
+@login_required
+def update_menu_item_view(request, id):
+    # First, get the menu item to check permissions and display in the form
+    try:
+        # For GET, fetch the existing item data
+        get_response = requests.get(f"http://127.0.0.1:5000/product/{id}")
+        if get_response.status_code != 200:
+            messages.error(request, "Menu item not found")
+            return redirect('order_app:order-menu')
+        
+        item = get_response.json()
+        
+        # Check permissions (adjust as needed for your application)
+        if not request.user.is_staff and not request.user.is_superuser:
+            messages.error(request, "You are not allowed to update this menu item.")
+            return redirect('order_app:order-home')
+        
+        if request.method == 'POST':
+            # Prepare data for the API request
+            data = {
+                "subcategory": request.POST.get('subcategory', '').strip().title(),
+                "subsubcategory": request.POST.get('subsubcategory', '').strip().title(),
+                "name": request.POST.get('name', '').strip(),
+                "price": request.POST.get('price')
+            }
+            
+            # Make a PUT request to the API endpoint
+            # Note: Using a simpler approach without tokens for now
+            put_response = requests.put(f"http://127.0.0.1:5000/product/{id}", json=data)
+            
+            if put_response.status_code == 200:
+                messages.success(request, "Menu item updated successfully")
+                return redirect('order_app:order-menu')
+            else:
+                messages.error(request, f"Error updating menu item: {put_response.status_code}")
+                
+        return render(request, 'edit_menu.html', {"item": item})
+        
+    except requests.RequestException as e:
+        messages.error(request, f"Connection error: {str(e)}")
         return redirect('order_app:order-menu')
-    
-     return render(request,'edit_menu.html', {"item":item})
-        
-
 @login_required
 def superadmin_view(request):
     users=User.objects.exclude(is_superuser="True")
     return render(request,"superadmin.html",{"users":users})
+
+@login_required
+def delete_order_view(request,id):
+    response=requests.delete(f'{flask_api}/orderresource/{id}')
+    messages.success(request,"order has been deleted successfully!!")
+    return redirect('order_app:order_history')
+
      
      
  

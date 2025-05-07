@@ -1,27 +1,24 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Document</title>
-   <link
- href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
- rel="stylesheet"
- integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
- crossorigin="anonymous"
-/>
+   <title>Edit Gift Card</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
    <style>
-       /* Custom styling to match the image */
-
-       header {
-           background-color: var(--beige-medium);
-           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-           padding: 30px;
-           font-size: 28px;
-           font-weight: bold;
+       /* Custom CSS variables */
+       :root {
+           --primary-blue: #161a23;
+           --secondary-blue: #1e2330;
+           --darker-blue: #0f121a;
+           --box-blue: #202735;
+           --accent-teal: #35c2bd;
+           --beige-light: #f5e8d3;
+           --beige-medium: #e6d5b8;
        }
-   
+       
        * {
            margin: 0;
            padding: 0;
@@ -119,13 +116,6 @@
            color: var(--beige-medium);
        }
 
-       /* Icons */
-       .icon {
-           width: 20px;
-           height: 20px;
-       }
-
-
        .footer {
            background: var(--darker-blue);
            padding: 4rem 2rem 2rem;
@@ -155,7 +145,6 @@
        .footer-column h3 {
            color: var(--beige-light);
            font-size: 1.25rem;
-           
            font-weight: 500;
            margin-bottom: 1.5rem;
            padding-bottom: 0.75rem;
@@ -260,8 +249,6 @@
            }
        }
 
-
-
        @media (max-width: 768px) {
            .nav-items {
                display: none;
@@ -272,297 +259,154 @@
            }
        }
 
-
-       .card {
-           border-radius: 8px;
-           box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-           border: 1px solid #eaeaea;
+       /* Page title */
+       .page-title {
+           color: #ffffff;
+           margin: 2rem 0 1rem 2rem;
+           font-size: 2rem;
+           font-weight: 600;
        }
-       
-       .progress {
-           height: 4px;
-           background-color: #f0f0f0;
+
+       /* Form styling */
+       .card {
+           background-color: #ffffff;
+           border-radius: 8px;
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+           margin: 2rem;
            overflow: hidden;
        }
-       
-       .badge-success {
-           background-color: #e6f7ef;
-           color: #10b981;
-           border: none;
-           font-weight: normal;
-           padding: 5px 10px;
-           border-radius: 4px;
+
+       .card-header {
+           background-color: #f8fafc;
+           padding: 1.5rem;
+           border-bottom: 1px solid #e2e8f0;
        }
-       
-       .badge-warning, .badge-danger {
+
+       .card-header h2 {
+           color: #1a365d;
+           font-size: 1.5rem;
+           margin: 0;
+           font-weight: 600;
+       }
+
+       .card-body {
+           padding: 2rem;
+           color: #1a365d;
+       }
+
+       .form-group {
+           margin-bottom: 1.5rem;
+       }
+
+       .form-label {
+           display: block;
+           margin-bottom: 0.5rem;
+           font-weight: 500;
+           color: #1a365d;
+       }
+
+       .form-control {
+           width: 100%;
+           padding: 0.75rem;
+           border: 1px solid #e2e8f0;
+           border-radius: 6px;
+           font-size: 1rem;
+           transition: border 0.2s ease;
+       }
+
+       .form-control:focus {
+           border-color: #3b82f6;
+           outline: none;
+           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+       }
+
+       .form-check {
+           display: flex;
+           align-items: center;
+           gap: 0.5rem;
+           margin: 1rem 0;
+       }
+
+       .form-check-input {
+           width: 18px;
+           height: 18px;
+           cursor: pointer;
+       }
+
+       .form-check-label {
+           font-size: 1rem;
+           cursor: pointer;
+       }
+
+       .btn-primary {
+           background-color: #2563eb;
+           color: white;
+           border: none;
+           padding: 0.75rem 1.5rem;
+           border-radius: 6px;
+           font-size: 1rem;
+           font-weight: 500;
+           cursor: pointer;
+           transition: background-color 0.2s ease;
+       }
+
+       .btn-primary:hover {
+           background-color: #1d4ed8;
+       }
+
+       .btn-secondary {
+           background-color: #94a3b8;
+           color: white;
+           border: none;
+           padding: 0.75rem 1.5rem;
+           border-radius: 6px;
+           font-size: 1rem;
+           font-weight: 500;
+           cursor: pointer;
+           transition: background-color 0.2s ease;
+           margin-right: 0.5rem;
+       }
+
+       .btn-secondary:hover {
+           background-color: #64748b;
+       }
+
+       .card-footer {
+           background-color: #f8fafc;
+           padding: 1.5rem;
+           border-top: 1px solid #e2e8f0;
+           display: flex;
+           justify-content: flex-end;
+       }
+
+       .alert {
+           padding: 1rem;
+           margin: 1rem 2rem;
+           border-radius: 6px;
+       }
+
+       .alert-warning {
            background-color: #fef3c7;
-           color: #f59e0b;
-           border: none;
-           font-weight: normal;
-           padding: 5px 10px;
-           border-radius: 4px;
+           color: #92400e;
+           border: 1px solid #fde68a;
        }
-       
-       .badge-danger {
-           background-color: #fee2e2;
-           color: #ef4444;
+
+       textarea.form-control {
+           min-height: 100px;
        }
-       
-       .nav-pills .nav-link {
-           color: #6b7280;
-           padding: 0.5rem 1rem;
-           border-radius: 4px;
+
+       /* Form columns for layout */
+       .form-row {
+           display: flex;
+           flex-wrap: wrap;
+           margin: -0.5rem;
        }
-       
-       .nav-pills .nav-link.active {
-           background-color: #f3f4f6;
-           color: #111827;
+
+       .form-col {
+           flex: 1;
+           padding: 0.5rem;
+           min-width: 250px;
        }
-       
-       /* Main Table Styling */
-/* Container styling */
-.container-fluid {
- padding: 2rem;
-}
-
-/* Main Table Styling */
-.table {
- width: 100%;
- border-collapse: separate;
- border-spacing: 0;
- font-size: 16px;
- margin: 1.5rem 0;
- box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
- background-color: #ffffff;
- color: #1a365d; /* Dark blue text */
- border-radius: 6px;
- overflow: hidden;
- border: 1px solid #e2e8f0;
-}
-
-/* Table Header */
-.table thead th {
- background-color: #f8fafc;
- color: #1a365d;
- font-weight: 600;
- padding: 18px 15px;
- border-bottom: 2px solid #cbd5e1;
- text-align: left;
- vertical-align: middle;
- position: relative;
-}
-
-/* Sort icon spacing */
-.table thead th i {
- margin-left: 5px;
- color: #64748b;
-}
-
-/* Table Data Cells */
-.table tbody td {
- padding: 16px 15px;
- vertical-align: middle;
- border-bottom: 1px solid #e2e8f0;
-}
-
-/* Last row styling */
-.table tbody tr:last-child td {
- border-bottom: none;
-}
-
-/* Alternating Row Colors */
-.table tbody tr:nth-child(even) {
- background-color: #f8fafc;
-}
-
-/* Hover Effect */
-.table tbody tr:hover {
- background-color: #f1f5f9;
-}
-
-/* Checkbox Styling */
-.table input[type="checkbox"] {
- width: 20px;
- height: 20px;
- cursor: pointer;
- border: 2px solid #64748b;
- border-radius: 3px;
-}
-
-/* Button Styling */
-.btn {
- padding: 10px 16px;
- margin-right: 10px;
- border-radius: 6px;
- cursor: pointer;
- font-size: 14px;
- font-weight: 500;
- transition: all 0.2s ease;
- box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.btn-sm {
- padding: 8px 12px;
-}
-
-.btn-edit {
- background-color: #e0f2fe;
- color: #0369a1;
- border: 1px solid #bae6fd;
-}
-
-.btn-delete {
- background-color: #fecdd3;
- color: #be123c;
- border: 1px solid #fda4af;
-}
-
-.btn-edit:hover {
- background-color: #bae6fd;
-}
-
-.btn-delete:hover {
- background-color: #fda4af;
-}
-
-/* Icons in buttons */
-.btn i {
- margin-right: 6px;
-}
-
-/* Responsive container */
-.table-responsive {
- overflow-x: auto;
- -webkit-overflow-scrolling: touch;
- border-radius: 6px;
- margin: 0 1.5rem;
-}
-
-/* Status indicator for admin column */
-.admin-badge {
- display: inline-block;
- padding: 5px 10px;
- border-radius: 4px;
- font-size: 12px;
- font-weight: 600;
- text-transform: uppercase;
- letter-spacing: 0.5px;
-}
-
-.admin-badge.admin {
- background-color: #dbeafe;
- color: #1e40af;
-}
-
-.admin-badge.user {
- background-color: #dcfce7;
- color: #166534;
-}
-
-/* Monetary values styling */
-.table .price-cell {
- font-family: 'Courier New', monospace;
- text-align: right;
- font-weight: 600;
-}
-
-/* First column (checkbox column) */
-.table th:first-child,
-.table td:first-child {
- padding-left: 20px;
-}
-
-/* Last column (actions column) */
-.table th:last-child,
-.table td:last-child {
- padding-right: 20px;
-}
-
-/* Table header text styling */
-.table th {
- text-transform: uppercase;
- letter-spacing: 0.5px;
- font-size: 14px;
-}
-
-/* No results message */
-.no-results {
- padding: 2rem;
- text-align: center;
- color: #64748b;
- font-style: italic;
-}
-
-/* Button Styling */
-.btn {
- padding: 8px 16px;
- margin-right: 8px;
- border-radius: 4px;
- cursor: pointer;
- font-size: 14px;
- transition: all 0.2s ease;
-}
-
-.btn-sm {
- padding: 6px 12px;
-}
-
-.btn-edit {
- background-color: #e9ecef;
- color: #495057;
- border: 1px solid #ced4da;
-}
-
-.btn-delete {
- background-color: #f8d7da;
- color: #dc3545;
- border: 1px solid #f5c2c7;
-}
-
-.btn-edit:hover {
- background-color: #ced4da;
-}
-
-.btn-delete:hover {
- background-color: #f5c2c7;
-}
-
-/* Icons in buttons */
-.btn i {
- margin-right: 5px;
-}
-
-/* Responsive container */
-.table-responsive {
- overflow-x: auto;
- -webkit-overflow-scrolling: touch;
-}
-
-/* Status indicator for admin column */
-.admin-badge {
- display: inline-block;
- padding: 4px 8px;
- border-radius: 4px;
- font-size: 12px;
- font-weight: 600;
- text-transform: uppercase;
-}
-
-.admin-badge.admin {
- background-color: #cce5ff;
- color: #0d6efd;
-}
-
-.admin-badge.user {
- background-color: #d1e7dd;
- color: #198754;
-}
-
-/* Monetary values styling */
-.table .price-cell {
- font-family: monospace;
- text-align: right;
-}
    </style>
 </head>
 <body>
@@ -578,79 +422,109 @@
            <a href="{% url 'order_app:superadmin' %}" class="nav-link active">SUPERADMIN PANEL</a>
            {% endif %}
            
-       
            <a href="{% url 'order_app:contact' %}" class="nav-link">CONTACT US</a>
            <a href="{% url 'order_app:about' %}" class="nav-link">ABOUT US</a>
            {% if user.is_authenticated %}
            <a href="{% url 'order_app:profile' id=user.id %}" class="nav-link">PROFILE </a>
            <a href="{% url 'order_app:logout' %}" class="nav-link active">LOGOUT</a>
            {% endif %}
-           
-           
-           
        </nav>
 
        <div class="right-items">
-           
-           <a href="
-           #"><i class="fa fa-user-o" style="font-size:36px;color: var(--beige-light);"></i></a>
+           <a href="#"><i class="fa fa-user-o" style="font-size:36px;color: var(--beige-light);"></i></a>
        </div>
-
    </header>
+   
    {% if messages %}
-
-
    {% for message in messages %}
-
-
-   <div class="alert alert-warning  alert-dismissible fade show" role="alert">
+   <div class="alert alert-warning alert-dismissible fade show" role="alert">
        {{message}}
        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
    </div>
-
-
    {% endfor %}
    {% endif %}
    
-   <div class="container-fluid py-4">
-       <div class="table-responsive">
-           <table class="table">
-               <thead>
-                   <tr>
-                       <th>
-                           <input type="checkbox" class="select-all">
-                       </th>
-                       <th>Order ID</th>
-                       <th>Date <i class="fas fa-sort"></i></th>
-                       <th>Items</th>
-                       <th>Subtotal</th>
-                       <th>GST</th>
-                       <th>Total</th>
-                       
-                       <th>Actions</th>
-                   </tr>
-               </thead>
-               <tbody>
-                   {% for order in orders %}
-                   <tr>
-                       <td>
-                           <input type="checkbox" class="select-item">
-                       </td>
-                       <td>{{order.id}}</td>
-                       <td>{{order.created_at}}</td>
-                       <td>{{order.items}}</td>
-                       <td class="price-cell">₹{{order.subtotal}}</td>
-                       <td class="price-cell">₹{{order.gst}}</td>
-                       <td class="price-cell">₹{{order.total}}</td>
-                       
-                       <td>
-                           <a href="{% url 'order_app:delete_order' id=order.id %}"> <button class="btn btn-sm btn-delete"><i class="fas fa-trash"></i> Delete</button></a>
-                       </td>
-                   </tr>
-                   {% endfor %}
-               </tbody>
-           </table>
+   <h1 class="page-title">Edit Gift Card</h1>
+   
+   <div class="card">
+       <div class="card-header">
+           <h2><i class="fas fa-edit me-2"></i>Edit Gift Card #{{ gift_card.id }}</h2>
        </div>
+       <form method="POST" action="{% url 'shop_app:edit_gift_card' id=gift_card.id %}">
+           {% csrf_token %}
+           <div class="card-body">
+               <div class="form-row">
+                   <div class="form-col">
+                       <div class="form-group">
+                           <label class="form-label" for="gift_card_type">Gift Card Type</label>
+                           <select class="form-control" id="gift_card_type" name="gift_card_type" required>
+                               {% for type in gift_card_types %}
+                               <option value="{{ type.id }}" {% if type.id == gift_card.gift_card_type.id %}selected{% endif %}>{{ type.name }}</option>
+                               {% endfor %}
+                           </select>
+                       </div>
+                       
+                       <div class="form-group">
+                           <label class="form-label" for="recipient_name">Recipient Name</label>
+                           <input type="text" class="form-control" id="recipient_name" name="recipient_name" value="{{ gift_card.recipient_name }}" required>
+                       </div>
+                       
+                       <div class="form-group">
+                           <label class="form-label" for="recipient_email">Recipient Email</label>
+                           <input type="email" class="form-control" id="recipient_email" name="recipient_email" value="{{ gift_card.recipient_email }}" required>
+                       </div>
+                       
+                       <div class="form-group">
+                           <label class="form-label" for="recipient_phone">Recipient Phone</label>
+                           <input type="tel" class="form-control" id="recipient_phone" name="recipient_phone" value="{{ gift_card.recipient_phone }}">
+                       </div>
+                   </div>
+                   
+                   <div class="form-col">
+                       <div class="form-group">
+                           <label class="form-label" for="sender_name">Sender Name</label>
+                           <input type="text" class="form-control" id="sender_name" name="sender_name" value="{{ gift_card.sender_name }}" required>
+                       </div>
+                       
+                       <div class="form-group">
+                           <label class="form-label" for="amount">Amount (₹)</label>
+                           <input type="number" class="form-control" id="amount" name="amount" value="{{ gift_card.amount }}" step="0.01" min="0" required>
+                       </div>
+                       
+                       <div class="form-group">
+                           <label class="form-label" for="delivery_date">Delivery Date</label>
+                           <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ gift_card.delivery_date|date:'Y-m-d' }}">
+                       </div>
+                       
+                       <div class="form-check">
+                           <input class="form-check-input" type="checkbox" id="is_redeemed" name="is_redeemed" {% if gift_card.is_redeemed %}checked{% endif %}>
+                           <label class="form-check-label" for="is_redeemed">
+                               Redeemed
+                           </label>
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="form-group">
+                   <label class="form-label" for="message">Message</label>
+                   <textarea class="form-control" id="message" name="message">{{ gift_card.message }}</textarea>
+               </div>
+               
+               <div class="form-group">
+                   <p><strong>Code:</strong> {{ gift_card.code }}</p>
+                   <p><strong>Created:</strong> {{ gift_card.created_at|date:"M d, Y" }}</p>
+               </div>
+           </div>
+           
+           <div class="card-footer">
+               <a href="{% url 'shop_app:gift_card_history' %}" class="btn btn-secondary">
+                   <i class="fas fa-times me-1"></i> Cancel
+               </a>
+               <button type="submit" class="btn btn-primary">
+                   <i class="fas fa-save me-1"></i> Update Gift Card
+               </button>
+           </div>
+       </form>
    </div>
 
    <footer class="footer">
@@ -660,13 +534,10 @@
                    <h3>Expertise</h3>
                    <div class="footer-links">
                        <a href="#" class="footer-link">Analytics and Reporting</a>
-                      
                        <a href="#" class="footer-link">Inventory Management</a>
                        <a href="#" class="footer-link">Mobile and Remote Access</a>
-                        
                        <a href="#" class="footer-link">Endpoint Management</a>
                        <a href="#" class="footer-link">Order Processing</a>
-                       
                        <a href="#" class="footer-link">Customer Database</a>
                        <a href="#" class="footer-link">Integration Capabilities</a>
                        <a href="#" class="footer-link">Security and Compliance</a>
@@ -679,7 +550,6 @@
                    <h3>Company</h3>
                    <div class="footer-links">
                        <a href="#" class="footer-link">About Us</a>
-                       
                        <a href="#" class="footer-link">News</a>
                        <a href="#" class="footer-link">Contact</a>
                        <a href="#" class="footer-link">Trust Centre</a>
@@ -735,49 +605,20 @@
            </div>
        </div>
    </footer>
-
-</body>
-</html>
-<script>
-   // orders.js
-document.addEventListener('DOMContentLoaded', function() {
-   // Handle select all checkbox
-   const selectAllCheckbox = document.querySelector('.select-all');
-   if (selectAllCheckbox) {
-       selectAllCheckbox.addEventListener('change', function() {
-           const orderCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-           orderCheckboxes.forEach(checkbox => {
-               checkbox.checked = selectAllCheckbox.checked;
+   
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+   <script>
+       document.addEventListener('DOMContentLoaded', function() {
+           // Form validation
+           const form = document.querySelector('form');
+           form.addEventListener('submit', function(event) {
+               const amount = document.getElementById('amount').value;
+               if (parseFloat(amount) <= 0) {
+                   alert('Amount must be greater than zero');
+                   event.preventDefault();
+               }
            });
        });
-   }
-   
-   // Filter tabs functionality
-   const filterTabs = document.querySelectorAll('.nav-pills .nav-link');
-   filterTabs.forEach(tab => {
-       tab.addEventListener('click', function(e) {
-           e.preventDefault();
-           // Remove active class from all tabs
-           filterTabs.forEach(t => t.classList.remove('active'));
-           // Add active class to clicked tab
-           this.classList.add('active');
-           
-           // You would implement actual filtering here
-       });
-   });
-   
-   // Date filter dropdown
-   const dateFilter = document.querySelector('.date-filter');
-   if (dateFilter) {
-       dateFilter.addEventListener('click', function() {
-           // In a real implementation, you would show a date picker here
-           console.log('Date filter clicked');
-       });
-   }
-});
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
+   </script>
+</body>
+</html>
