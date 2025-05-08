@@ -23,9 +23,10 @@ This is a web-based café management system built using Django. It includes sepa
 ## How to Run
 1. Clone the repo:
 
-2. Install dependencies:
+2. Install dependencies: pip install -r requirements.txt
+  
 
-3. Run the development server:
+4. Run the development server: python manage.py runserver <port_number>
 
 
 ## Author
