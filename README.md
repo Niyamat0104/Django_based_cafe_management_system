@@ -27,6 +27,7 @@ This is a web-based café management system built using Django. It includes sepa
   
 
 4. Run the development server: python manage.py runserver <port_number>
+5.Deployed Link for backend: https://niyamat.pythonanywhere.com/
 
 
 ## Author
